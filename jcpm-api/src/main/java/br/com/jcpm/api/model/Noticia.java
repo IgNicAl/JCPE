@@ -1,4 +1,4 @@
-package br.com.jcpm.model;
+package br.com.jcpm.api.model;
 
 import java.time.LocalDateTime;
 

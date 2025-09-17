@@ -1,4 +1,4 @@
-package br.com.jcpm.controller;
+package br.com.jcpm.api.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.jcpm.model.Noticia;
-import br.com.jcpm.repository.NoticiaRepository;
+import br.com.jcpm.api.model.Noticia;
+import br.com.jcpm.api.repository.NoticiaRepository;
 
 @RestController
 @RequestMapping("/api/noticias")

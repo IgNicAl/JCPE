@@ -1,4 +1,12 @@
 {
+  "private": true,
+  "name": "jcpm-monorepo",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npm --prefix jcpm-frontend run start",
+    "dev": "npm --prefix jcpm-frontend run dev",
+    "build": "npm --prefix jcpm-frontend run build"
+  },
   "dependencies": {
     "axios": "^1.11.0",
     "react": "^18.2.0",
