@@ -35,7 +35,12 @@ const Home = () => {
         setLoading(true);
         setError('');
         const response = await noticiaService.getAllNoticias().catch(() => ({ data: [] }));
-        const recebidas = Array.isArray(response?.data) ? response.data : [];
+        let recebidas = Array.isArray(response?.data) ? response.data : [];
+
+        // Ordena as notícias: prioridade (desc) e depois data (desc)
+        recebidas.sort((a, b) => {
+          return b.prioridade - a.prioridade || new Date(b.dataPublicacao) - new Date(a.dataPublicacao);
+        });
 
         // Mock para visualização quando não houver dados da API
         const mockNoticias = [
@@ -276,5 +281,3 @@ const Home = () => {
 };
 
 export default Home;
-
-

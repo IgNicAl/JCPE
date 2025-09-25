@@ -1,16 +1,24 @@
 package br.com.jcpm.api.controller;
 
-import br.com.jcpm.api.model.User;
-import br.com.jcpm.api.service.UserService;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
+import br.com.jcpm.api.model.User;
+import br.com.jcpm.api.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
@@ -113,5 +121,78 @@ public class UserController {
                     return ResponseEntity.noContent().build();
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Ativar usuário (apenas para ADMIN)
+    @PutMapping("/{id}/ativar")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<User> ativarUser(@PathVariable Long id) {
+        try {
+            User user = userService.ativarUsuario(id);
+            user.setPassword(null); // Remove senha da resposta
+            return ResponseEntity.ok(user);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Desativar usuário (apenas para ADMIN)
+    @PutMapping("/{id}/desativar")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<User> desativarUser(@PathVariable Long id) {
+        try {
+            User user = userService.desativarUsuario(id);
+            user.setPassword(null); // Remove senha da resposta
+            return ResponseEntity.ok(user);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Listar usuários por tipo (apenas para ADMIN)
+    @GetMapping("/tipo/{tipoUsuario}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<User> getUsersByTipo(@PathVariable String tipoUsuario) {
+        try {
+            br.com.jcpm.api.enums.TipoUsuario tipo = br.com.jcpm.api.enums.TipoUsuario.valueOf(tipoUsuario.toUpperCase());
+            List<User> users = userService.findByTipoUsuario(tipo);
+            users.forEach(user -> user.setPassword(null)); // Remove senhas da resposta
+            return users;
+        } catch (IllegalArgumentException e) {
+            return List.of(); // Retorna lista vazia se tipo inválido
+        }
+    }
+
+    // Estatísticas de usuários (apenas para ADMIN)
+    @GetMapping("/stats")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getUserStats() {
+        long totalUsuarios = userService.countUsuarios();
+        long totalAdmins = userService.countUsuariosPorTipo(br.com.jcpm.api.enums.TipoUsuario.ADMIN);
+        long totalJornalistas = userService.countUsuariosPorTipo(br.com.jcpm.api.enums.TipoUsuario.JORNALISTA);
+        long totalUsuariosComuns = userService.countUsuariosPorTipo(br.com.jcpm.api.enums.TipoUsuario.USUARIO);
+        
+        return ResponseEntity.ok(new UserStats(totalUsuarios, totalAdmins, totalJornalistas, totalUsuariosComuns));
+    }
+
+    // Classe interna para estatísticas
+    public static class UserStats {
+        private long totalUsuarios;
+        private long totalAdmins;
+        private long totalJornalistas;
+        private long totalUsuariosComuns;
+
+        public UserStats(long totalUsuarios, long totalAdmins, long totalJornalistas, long totalUsuariosComuns) {
+            this.totalUsuarios = totalUsuarios;
+            this.totalAdmins = totalAdmins;
+            this.totalJornalistas = totalJornalistas;
+            this.totalUsuariosComuns = totalUsuariosComuns;
+        }
+
+        // Getters
+        public long getTotalUsuarios() { return totalUsuarios; }
+        public long getTotalAdmins() { return totalAdmins; }
+        public long getTotalJornalistas() { return totalJornalistas; }
+        public long getTotalUsuariosComuns() { return totalUsuariosComuns; }
     }
 }

@@ -37,11 +37,21 @@ export const AuthProvider = ({ children }) => {
     return user !== null;
   };
 
+  const isAdmin = () => {
+    return user && user.tipoUsuario === 'ADMIN';
+  };
+
+  const isJornalista = () => {
+    return user && user.tipoUsuario === 'JORNALISTA';
+  };
+
   const value = {
     user,
     login,
     logout,
     isAuthenticated,
+    isAdmin,
+    isJornalista,
     loading
   };
 

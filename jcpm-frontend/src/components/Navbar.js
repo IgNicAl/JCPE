@@ -1,86 +1,60 @@
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { user, logout, isAuthenticated } = useAuth();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+  const { user, logout, isAdmin, isJornalista } = useAuth();
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <div className="navbar-brand">
-          <i className="fas fa-users"></i>
-          <span>JCPM</span>
-        </div>
-        
-        <div className="navbar-menu">
-          {
-            /* Home visível para todos */
-          }
-          <Link 
-            to="/" 
-            className={`navbar-link ${location.pathname === '/' ? 'active' : ''}`}
-          >
-            <i className="fas fa-home"></i>
-            Início
-          </Link>
-          {isAuthenticated() ? (
+        <Link to="/" className="navbar-logo">
+          <i className="fas fa-newspaper"></i> JCPM News
+        </Link>
+
+        <div className="nav-user-actions">
+          {user ? (
             <>
-              
-              <Link 
-                to="/cadastro" 
-                className={`navbar-link ${location.pathname === '/cadastro' ? 'active' : ''}`}
-              >
-                <i className="fas fa-user-plus"></i>
-                Cadastro
-              </Link>
-              
-              <Link 
-                to="/usuarios" 
-                className={`navbar-link ${location.pathname === '/usuarios' ? 'active' : ''}`}
-              >
-                <i className="fas fa-list"></i>
-                Usuários
-              </Link>
-              
-              <div className="navbar-user">
-                <span className="user-info">
-                  <i className="fas fa-user"></i>
-                  {user?.nome || user?.email}
+              {/* Botões para Admin e Jornalista */}
+              {(isAdmin() || isJornalista()) && (
+                <Link to="/noticias/gerenciar" className="nav-btn nav-btn-admin">
+                  <i className="fas fa-edit"></i> Gerenciar Notícias
+                </Link>
+              )}
+
+              {/* Botão exclusivo para Admin */}
+              {isAdmin() && (
+                <Link to="/usuarios" className="nav-btn nav-btn-admin">
+                  <i className="fas fa-users-cog"></i> Gerenciar Usuários
+                </Link>
+              )}
+
+              <div className="nav-user-info">
+                <span className="nav-welcome">
+                  Olá, <strong>{user.nome}</strong>
                 </span>
-                <button onClick={handleLogout} className="logout-btn">
-                  <i className="fas fa-sign-out-alt"></i>
-                  Sair
+                <button onClick={logout} className="nav-btn nav-btn-logout">
+                  <i className="fas fa-sign-out-alt"></i> Sair
                 </button>
               </div>
             </>
           ) : (
             <>
-              <Link 
-                to="/login" 
-                className={`navbar-link ${location.pathname === '/login' ? 'active' : ''}`}
-              >
-                <i className="fas fa-sign-in-alt"></i>
-                Login
+              {/* Botões para visitantes */}
+              <Link to="/login" className="nav-btn nav-btn-login">
+                <i className="fas fa-sign-in-alt"></i> Login
               </Link>
-              
-              <Link 
-                to="/cadastro" 
-                className={`navbar-link ${location.pathname === '/cadastro' ? 'active' : ''}`}
-              >
-                <i className="fas fa-user-plus"></i>
-                Cadastro
+              <Link to="/cadastro-interno" className="nav-btn nav-btn-register">
+                <i className="fas fa-user-plus"></i> Cadastrar
               </Link>
             </>
           )}
+        </div>
+
+        {/* Menu Hamburguer para telas menores (opcional) */}
+        <div className="menu-icon">
+          <i className="fas fa-bars" />
         </div>
       </div>
     </nav>
