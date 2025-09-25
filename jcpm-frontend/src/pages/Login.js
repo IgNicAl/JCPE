@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { usuarioService } from '../services/api';
+import { authService } from '../services/api'; // Alterado para authService
 import './Login.css';
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    senha: ''
+    username: '',
+    password: ''
   });
   
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ const Login = () => {
     setMessage({ type: '', text: '' });
 
     try {
-      if (!formData.email || !formData.senha) {
+      if (!formData.username || !formData.password) {
         setMessage({ 
           type: 'error', 
           text: 'Por favor, preencha todos os campos.' 
@@ -38,19 +38,20 @@ const Login = () => {
         return;
       }
 
-      // Chamada real para a API de login
-      const response = await usuarioService.login({
-        email: formData.email,
-        senha: formData.senha
+      // Chamada para a API de login usando o serviço de autenticação correto
+      const response = await authService.login({
+        username: formData.username,
+        password: formData.password
       });
       
       // Se chegou aqui, o login foi bem-sucedido
       const userData = {
         id: response.data.id,
+        username: response.data.username,
         email: response.data.email,
         nome: response.data.nome,
-        sexo: response.data.sexo,
-        dataNascimento: response.data.dataNascimento
+        tipoUsuario: response.data.tipoUsuario,
+        token: response.data.accessToken
       };
       
       login(userData);
@@ -69,7 +70,7 @@ const Login = () => {
       let errorMessage = 'Erro ao fazer login. Tente novamente.';
       
       if (error.response?.status === 401) {
-        errorMessage = error.response.data?.message || 'Email ou senha incorretos.';
+        errorMessage = error.response.data?.message || 'Username ou senha incorretos.';
       } else if (error.response?.status === 404) {
         errorMessage = 'Usuário não encontrado.';
       } else if (error.response?.data?.message) {
@@ -103,29 +104,29 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="email">
-              <i className="fas fa-envelope"></i> E-mail *
+            <label htmlFor="username">
+              <i className="fas fa-user"></i> Username *
             </label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
               onChange={handleChange}
               required
-              placeholder="Digite seu e-mail"
+              placeholder="Digite seu username"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="senha">
+            <label htmlFor="password">
               <i className="fas fa-lock"></i> Senha *
             </label>
             <input
               type="password"
-              id="senha"
-              name="senha"
-              value={formData.senha}
+              id="password"
+              name="password"
+              value={formData.password}
               onChange={handleChange}
               required
               placeholder="Digite sua senha"

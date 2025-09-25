@@ -57,15 +57,22 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeHttpRequests()
-                    .requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/api/noticias").permitAll()
-                    .requestMatchers("/api/noticias/{id}").permitAll()
-                    .requestMatchers("/api/users/perfil/**").permitAll()
-                    .anyRequest().authenticated();
+        http
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .csrf(csrf -> csrf.disable())
+            .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/init/**").permitAll()
+                .requestMatchers("/api/noticias").permitAll()
+                .requestMatchers("/api/noticias/{id}").permitAll()
+                .requestMatchers("/api/users/perfil/**").permitAll()
+                // Permitir cadastro e login de usuários
+                .requestMatchers("/api/usuarios").permitAll()  // GET e POST para lista e cadastro
+                .requestMatchers("/api/usuarios/login").permitAll()  // POST para login
+                .anyRequest().authenticated()
+            );
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
