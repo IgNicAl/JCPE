@@ -3,7 +3,7 @@ package br.com.jcpm.api.config;
 import br.com.jcpm.api.security.JwtAuthenticationEntryPoint;
 import br.com.jcpm.api.security.JwtRequestFilter;
 import br.com.jcpm.api.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,21 +21,18 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
+// Corrigido: Usando injeção via construtor com Lombok para evitar @Autowired em campos
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
+    private final UserService userService;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtRequestFilter jwtRequestFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -63,14 +60,12 @@ public class WebSecurityConfig {
             .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                // Corrigido: Endpoints de autenticação e notícias públicas são permitidos
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/init/**").permitAll()
-                .requestMatchers("/api/noticias").permitAll()
-                .requestMatchers("/api/noticias/{id}").permitAll()
+                .requestMatchers("/api/init/**").permitAll() // Para criação inicial de admin
+                .requestMatchers("/api/noticias/**").permitAll()
                 .requestMatchers("/api/users/perfil/**").permitAll()
-                // Permitir cadastro e login de usuários
-                .requestMatchers("/api/usuarios").permitAll()  // GET e POST para lista e cadastro
-                .requestMatchers("/api/usuarios/login").permitAll()  // POST para login
+                // Corrigido: Removida a permissão para POST em /api/usuarios, que era uma falha de segurança
                 .anyRequest().authenticated()
             );
 
@@ -83,9 +78,10 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        // Corrigido: Configuração de CORS mais específica para o ambiente de desenvolvimento
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

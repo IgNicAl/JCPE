@@ -1,125 +1,57 @@
 package br.com.jcpm.api.model;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "noticias")
 public class Noticia {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    @Column(nullable = false)
-    private String titulo;
-
-    @Column(nullable = false, length = 512)
-    private String resumo;
-
-    @Lob
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String conteudo;
-
-    @Column(nullable = false)
-    private String urlImagemDestaque;
-
-    @Column(nullable = false)
-    private Integer prioridade = 0; // 0: Comum, 1: Secundário, 2: Principal
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime dataPublicacao;
-
-    private LocalDateTime dataAtualizacao;
-
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "autor_id", nullable = false)
     private User autor;
 
-    // Construtor padrão é OBRIGATÓRIO para o JPA
-    public Noticia() {}
+    @NotBlank(message = "Título é obrigatório")
+    @Column(nullable = false)
+    private String titulo;
 
-    // Getters e Setters
+    @NotBlank(message = "Resumo é obrigatório")
+    @Column(length = 512, nullable = false)
+    private String resumo;
 
-    public Long getId() {
-        return id;
-    }
+    @NotBlank(message = "Conteúdo é obrigatório")
+    @Lob // Para textos longos
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String conteudo;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @NotBlank(message = "URL da imagem de destaque é obrigatória")
+    @Column(nullable = false)
+    private String urlImagemDestaque;
 
-    public String getTitulo() {
-        return titulo;
-    }
+    @NotNull(message = "Prioridade é obrigatória")
+    @Column(nullable = false)
+    private Integer prioridade = 1;
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime dataPublicacao;
 
-    public String getResumo() {
-        return resumo;
-    }
-
-    public void setResumo(String resumo) {
-        this.resumo = resumo;
-    }
-
-    public String getConteudo() {
-        return conteudo;
-    }
-
-    public void setConteudo(String conteudo) {
-        this.conteudo = conteudo;
-    }
-
-    public String getUrlImagemDestaque() {
-        return urlImagemDestaque;
-    }
-
-    public void setUrlImagemDestaque(String urlImagemDestaque) {
-        this.urlImagemDestaque = urlImagemDestaque;
-    }
-
-    public Integer getPrioridade() {
-        return prioridade;
-    }
-
-    public void setPrioridade(Integer prioridade) {
-        this.prioridade = prioridade;
-    }
-
-    public LocalDateTime getDataPublicacao() {
-        return dataPublicacao;
-    }
-
-    public void setDataPublicacao(LocalDateTime dataPublicacao) {
-        this.dataPublicacao = dataPublicacao;
-    }
-
-    public LocalDateTime getDataAtualizacao() {
-        return dataAtualizacao;
-    }
-
-    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
-        this.dataAtualizacao = dataAtualizacao;
-    }
-
-    public User getAutor() {
-        return autor;
-    }
-
-    public void setAutor(User autor) {
-        this.autor = autor;
-    }
+    @UpdateTimestamp
+    private LocalDateTime dataAtualizacao;
 }

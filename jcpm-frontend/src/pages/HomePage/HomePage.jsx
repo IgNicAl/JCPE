@@ -1,48 +1,38 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { noticiaService } from '../services/api';
+import React, { useState, useEffect, useMemo } from 'react';
+import { noticiaService } from '@/lib/api';
 import './Home.css';
 
-const Home = () => {
+const PLACAR_JOGOS = [
+  { time1: 'Sport', placar1: 2, time2: 'Santa Cruz', placar2: 1, status: 'Final' },
+  { time1: 'Náutico', placar1: 0, time2: 'América-PE', placar2: 0, status: '1º Tempo' },
+  { time1: 'Flamengo', placar1: 3, time2: 'Palmeiras', placar2: 1, status: 'Final' }
+];
+const PREVISAO_TEMPO = {
+  cidade: 'Recife',
+  temperatura: 28,
+  descricao: 'Parcialmente nublado',
+  umidade: 75,
+  vento: '15 km/h'
+};
+const BOLSA_VALORES = [
+  { acao: 'PETR4', valor: 32.45, variacao: '+2.1%', cor: 'verde' },
+  { acao: 'VALE3', valor: 58.90, variacao: '-1.3%', cor: 'vermelho' },
+  { acao: 'ITUB4', valor: 28.75, variacao: '+0.8%', cor: 'verde' }
+];
+
+function Home() {
   const [noticias, setNoticias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
-  // Dados simulados para widgets
-  const [placarJogos] = useState([
-    { time1: 'Sport', placar1: 2, time2: 'Santa Cruz', placar2: 1, status: 'Final' },
-    { time1: 'Náutico', placar1: 0, time2: 'América-PE', placar2: 0, status: '1º Tempo' },
-    { time1: 'Flamengo', placar1: 3, time2: 'Palmeiras', placar2: 1, status: 'Final' }
-  ]);
-  
-  const [previsaoTempo] = useState({
-    cidade: 'Recife',
-    temperatura: 28,
-    descricao: 'Parcialmente nublado',
-    umidade: 75,
-    vento: '15 km/h'
-  });
-  
-  const [bolsaValores] = useState([
-    { acao: 'PETR4', valor: 32.45, variacao: '+2.1%', cor: 'verde' },
-    { acao: 'VALE3', valor: 58.90, variacao: '-1.3%', cor: 'vermelho' },
-    { acao: 'ITUB4', valor: 28.75, variacao: '+0.8%', cor: 'verde' }
-  ]);
-
 
   useEffect(() => {
-    const carregarNoticias = async () => {
+    async function carregarNoticias() {
       try {
         setLoading(true);
         setError('');
         const response = await noticiaService.getAllNoticias().catch(() => ({ data: [] }));
-        let recebidas = Array.isArray(response?.data) ? response.data : [];
-
-        // Ordena as notícias: prioridade (desc) e depois data (desc)
-        recebidas.sort((a, b) => {
-          return b.prioridade - a.prioridade || new Date(b.dataPublicacao) - new Date(a.dataPublicacao);
-        });
-
-        // Mock para visualização quando não houver dados da API
+        const recebidas = Array.isArray(response?.data) ? response.data : [];
+        recebidas.sort((a, b) => b.prioridade - a.prioridade || new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
         const mockNoticias = [
           {
             id: 'm1',
@@ -68,7 +58,6 @@ const Home = () => {
             imagemUrl: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop',
             dataPublicacao: new Date().toISOString(),
           },
-          // cards menores
           ...Array.from({ length: 9 }).map((_, i) => ({
             id: `s${i+1}`,
             titulo: `Notícia breve ${i+1}: título ilustrativo para card`,
@@ -78,21 +67,18 @@ const Home = () => {
             dataPublicacao: new Date(Date.now() - (i+1) * 86400000).toISOString(),
           })),
         ];
-
         setNoticias(recebidas.length > 0 ? recebidas : mockNoticias);
       } catch (err) {
         setError('Não foi possível carregar as notícias.');
       } finally {
         setLoading(false);
       }
-    };
-
+    }
     carregarNoticias();
   }, []);
 
-
-  const destaque = useMemo(() => (noticias && noticias.length > 0 ? noticias[0] : null), [noticias]);
-  const demais = useMemo(() => (noticias && noticias.length > 1 ? noticias.slice(1) : []), [noticias]);
+  const destaque = useMemo(() => (noticias.length > 0 ? noticias[0] : null), [noticias]);
+  const demais = useMemo(() => (noticias.length > 1 ? noticias.slice(1) : []), [noticias]);
   const principais = useMemo(() => demais.slice(0, 2), [demais]);
   const pequenas = useMemo(() => demais.slice(2), [demais]);
 
@@ -126,7 +112,7 @@ const Home = () => {
         <div className="widget placar-widget">
           <h3><i className="fas fa-futbol"></i> Placar dos Jogos</h3>
           <div className="jogos-list">
-            {placarJogos.map((jogo, index) => (
+            {PLACAR_JOGOS.map((jogo, index) => (
               <div key={index} className="jogo-item">
                 <div className="jogo-times">
                   <span className="time">{jogo.time1}</span>
@@ -144,18 +130,18 @@ const Home = () => {
           <h3><i className="fas fa-cloud-sun"></i> Previsão do Tempo</h3>
           <div className="tempo-info">
             <div className="tempo-principal">
-              <span className="cidade">{previsaoTempo.cidade}</span>
-              <span className="temperatura">{previsaoTempo.temperatura}°C</span>
-              <span className="descricao">{previsaoTempo.descricao}</span>
+              <span className="cidade">{PREVISAO_TEMPO.cidade}</span>
+              <span className="temperatura">{PREVISAO_TEMPO.temperatura}°C</span>
+              <span className="descricao">{PREVISAO_TEMPO.descricao}</span>
             </div>
             <div className="tempo-detalhes">
               <div className="detalhe">
                 <i className="fas fa-tint"></i>
-                <span>Umidade: {previsaoTempo.umidade}%</span>
+                <span>Umidade: {PREVISAO_TEMPO.umidade}%</span>
               </div>
               <div className="detalhe">
                 <i className="fas fa-wind"></i>
-                <span>Vento: {previsaoTempo.vento}</span>
+                <span>Vento: {PREVISAO_TEMPO.vento}</span>
               </div>
             </div>
           </div>
@@ -165,7 +151,7 @@ const Home = () => {
         <div className="widget bolsa-widget">
           <h3><i className="fas fa-chart-line"></i> Bolsa de Valores</h3>
           <div className="acoes-list">
-            {bolsaValores.map((acao, index) => (
+            {BOLSA_VALORES.map((acao, index) => (
               <div key={index} className="acao-item">
                 <span className="acao-nome">{acao.acao}</span>
                 <span className="acao-valor">R$ {acao.valor}</span>
@@ -185,7 +171,7 @@ const Home = () => {
             <div className="widget placar-widget">
               <h3><i className="fas fa-futbol"></i> Placar dos Jogos</h3>
               <div className="jogos-list">
-                {placarJogos.map((jogo, index) => (
+                {PLACAR_JOGOS.map((jogo, index) => (
                   <div key={index} className="jogo-item">
                     <div className="jogo-times">
                       <span className="time">{jogo.time1}</span>
@@ -203,18 +189,18 @@ const Home = () => {
               <h3><i className="fas fa-cloud-sun"></i> Previsão do Tempo</h3>
               <div className="tempo-info">
                 <div className="tempo-principal">
-                  <span className="cidade">{previsaoTempo.cidade}</span>
-                  <span className="temperatura">{previsaoTempo.temperatura}°C</span>
-                  <span className="descricao">{previsaoTempo.descricao}</span>
+                  <span className="cidade">{PREVISAO_TEMPO.cidade}</span>
+                  <span className="temperatura">{PREVISAO_TEMPO.temperatura}°C</span>
+                  <span className="descricao">{PREVISAO_TEMPO.descricao}</span>
                 </div>
                 <div className="tempo-detalhes">
                   <div className="detalhe">
                     <i className="fas fa-tint"></i>
-                    <span>Umidade: {previsaoTempo.umidade}%</span>
+                    <span>Umidade: {PREVISAO_TEMPO.umidade}%</span>
                   </div>
                   <div className="detalhe">
                     <i className="fas fa-wind"></i>
-                    <span>Vento: {previsaoTempo.vento}</span>
+                    <span>Vento: {PREVISAO_TEMPO.vento}</span>
                   </div>
                 </div>
               </div>
@@ -224,7 +210,7 @@ const Home = () => {
             <div className="widget bolsa-widget">
               <h3><i className="fas fa-chart-line"></i> Bolsa de Valores</h3>
               <div className="acoes-list">
-                {bolsaValores.map((acao, index) => (
+                {BOLSA_VALORES.map((acao, index) => (
                   <div key={index} className="acao-item">
                     <span className="acao-nome">{acao.acao}</span>
                     <span className="acao-valor">R$ {acao.valor}</span>
@@ -278,6 +264,6 @@ const Home = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Home;

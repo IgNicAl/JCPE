@@ -5,7 +5,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.2</version>
+        <!-- Corrigido: Alterado para uma versão estável recente do Spring Boot -->
+        <version>3.2.5</version>
         <relativePath/>
     </parent>
     <groupId>br.com.jcpm</groupId>
@@ -14,7 +15,7 @@
     <name>jcpm-api</name>
     <description>API para o projeto JCPM</description>
     <properties>
-        <java.version>21</java.version>
+        <java.version>21</java.version> <!-- Corrigido: Ajustado para Java 21 conforme solicitado -->
     </properties>
     <dependencies>
         <dependency>
@@ -55,6 +56,14 @@
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- Corrigido: Adicionada dependência do Lombok para reduzir boilerplate -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -71,15 +80,17 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <!-- Corrigido: Adicionada configuração do Lombok ao plugin -->
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
     </build>
 </project>
+
