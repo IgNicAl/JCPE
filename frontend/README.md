@@ -22,7 +22,7 @@ Frontend React para o sistema JCPM com página de cadastro de usuários.
 
 1. Navegue até o diretório do frontend:
 ```bash
-cd jcpm-frontend
+cd frontend
 ```
 
 2. Instale as dependências:
@@ -45,7 +45,7 @@ http://localhost:3000
 ## 📁 Estrutura do Projeto
 
 ```
-jcpm-frontend/
+frontend
 ├── public/
 │   └── index.html
 ├── src/

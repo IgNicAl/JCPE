@@ -10,9 +10,9 @@
         <relativePath/>
     </parent>
     <groupId>br.com.jcpm</groupId>
-    <artifactId>jcpm-api</artifactId>
+    <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>jcpm-api</name>
+    <name>backend</name>
     <description>API para o projeto JCPM</description>
     <properties>
         <java.version>21</java.version> <!-- Corrigido: Ajustado para Java 21 conforme solicitado -->

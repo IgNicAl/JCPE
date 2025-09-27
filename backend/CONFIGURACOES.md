@@ -75,7 +75,7 @@ jwt.expiration=86400000  # 24 horas
 
 ### Para Produção:
 ```bash
-java -jar jcpm-api.jar --spring.profiles.active=prod
+java -jar backend.jar --spring.profiles.active=prod
 ```
 
 ### Com Variáveis de Ambiente (Produção):
@@ -83,7 +83,7 @@ java -jar jcpm-api.jar --spring.profiles.active=prod
 export DB_USERNAME=usuario_prod
 export DB_PASSWORD=senha_segura
 export JWT_SECRET=chave_jwt_super_secreta
-java -jar jcpm-api.jar --spring.profiles.active=prod
+java -jar backend.jar --spring.profiles.active=prod
 ```
 
 ## ⚠️ **Ações Recomendadas**
@@ -108,7 +108,7 @@ java -jar jcpm-api.jar --spring.profiles.active=prod
 ## 📈 **Monitoramento**
 
 ### Logs Importantes:
-- `logs/jcpm-api.log` - Log principal da aplicação
+- `logs/backend.log` - Log principal da aplicação
 - Console - SQL queries (apenas desenvolvimento)
 - HikariCP metrics - Pool de conexões
 
