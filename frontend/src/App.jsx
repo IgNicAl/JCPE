@@ -10,6 +10,7 @@ import Login from './features/auth/pages/Login/Login';
 import UserRegistration from './features/auth/pages/UserRegistration/UserRegistration';
 import InternalRegistration from './features/auth/pages/InternalRegistration/InternalRegistration';
 import UserList from './features/auth/pages/UserList/UserList';
+import EditUser from './features/auth/pages/EditUser/EditUser'; // Importar o novo componente
 import CreateNews from './features/news/pages/CreateNews/CreateNews';
 import ManageNews from './features/news/pages/ManageNews/ManageNews';
 import EditNews from './features/news/pages/EditNews/EditNews';
@@ -58,6 +59,16 @@ export function App() {
                 element={
                   <ProtectedRoute roles={['ADMIN']}>
                     <InternalRegistration />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Rota de Edição de Usuário */}
+              <Route
+                path="/admin/usuarios/editar/:id"
+                element={
+                  <ProtectedRoute roles={['ADMIN']}>
+                    <EditUser />
                   </ProtectedRoute>
                 }
               />
