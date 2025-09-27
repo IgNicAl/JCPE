@@ -58,7 +58,7 @@ public class NoticiaController {
     public ResponseEntity<Noticia> createNoticia(@Valid @RequestBody NoticiaRequest noticiaRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
-        
+
         Noticia noticia = new Noticia();
         noticia.setTitulo(noticiaRequest.getTitulo());
         noticia.setResumo(noticiaRequest.getResumo());
@@ -83,7 +83,7 @@ public class NoticiaController {
                 .map(noticia -> {
                     // Verifica se o usuário é o dono da notícia ou se é um ADMIN
                     boolean isOwner = noticia.getAutor().getId().equals(currentUser.getId());
-                    boolean isAdmin = "ADMIN".equals(currentUser.getTipoUsuario().name());
+                    boolean isAdmin = "ADMIN".equals(currentUser.getTipoUser().name());
 
                     if (!isOwner && !isAdmin) {
                         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("error", "Você não tem permissão para editar esta notícia."));
@@ -95,7 +95,7 @@ public class NoticiaController {
                     noticia.setUrlImagemDestaque(noticiaRequest.getUrlImagemDestaque());
                     noticia.setPrioridade(noticiaRequest.getPrioridade());
                     noticia.setDataAtualizacao(LocalDateTime.now());
-                    
+
                     Noticia updatedNoticia = noticiaRepository.save(noticia);
                     return ResponseEntity.ok(updatedNoticia);
                 }).orElseGet(() -> ResponseEntity.notFound().build());
@@ -112,7 +112,7 @@ public class NoticiaController {
                 .map(noticia -> {
                     // Verifica se o usuário é o dono da notícia ou se é um ADMIN
                     boolean isOwner = noticia.getAutor().getId().equals(currentUser.getId());
-                    boolean isAdmin = "ADMIN".equals(currentUser.getTipoUsuario().name());
+                    boolean isAdmin = "ADMIN".equals(currentUser.getTipoUser().name());
 
                     if (!isOwner && !isAdmin) {
                         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("error", "Você não tem permissão para excluir esta notícia."));

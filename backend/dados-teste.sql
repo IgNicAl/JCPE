@@ -5,12 +5,12 @@
 -- Senha BCrypt para "admcesar": $2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi
 -- Senha BCrypt para "123456": $2a$10$JKlV4Z3p1iLF9mPq2ixu.OqQ3L7M9nF5YPsVzw0dIYzX8E9qJn7zC
 
-INSERT INTO usuarios (username, email, password, nome, tipo_usuario, ativo, data_cadastro, biografia, url_imagem_perfil) VALUES
+INSERT INTO users (username, email, password, name, tipo_user, ativo, data_cadastro, biografia, url_imagem_perfil) VALUES
 ('admin', 'admin@jcpm.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrador do Sistema', 'ADMIN', true, NOW(), 'Administrador responsável pelo sistema JCPM', 'https://via.placeholder.com/150'),
 ('jornalista1', 'jornalista1@jcpm.com', '$2a$10$JKlV4Z3p1iLF9mPq2ixu.OqQ3L7M9nF5YPsVzw0dIYzX8E9qJn7zC', 'Maria Silva', 'JORNALISTA', true, NOW(), 'Jornalista especializada em política e economia', 'https://via.placeholder.com/150'),
 ('jornalista2', 'jornalista2@jcpm.com', '$2a$10$JKlV4Z3p1iLF9mPq2ixu.OqQ3L7M9nF5YPsVzw0dIYzX8E9qJn7zC', 'João Santos', 'JORNALISTA', true, NOW(), 'Jornalista de esportes e entretenimento', 'https://via.placeholder.com/150'),
-('usuario1', 'usuario1@jcpm.com', '$2a$10$JKlV4Z3p1iLF9mPq2ixu.OqQ3L7M9nF5YPsVzw0dIYzX8E9qJn7zC', 'Ana Costa', 'USUARIO', true, NOW(), 'Leitora assídua de notícias', 'https://via.placeholder.com/150'),
-('usuario2', 'usuario2@jcpm.com', '$2a$10$JKlV4Z3p1iLF9mPq2ixu.OqQ3L7M9nF5YPsVzw0dIYzX8E9qJn7zC', 'Pedro Oliveira', 'USUARIO', true, NOW(), 'Interessado em tecnologia e inovação', 'https://via.placeholder.com/150');
+('user1', 'user1@jcpm.com', '$2a$10$JKlV4Z3p1iLF9mPq2ixu.OqQ3L7M9nF5YPsVzw0dIYzX8E9qJn7zC', 'Ana Costa', 'USER', true, NOW(), 'Leitora assídua de notícias', 'https://via.placeholder.com/150'),
+('user2', 'user2@jcpm.com', '$2a$10$JKlV4Z3p1iLF9mPq2ixu.OqQ3L7M9nF5YPsVzw0dIYzX8E9qJn7zC', 'Pedro Oliveira', 'USER', true, NOW(), 'Interessado em tecnologia e inovação', 'https://via.placeholder.com/150');
 
 -- Inserir notícias de exemplo
 INSERT INTO noticias (titulo, resumo, conteudo, autor_id, url_imagem_destaque, data_publicacao) VALUES

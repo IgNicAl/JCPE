@@ -1,7 +1,7 @@
 package br.com.jcpm.api.controller;
 
 import br.com.jcpm.api.dto.UserResponse;
-import br.com.jcpm.api.enums.TipoUsuario;
+import br.com.jcpm.api.enums.TipoUser;
 import br.com.jcpm.api.model.User;
 import br.com.jcpm.api.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,7 @@ public class UserController {
             .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
         // Atualiza apenas campos permitidos
-        currentUser.setNome(userDetails.getNome());
+        currentUser.setName(userDetails.getName());
         currentUser.setEmail(userDetails.getEmail());
         currentUser.setBiografia(userDetails.getBiografia());
         currentUser.setUrlImagemPerfil(userDetails.getUrlImagemPerfil());
@@ -85,11 +85,11 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         return userService.findById(id)
                 .map(user -> {
-                    user.setNome(userDetails.getNome());
+                    user.setName(userDetails.getName());
                     user.setEmail(userDetails.getEmail());
                     user.setBiografia(userDetails.getBiografia());
                     user.setUrlImagemPerfil(userDetails.getUrlImagemPerfil());
-                    user.setTipoUsuario(userDetails.getTipoUsuario());
+                    user.setTipoUser(userDetails.getTipoUser());
                     user.setAtivo(userDetails.getAtivo());
 
                     User updatedUser = userService.update(user);
@@ -117,7 +117,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> ativarUser(@PathVariable Long id) {
         try {
-            User user = userService.ativarUsuario(id);
+            User user = userService.ativarUser(id);
             return ResponseEntity.ok(new UserResponse(user));
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -129,7 +129,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> desativarUser(@PathVariable Long id) {
         try {
-            User user = userService.desativarUsuario(id);
+            User user = userService.desativarUser(id);
             return ResponseEntity.ok(new UserResponse(user));
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -137,12 +137,12 @@ public class UserController {
     }
 
     // Listar usuários por tipo (apenas para ADMIN)
-    @GetMapping("/tipo/{tipoUsuario}")
+    @GetMapping("/tipo/{tipoUser}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<UserResponse>> getUsersByTipo(@PathVariable String tipoUsuario) {
+    public ResponseEntity<List<UserResponse>> getUsersByTipo(@PathVariable String tipoUser) {
         try {
-            TipoUsuario tipo = TipoUsuario.valueOf(tipoUsuario.toUpperCase());
-            List<UserResponse> users = userService.findByTipoUsuario(tipo).stream()
+            TipoUser tipo = TipoUser.valueOf(tipoUser.toUpperCase());
+            List<UserResponse> users = userService.findByTipoUser(tipo).stream()
                 .map(UserResponse::new)
                 .collect(Collectors.toList());
             return ResponseEntity.ok(users);
@@ -155,14 +155,14 @@ public class UserController {
     @GetMapping("/stats")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserStats> getUserStats() {
-        long totalUsuarios = userService.countUsuarios();
-        long totalAdmins = userService.countUsuariosPorTipo(TipoUsuario.ADMIN);
-        long totalJornalistas = userService.countUsuariosPorTipo(TipoUsuario.JORNALISTA);
-        long totalUsuariosComuns = userService.countUsuariosPorTipo(TipoUsuario.USUARIO);
+        long totalUsers = userService.countUsers();
+        long totalAdmins = userService.countUsersPorTipo(TipoUser.ADMIN);
+        long totalJornalistas = userService.countUsersPorTipo(TipoUser.JORNALISTA);
+        long totalUsersComuns = userService.countUsersPorTipo(TipoUser.USER);
 
-        return ResponseEntity.ok(new UserStats(totalUsuarios, totalAdmins, totalJornalistas, totalUsuariosComuns));
+        return ResponseEntity.ok(new UserStats(totalUsers, totalAdmins, totalJornalistas, totalUsersComuns));
     }
 
     // Classe interna para DTO de estatísticas
-    public record UserStats(long totalUsuarios, long totalAdmins, long totalJornalistas, long totalUsuariosComuns) {}
+    public record UserStats(long totalUsers, long totalAdmins, long totalJornalistas, long totalUsersComuns) {}
 }

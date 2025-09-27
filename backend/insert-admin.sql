@@ -8,15 +8,15 @@
 -- Senha: admcesar
 -- Hash BCrypt: $2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi
 
-INSERT INTO usuarios (
-    username, 
-    email, 
-    password, 
-    nome, 
-    tipo_usuario, 
-    ativo, 
-    data_cadastro, 
-    biografia, 
+INSERT INTO users (
+    username,
+    email,
+    password,
+    name,
+    tipo_user,
+    ativo,
+    data_cadastro,
+    biografia,
     url_imagem_perfil
 ) VALUES (
     'admin',
@@ -31,6 +31,6 @@ INSERT INTO usuarios (
 );
 
 -- Verificar se o usuário foi inserido
-SELECT id, username, email, nome, tipo_usuario, ativo, data_cadastro 
-FROM usuarios 
+SELECT id, username, email, name, tipo_user, ativo, data_cadastro
+FROM users
 WHERE username = 'admin';

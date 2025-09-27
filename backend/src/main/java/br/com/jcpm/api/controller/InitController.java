@@ -1,6 +1,6 @@
 package br.com.jcpm.api.controller;
 
-import br.com.jcpm.api.enums.TipoUsuario;
+import br.com.jcpm.api.enums.TipoUser;
 import br.com.jcpm.api.model.User;
 import br.com.jcpm.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +34,8 @@ public class InitController {
             admin.setUsername("admin");
             admin.setEmail("admin@jcpm.com");
             admin.setPassword(passwordEncoder.encode("admcesar"));
-            admin.setNome("Administrador do Sistema");
-            admin.setTipoUsuario(TipoUsuario.ADMIN);
+            admin.setName("Administrador do Sistema");
+            admin.setTipoUser(TipoUser.ADMIN);
             admin.setAtivo(true);
             admin.setDataCadastro(LocalDateTime.now());
             admin.setBiografia("Administrador responsável pelo sistema JCPM");
@@ -58,8 +58,8 @@ public class InitController {
                 jornalista1.setUsername("jornalista1");
                 jornalista1.setEmail("jornalista1@jcpm.com");
                 jornalista1.setPassword(passwordEncoder.encode("123456"));
-                jornalista1.setNome("Maria Silva");
-                jornalista1.setTipoUsuario(TipoUsuario.JORNALISTA);
+                jornalista1.setName("Maria Silva");
+                jornalista1.setTipoUser(TipoUser.JORNALISTA);
                 jornalista1.setAtivo(true);
                 jornalista1.setDataCadastro(LocalDateTime.now());
                 jornalista1.setBiografia("Jornalista especializada em política e economia");
@@ -73,8 +73,8 @@ public class InitController {
                 jornalista2.setUsername("jornalista2");
                 jornalista2.setEmail("jornalista2@jcpm.com");
                 jornalista2.setPassword(passwordEncoder.encode("123456"));
-                jornalista2.setNome("João Santos");
-                jornalista2.setTipoUsuario(TipoUsuario.JORNALISTA);
+                jornalista2.setName("João Santos");
+                jornalista2.setTipoUser(TipoUser.JORNALISTA);
                 jornalista2.setAtivo(true);
                 jornalista2.setDataCadastro(LocalDateTime.now());
                 jornalista2.setBiografia("Jornalista de esportes e entretenimento");
@@ -83,33 +83,33 @@ public class InitController {
             }
 
             // Criar usuário comum 1
-            if (!userService.existsByUsername("usuario1")) {
-                User usuario1 = new User();
-                usuario1.setUsername("usuario1");
-                usuario1.setEmail("usuario1@jcpm.com");
-                usuario1.setPassword(passwordEncoder.encode("123456"));
-                usuario1.setNome("Ana Costa");
-                usuario1.setTipoUsuario(TipoUsuario.USUARIO);
-                usuario1.setAtivo(true);
-                usuario1.setDataCadastro(LocalDateTime.now());
-                usuario1.setBiografia("Leitora assídua de notícias");
-                usuario1.setUrlImagemPerfil("https://via.placeholder.com/150");
-                userService.save(usuario1);
+            if (!userService.existsByUsername("user1")) {
+                User user1 = new User();
+                user1.setUsername("user1");
+                user1.setEmail("user1@jcpm.com");
+                user1.setPassword(passwordEncoder.encode("123456"));
+                user1.setName("Ana Costa");
+                user1.setTipoUser(TipoUser.USER);
+                user1.setAtivo(true);
+                user1.setDataCadastro(LocalDateTime.now());
+                user1.setBiografia("Leitora assídua de notícias");
+                user1.setUrlImagemPerfil("https://via.placeholder.com/150");
+                userService.save(user1);
             }
 
             // Criar usuário comum 2
-            if (!userService.existsByUsername("usuario2")) {
-                User usuario2 = new User();
-                usuario2.setUsername("usuario2");
-                usuario2.setEmail("usuario2@jcpm.com");
-                usuario2.setPassword(passwordEncoder.encode("123456"));
-                usuario2.setNome("Pedro Oliveira");
-                usuario2.setTipoUsuario(TipoUsuario.USUARIO);
-                usuario2.setAtivo(true);
-                usuario2.setDataCadastro(LocalDateTime.now());
-                usuario2.setBiografia("Interessado em tecnologia e inovação");
-                usuario2.setUrlImagemPerfil("https://via.placeholder.com/150");
-                userService.save(usuario2);
+            if (!userService.existsByUsername("user2")) {
+                User user2 = new User();
+                user2.setUsername("user2");
+                user2.setEmail("user2@jcpm.com");
+                user2.setPassword(passwordEncoder.encode("123456"));
+                user2.setName("Pedro Oliveira");
+                user2.setTipoUser(TipoUser.USER);
+                user2.setAtivo(true);
+                user2.setDataCadastro(LocalDateTime.now());
+                user2.setBiografia("Interessado em tecnologia e inovação");
+                user2.setUrlImagemPerfil("https://via.placeholder.com/150");
+                userService.save(user2);
             }
 
             return ResponseEntity.ok("Usuários de teste criados com sucesso!");

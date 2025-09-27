@@ -43,9 +43,9 @@ O sistema agora possui autenticação real que verifica se o usuário está cada
 
 ### 📝 Endpoints da API:
 
-- `POST /api/usuarios/login` - Login de usuário
-- `POST /api/usuarios` - Cadastro de usuário
-- `GET /api/usuarios` - Lista usuários (protegido)
+- `POST /api/users/login` - Login de usuário
+- `POST /api/users` - Cadastro de usuário
+- `GET /api/users` - Lista usuários (protegido)
 
 ### 🐛 Troubleshooting:
 

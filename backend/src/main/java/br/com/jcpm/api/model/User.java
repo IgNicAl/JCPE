@@ -1,6 +1,6 @@
 package br.com.jcpm.api.model;
 
-import br.com.jcpm.api.enums.TipoUsuario;
+import br.com.jcpm.api.enums.TipoUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "usuarios")
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
@@ -44,12 +44,12 @@ public class User implements UserDetails {
     private String email;
 
     @Column(nullable = false)
-    @NotBlank(message = "Nome é obrigatório")
-    private String nome;
+    @NotBlank(message = "Name é obrigatório")
+    private String name;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TipoUsuario tipoUsuario = TipoUsuario.USUARIO;
+    private TipoUser tipoUser = TipoUser.USER;
 
     private String biografia;
     private String urlImagemPerfil;
@@ -64,7 +64,7 @@ public class User implements UserDetails {
     // Métodos do Spring Security (UserDetails)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + tipoUsuario.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + tipoUser.name()));
     }
 
     @Override

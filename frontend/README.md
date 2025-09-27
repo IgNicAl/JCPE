@@ -53,10 +53,10 @@ frontend
 │   │   ├── Navbar.js
 │   │   └── Navbar.css
 │   ├── pages/
-│   │   ├── CadastroUsuario.js
-│   │   ├── CadastroUsuario.css
-│   │   ├── ListaUsuarios.js
-│   │   └── ListaUsuarios.css
+│   │   ├── CadastroUser.js
+│   │   ├── CadastroUser.css
+│   │   ├── ListaUsers.js
+│   │   └── ListaUsers.css
 │   ├── services/
 │   │   └── api.js
 │   ├── styles/
@@ -74,11 +74,11 @@ O frontend está configurado para se comunicar com o backend Java através da AP
 
 - **URL Base**: `http://localhost:8080/api`
 - **Endpoints**:
-  - `GET /usuarios` - Lista todos os usuários
-  - `POST /usuarios` - Cria novo usuário
-  - `GET /usuarios/{id}` - Busca usuário por ID
-  - `PUT /usuarios/{id}` - Atualiza usuário
-  - `DELETE /usuarios/{id}` - Remove usuário
+  - `GET /users` - Lista todos os usuários
+  - `POST /users` - Cria novo usuário
+  - `GET /users/{id}` - Busca usuário por ID
+  - `PUT /users/{id}` - Atualiza usuário
+  - `DELETE /users/{id}` - Remove usuário
 
 ## 🎨 Tecnologias Utilizadas
 

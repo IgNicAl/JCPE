@@ -80,7 +80,7 @@ java -jar backend.jar --spring.profiles.active=prod
 
 ### Com Variáveis de Ambiente (Produção):
 ```bash
-export DB_USERNAME=usuario_prod
+export DB_USERNAME=user_prod
 export DB_PASSWORD=senha_segura
 export JWT_SECRET=chave_jwt_super_secreta
 java -jar backend.jar --spring.profiles.active=prod

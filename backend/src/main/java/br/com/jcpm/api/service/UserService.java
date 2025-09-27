@@ -1,6 +1,6 @@
 package br.com.jcpm.api.service;
 
-import br.com.jcpm.api.enums.TipoUsuario;
+import br.com.jcpm.api.enums.TipoUser;
 import br.com.jcpm.api.model.User;
 import br.com.jcpm.api.repository.UserRepository;
 import org.springframework.context.annotation.Lazy;
@@ -80,33 +80,33 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
-    public List<User> findByTipoUsuario(TipoUsuario tipoUsuario) {
+    public List<User> findByTipoUser(TipoUser tipoUser) {
         return userRepository.findAll().stream()
-                .filter(user -> user.getTipoUsuario().equals(tipoUsuario))
+                .filter(user -> user.getTipoUser().equals(tipoUser))
                 .toList();
     }
 
-    public User ativarUsuario(Long id) {
+    public User ativarUser(Long id) {
         User user = findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com ID: " + id));
         user.setAtivo(true);
         return userRepository.save(user);
     }
 
-    public User desativarUsuario(Long id) {
+    public User desativarUser(Long id) {
         User user = findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com ID: " + id));
         user.setAtivo(false);
         return userRepository.save(user);
     }
 
-    public long countUsuarios() {
+    public long countUsers() {
         return userRepository.count();
     }
 
-    public long countUsuariosPorTipo(TipoUsuario tipoUsuario) {
+    public long countUsersPorTipo(TipoUser tipoUser) {
         return userRepository.findAll().stream()
-                .filter(user -> user.getTipoUsuario().equals(tipoUsuario))
+                .filter(user -> user.getTipoUser().equals(tipoUser))
                 .count();
     }
 }

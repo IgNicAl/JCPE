@@ -23,7 +23,7 @@ Adicionado novo serviço de autenticação em `src/services/api.js`:
 export const authService = {
   // Login com JWT
   login: (credentials) => api.post('/auth/login', credentials),
-  
+
   // Registro de novo usuário/admin
   register: (userData) => api.post('/auth/register', userData),
 };
@@ -40,23 +40,23 @@ const cadastrarAdmin = async () => {
   try {
     const adminData = {
       username: "admin",
-      email: "admin@jcpm.com", 
+      email: "admin@jcpm.com",
       password: "admin123",
-      nome: "Administrador",
-      tipoUsuario: "ADMIN",  // Opcional - padrão é USUARIO
+      name: "Administrador",
+      tipoUser: "ADMIN",  // Opcional - padrão é USER
       biografia: "Administrador do sistema",  // Opcional
       urlImagemPerfil: ""  // Opcional
     };
 
     const response = await authService.register(adminData);
-    
+
     console.log('Admin cadastrado com sucesso:', response.data);
     // response.data.user contém os dados do usuário criado
     // response.data.message contém a mensagem de sucesso
-    
+
   } catch (error) {
     console.error('Erro ao cadastrar admin:', error.response?.data || error);
-    
+
     if (error.response?.data?.error === 'USERNAME_EXISTS') {
       alert('Username já está em uso!');
     } else if (error.response?.data?.error === 'EMAIL_EXISTS') {
@@ -81,15 +81,15 @@ const loginAdmin = async () => {
     };
 
     const response = await authService.login(credentials);
-    
+
     // Dados retornados:
     console.log('Token:', response.data.accessToken);
     console.log('Usuário:', response.data.username);
-    console.log('Tipo:', response.data.tipoUsuario); // "ADMIN"
-    
+    console.log('Tipo:', response.data.tipoUser); // "ADMIN"
+
     // Salvar token para próximas requisições
     localStorage.setItem('token', response.data.accessToken);
-    
+
   } catch (error) {
     console.error('Erro no login:', error);
     alert('Credenciais inválidas!');
@@ -103,10 +103,10 @@ const loginAdmin = async () => {
 ```json
 {
   "username": "admin",           // ✅ Obrigatório
-  "email": "admin@jcpm.com",    // ✅ Obrigatório  
+  "email": "admin@jcpm.com",    // ✅ Obrigatório
   "password": "admin123",        // ✅ Obrigatório (min 6 chars)
-  "nome": "Administrador",       // ✅ Obrigatório
-  "tipoUsuario": "ADMIN",        // ❓ Opcional (USUARIO, JORNALISTA, ADMIN)
+  "name": "Administrador",       // ✅ Obrigatório
+  "tipoUser": "ADMIN",        // ❓ Opcional (USER, JORNALISTA, ADMIN)
   "biografia": "...",            // ❓ Opcional
   "urlImagemPerfil": "..."       // ❓ Opcional
 }
@@ -119,25 +119,25 @@ const loginAdmin = async () => {
   "tokenType": "Bearer",
   "id": 1,
   "username": "admin",
-  "email": "admin@jcpm.com", 
-  "nome": "Administrador",
-  "tipoUsuario": "ADMIN"
+  "email": "admin@jcpm.com",
+  "name": "Administrador",
+  "tipoUser": "ADMIN"
 }
 ```
 
 ## ⚠️ **Validações Implementadas**
 
 1. **Username único** - Não pode haver duplicatas
-2. **Email único** - Não pode haver duplicatas  
+2. **Email único** - Não pode haver duplicatas
 3. **Password mínimo** - 6 caracteres
-4. **Campos obrigatórios** - username, email, password, nome
+4. **Campos obrigatórios** - username, email, password, name
 
 ## 🚀 **Próximos Passos**
 
 1. **✅ Backend rodando** na porta 8080
 2. **✅ Rotas configuradas** e funcionando
 3. **✅ Frontend atualizado** com serviços corretos
-4. **🎯 Usar `authService.register()`** ao invés de `usuarioService.createUsuario()`
+4. **🎯 Usar `authService.register()`** ao invés de `userService.createUser()`
 
 ## 📝 **Exemplo Completo de Componente React**
 
@@ -150,13 +150,13 @@ const CadastroAdmin = () => {
     username: '',
     email: '',
     password: '',
-    nome: '',
-    tipoUsuario: 'ADMIN'
+    name: '',
+    tipoUser: 'ADMIN'
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       await authService.register(formData);
       alert('Admin cadastrado com sucesso!');
@@ -191,9 +191,9 @@ const CadastroAdmin = () => {
       />
       <input
         type="text"
-        placeholder="Nome"
-        value={formData.nome}
-        onChange={(e) => setFormData({...formData, nome: e.target.value})}
+        placeholder="Name"
+        value={formData.name}
+        onChange={(e) => setFormData({...formData, name: e.target.value})}
         required
       />
       <button type="submit">Cadastrar Admin</button>
@@ -206,7 +206,7 @@ const CadastroAdmin = () => {
 
 - 🟢 **Backend**: Rodando na porta 8080
 - 🟢 **Rota Register**: `/api/auth/register` funcionando
-- 🟢 **Rota Login**: `/api/auth/login` funcionando  
+- 🟢 **Rota Login**: `/api/auth/login` funcionando
 - 🟢 **AuthService**: Disponível no frontend
 - 🟢 **Validações**: Funcionando corretamente
 - 🟢 **JWT**: Configurado e funcionando

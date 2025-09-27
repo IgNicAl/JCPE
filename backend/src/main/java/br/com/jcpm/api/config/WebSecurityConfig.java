@@ -65,7 +65,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/api/init/**").permitAll() // Para criação inicial de admin
                 .requestMatchers("/api/noticias/**").permitAll()
                 .requestMatchers("/api/users/perfil/**").permitAll()
-                // Corrigido: Removida a permissão para POST em /api/usuarios, que era uma falha de segurança
+                // Corrigido: Removida a permissão para POST em /api/users, que era uma falha de segurança
                 .anyRequest().authenticated()
             );
 

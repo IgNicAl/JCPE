@@ -1,6 +1,6 @@
 package br.com.jcpm.api.dto;
 
-import br.com.jcpm.api.enums.TipoUsuario;
+import br.com.jcpm.api.enums.TipoUser;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,15 +16,15 @@ public class JwtResponse {
     private UUID id;
     private String username;
     private String email;
-    private String nome;
-    private TipoUsuario tipoUsuario;
+    private String name;
+    private TipoUser tipoUser;
 
-    public JwtResponse(String accessToken, UUID id, String username, String email, String nome, TipoUsuario tipoUsuario) {
+    public JwtResponse(String accessToken, UUID id, String username, String email, String name, TipoUser tipoUser) {
         this.token = accessToken;
         this.id = id;
         this.username = username;
         this.email = email;
-        this.nome = nome;
-        this.tipoUsuario = tipoUsuario;
+        this.name = name;
+        this.tipoUser = tipoUser;
     }
 }

@@ -38,8 +38,8 @@ public class AuthController {
                 userPrincipal.getId(),
                 userPrincipal.getUsername(),
                 userPrincipal.getEmail(),
-                userPrincipal.getNome(),
-                userPrincipal.getTipoUsuario()));
+                userPrincipal.getName(),
+                userPrincipal.getTipoUser()));
     }
 
     @PostMapping("/register")
@@ -51,8 +51,8 @@ public class AuthController {
         user.setUsername(signUpRequest.getUsername());
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(signUpRequest.getPassword());
-        user.setNome(signUpRequest.getNome());
-        user.setTipoUsuario(signUpRequest.getTipoUsuario());
+        user.setName(signUpRequest.getName());
+        user.setTipoUser(signUpRequest.getTipoUser());
         user.setBiografia(signUpRequest.getBiografia());
         user.setUrlImagemPerfil(signUpRequest.getUrlImagemPerfil());
 

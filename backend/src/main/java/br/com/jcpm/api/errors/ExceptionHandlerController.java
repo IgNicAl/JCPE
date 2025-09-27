@@ -41,7 +41,7 @@ public class ExceptionHandlerController {
             if (ex.getMostSpecificCause().getMessage().toLowerCase().contains("email")) {
                 error.put("message", "Este e-mail já está em uso.");
             } else if (ex.getMostSpecificCause().getMessage().toLowerCase().contains("username")) {
-                error.put("message", "Este nome de usuário já está em uso.");
+                error.put("message", "Este name de usuário já está em uso.");
             } else {
                 error.put("message", "Já existe um registro com um dos campos informados.");
             }

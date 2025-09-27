@@ -1,4 +1,4 @@
-.cadastro-interno-container {
+.internal-registration-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%);
   display: flex;
@@ -9,7 +9,7 @@
   overflow: hidden;
 }
 
-.cadastro-interno-container::before {
+.internal-registration-container::before {
   content: '';
   position: absolute;
   top: 0;
@@ -26,11 +26,11 @@
   50% { transform: translateY(-20px) rotate(1deg); }
 }
 
-.cadastro-interno-card {
+.internal-registration-card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-radius: 25px;
-  box-shadow: 
+  box-shadow:
     0 25px 50px rgba(0, 0, 0, 0.2),
     0 0 0 1px rgba(255, 255, 255, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -42,7 +42,7 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.cadastro-interno-card::before {
+.internal-registration-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -60,13 +60,13 @@
   100% { background-position: 0% 50%; }
 }
 
-.cadastro-interno-header {
+.internal-registration-header {
   text-align: center;
   margin-bottom: 40px;
   position: relative;
 }
 
-.cadastro-interno-header h1 {
+.internal-registration-header h1 {
   color: #2c3e50;
   font-size: 32px;
   margin-bottom: 15px;
@@ -78,7 +78,7 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.cadastro-interno-header h1 i {
+.internal-registration-header h1 i {
   color: #3498db;
   font-size: 36px;
   animation: pulse 2s ease-in-out infinite;
@@ -89,14 +89,14 @@
   50% { transform: scale(1.1); }
 }
 
-.cadastro-interno-header p {
+.internal-registration-header p {
   color: #7f8c8d;
   font-size: 18px;
   margin: 0;
   font-weight: 500;
 }
 
-.cadastro-interno-form {
+.internal-registration-form {
   display: flex;
   flex-direction: column;
   gap: 25px;
@@ -148,7 +148,7 @@
   outline: none;
   border-color: #3498db;
   background: white;
-  box-shadow: 
+  box-shadow:
     0 0 0 4px rgba(52, 152, 219, 0.1),
     0 4px 12px rgba(52, 152, 219, 0.15);
   transform: translateY(-2px);
@@ -167,7 +167,7 @@
   font-style: italic;
 }
 
-.senha-interna {
+.internal-password {
   background: linear-gradient(135deg, #e8f4fd 0%, #d1ecf1 100%);
   padding: 25px;
   border-radius: 15px;
@@ -176,7 +176,7 @@
   margin-top: 10px;
 }
 
-.senha-interna::before {
+.internal-password::before {
   content: '🔐';
   position: absolute;
   top: 20px;
@@ -191,19 +191,19 @@
   60% { transform: translateY(-5px); }
 }
 
-.senha-interna label {
+.internal-password label {
   color: #0c5460;
   font-weight: 700;
   font-size: 16px;
 }
 
-.senha-interna input {
+.internal-password input {
   background: white;
   border-color: #bee5eb;
   font-weight: 600;
 }
 
-.senha-interna input:focus {
+.internal-password input:focus {
   border-color: #17a2b8;
   box-shadow: 0 0 0 4px rgba(23, 162, 184, 0.1);
 }
@@ -301,7 +301,7 @@
   font-size: 20px;
 }
 
-.cadastro-interno-footer {
+.internal-registration-footer {
   margin-top: 40px;
   padding: 25px;
   background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
@@ -310,7 +310,7 @@
   text-align: center;
 }
 
-.cadastro-interno-footer p {
+.internal-registration-footer p {
   color: #1565c0;
   font-size: 15px;
   margin: 0 0 15px 0;
@@ -321,7 +321,7 @@
   font-weight: 500;
 }
 
-.cadastro-interno-footer i {
+.internal-registration-footer i {
   color: #1976d2;
   font-size: 16px;
 }
@@ -349,31 +349,31 @@
 }
 
 @media (max-width: 768px) {
-  .cadastro-interno-container {
+  .internal-registration-container {
     padding: 10px;
   }
-  
-  .cadastro-interno-card {
+
+  .internal-registration-card {
     padding: 30px 20px;
   }
-  
-  .cadastro-interno-header h1 {
+
+  .internal-registration-header h1 {
     font-size: 26px;
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .form-row {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  
+
   .submit-btn {
     padding: 16px 28px;
     font-size: 16px;
   }
-  
-  .senha-interna {
+
+  .internal-password {
     padding: 20px;
   }
 }
