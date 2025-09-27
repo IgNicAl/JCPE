@@ -9,9 +9,9 @@ const INITIAL_FORM_STATE = {
   password: '',
   confirmPassword: '',
   name: '',
-  tipoUser: 'ADMIN',
-  biografia: '',
-  urlImagemPerfil: '',
+  userType: 'ADMIN',
+  biography: '',
+  profileImageUrl: '',
 };
 
 /**
@@ -29,10 +29,6 @@ function InternalRegistration() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  /**
-   * @description Valida o formulário de cadastro interno.
-   * @returns {string} Uma mensagem de erro se a validação falhar, ou uma string vazia.
-   */
   const validateForm = () => {
     if (formData.password !== formData.confirmPassword) {
       return 'As senhas não coincidem.';
@@ -61,28 +57,21 @@ function InternalRegistration() {
         email: formData.email,
         password: formData.password,
         name: formData.name,
-        biografia: formData.biografia,
-        urlImagemPerfil: formData.urlImagemPerfil,
-        tipoUser: formData.tipoUser,
+        biography: formData.biography,
+        profileImageUrl: formData.profileImageUrl,
+        userType: formData.userType,
       });
       setMessage({
         type: 'success',
-        text: `Usuário ${formData.tipoUser.toLowerCase()} cadastrado com sucesso! Redirecionando para login...`,
+        text: `Usuário ${formData.userType.toLowerCase()} cadastrado com sucesso! Redirecionando...`,
       });
       setFormData(INITIAL_FORM_STATE);
       setTimeout(() => {
-        navigate('/login');
+        navigate('/admin/usuarios');
       }, 3000);
     } catch (error) {
       let errorMessage = 'Erro ao cadastrar usuário. Tente novamente.';
-      // NOTE: Tratamento de erro específico para mensagens de username/email duplicado da API.
-      if (error.response?.data?.error) {
-        if (error.response.data.error === 'USERNAME_EXISTS') {
-          errorMessage = 'Username já está em uso!';
-        } else if (error.response.data.error === 'EMAIL_EXISTS') {
-          errorMessage = 'Email já está em uso!';
-        }
-      } else if (error.response?.data?.message) {
+      if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
       }
       setMessage({ type: 'error', text: errorMessage });
@@ -97,7 +86,7 @@ function InternalRegistration() {
       <div className="internal-registration-card">
         <div className="internal-registration-header">
           <h1><i className="fas fa-cog" />Cadastro Interno</h1>
-          <p>Use esta página para criar o primeiro Administrador ou novos Jornalistas.</p>
+          <p>Crie novas contas de Administrador ou Jornalista</p>
         </div>
 
         {message.text && (
@@ -108,21 +97,55 @@ function InternalRegistration() {
         )}
 
         <form onSubmit={handleSubmit} className="internal-registration-form">
-          {/* O código do formulário JSX foi omitido por ser repetitivo, mas estaria aqui */}
-        </form>
-
-        <div className="internal-registration-footer">
-          <p>
-            <i className="fas fa-info-circle" />
-            Esta página é destinada ao cadastro inicial de usuários com permissões no sistema.
-          </p>
-          <div className="login-link">
-            <a href="/login">
-              <i className="fas fa-sign-in-alt" />
-              Já tem uma conta? Faça login
-            </a>
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="name"><i className="fas fa-user" /> Nome Completo *</label>
+              <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label htmlFor="username"><i className="fas fa-at" /> Username *</label>
+              <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} required />
+            </div>
           </div>
-        </div>
+
+          <div className="form-group">
+            <label htmlFor="email"><i className="fas fa-envelope" /> E-mail *</label>
+            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="password"><i className="fas fa-lock" /> Senha *</label>
+              <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label htmlFor="confirmPassword"><i className="fas fa-check-double" /> Confirmar Senha *</label>
+              <input type="password" id="confirmPassword" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="userType"><i className="fas fa-user-shield" /> Tipo de Usuário *</label>
+            <select id="userType" name="userType" value={formData.userType} onChange={handleChange}>
+              <option value="ADMIN">Administrador</option>
+              <option value="JOURNALIST">Jornalista</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="profileImageUrl"><i className="fas fa-image" /> URL da Imagem de Perfil</label>
+            <input type="text" id="profileImageUrl" name="profileImageUrl" value={formData.profileImageUrl} onChange={handleChange} />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="biography"><i className="fas fa-paragraph" /> Biografia</label>
+            <textarea id="biography" name="biography" value={formData.biography} onChange={handleChange} />
+          </div>
+
+          <button type="submit" className="submit-btn" disabled={loading}>
+            {loading ? <><i className="fas fa-spinner fa-spin" /> Cadastrando...</> : <><i className="fas fa-plus" /> Cadastrar Usuário</>}
+          </button>
+        </form>
       </div>
     </div>
   );

@@ -1,8 +1,11 @@
 package br.com.jcpm.api.service;
 
-import br.com.jcpm.api.enums.TipoUser;
-import br.com.jcpm.api.model.User;
+import br.com.jcpm.api.domain.entity.User;
+import br.com.jcpm.api.domain.enums.UserType;
 import br.com.jcpm.api.repository.UserRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,103 +13,103 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
+/**
+ * Serviço que implementa a lógica de negócio para usuários e a interface UserDetailsService do
+ * Spring Security.
+ */
 @Service
 public class UserService implements UserDetailsService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
-    // Corrigido: Injeção de dependência via construtor.
-    // @Lazy no PasswordEncoder resolve a dependência circular com WebSecurityConfig.
-    public UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+  public UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
+    this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    return userRepository
+        .findByUsername(username)
+        .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
+  }
+
+  public User save(User user) {
+    if (user.getId() == null) {
+      if (existsByUsername(user.getUsername())) {
+        throw new IllegalStateException("Username já está em uso: " + user.getUsername());
+      }
+      if (existsByEmail(user.getEmail())) {
+        throw new IllegalStateException("Email já está em uso: " + user.getEmail());
+      }
     }
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    return userRepository.save(user);
+  }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
+  public List<User> findAll() {
+    return userRepository.findAll();
+  }
+
+  public Optional<User> findById(UUID id) {
+    return userRepository.findById(id);
+  }
+
+  public Optional<User> findByUsername(String username) {
+    return userRepository.findByUsername(username);
+  }
+
+  public Boolean existsByUsername(String username) {
+    return userRepository.existsByUsername(username);
+  }
+
+  public Boolean existsByEmail(String email) {
+    return userRepository.existsByEmail(email);
+  }
+
+  public User update(User user) {
+    return userRepository.save(user);
+  }
+
+  public void deleteById(UUID id) {
+    if (!userRepository.existsById(id)) {
+      throw new UsernameNotFoundException("Usuário não encontrado com ID: " + id);
     }
+    userRepository.deleteById(id);
+  }
 
-    public User save(User user) {
-        // Corrigido: Validação de existência de usuário e e-mail antes de salvar
-        if (user.getId() == null) { // Apenas para novos usuários
-            if (existsByUsername(user.getUsername())) {
-                throw new IllegalStateException("Username já está em uso: " + user.getUsername());
-            }
-            if (existsByEmail(user.getEmail())) {
-                throw new IllegalStateException("Email já está em uso: " + user.getEmail());
-            }
-        }
+  public List<User> findByUserType(UserType userType) {
+    return userRepository.findAll().stream()
+        .filter(user -> user.getUserType().equals(userType))
+        .toList();
+  }
 
-        // Corrigido: A senha SEMPRE deve ser criptografada ao salvar um novo usuário
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+  public User activateUser(UUID id) {
+    User user =
+        findById(id)
+            .orElseThrow(
+                () -> new UsernameNotFoundException("Usuário não encontrado com ID: " + id));
+    user.setActive(true);
+    return userRepository.save(user);
+  }
 
-        return userRepository.save(user);
-    }
+  public User deactivateUser(UUID id) {
+    User user =
+        findById(id)
+            .orElseThrow(
+                () -> new UsernameNotFoundException("Usuário não encontrado com ID: " + id));
+    user.setActive(false);
+    return userRepository.save(user);
+  }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
+  public long countUsers() {
+    return userRepository.count();
+  }
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
-    }
-
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    public Boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
-    }
-
-    public Boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
-    }
-
-    public User update(User user) {
-        return userRepository.save(user);
-    }
-
-    public void deleteById(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new UsernameNotFoundException("Usuário não encontrado com ID: " + id);
-        }
-        userRepository.deleteById(id);
-    }
-
-    public List<User> findByTipoUser(TipoUser tipoUser) {
-        return userRepository.findAll().stream()
-                .filter(user -> user.getTipoUser().equals(tipoUser))
-                .toList();
-    }
-
-    public User ativarUser(Long id) {
-        User user = findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com ID: " + id));
-        user.setAtivo(true);
-        return userRepository.save(user);
-    }
-
-    public User desativarUser(Long id) {
-        User user = findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com ID: " + id));
-        user.setAtivo(false);
-        return userRepository.save(user);
-    }
-
-    public long countUsers() {
-        return userRepository.count();
-    }
-
-    public long countUsersPorTipo(TipoUser tipoUser) {
-        return userRepository.findAll().stream()
-                .filter(user -> user.getTipoUser().equals(tipoUser))
-                .count();
-    }
+  public long countUsersByType(UserType userType) {
+    return userRepository.findAll().stream()
+        .filter(user -> user.getUserType().equals(userType))
+        .count();
+  }
 }

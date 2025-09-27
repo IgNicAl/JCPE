@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { newsService } from '@/lib/api';
 import './ManageNews.css';
 
-// NOTE: Objeto para mapear valores de prioridade a labels e classes CSS.
+// NOTE: Objeto para mapear valores de priority a labels e classes CSS.
 // Facilita a manutenção e a legibilidade do código.
 const PRIORITY_LEVEL = {
   URGENT: { value: 3, text: 'Urgente', class: 'urgent' },
@@ -63,9 +63,9 @@ function ManageNews() {
   };
 
   /**
-   * @description Retorna o objeto de prioridade correspondente ao valor numérico.
-   * @param {number} priorityValue O valor da prioridade (ex: 1, 2, 3).
-   * @returns {object} O objeto de prioridade com texto e classe.
+   * @description Retorna o objeto de priority correspondente ao valor numérico.
+   * @param {number} priorityValue O valor da priority (ex: 1, 2, 3).
+   * @returns {object} O objeto de priority com texto e classe.
    */
   const getPriorityLabel = (priorityValue) => {
     if (priorityValue === PRIORITY_LEVEL.URGENT.value) return PRIORITY_LEVEL.URGENT;
@@ -129,19 +129,19 @@ function ManageNews() {
       ) : (
         <div className="news-grid">
           {news.map((noticia) => {
-            const priority = getPriorityLabel(noticia.prioridade);
+            const priority = getPriorityLabel(noticia.priority);
 
             return (
               <div key={noticia.id} className="news-card">
-                {noticia.imagemUrl && (
+                {noticia.featuredImageUrl && (
                   <div
                     className="news-image"
-                    style={{ backgroundImage: `url(${noticia.imagemUrl})` }}
+                    style={{ backgroundImage: `url(${noticia.featuredImageUrl})` }}
                   />
                 )}
                 <div className="news-content">
-                  <h2>{noticia.titulo}</h2>
-                  <p className="news-summary">{noticia.resumo}</p>
+                  <h2>{noticia.title}</h2>
+                  <p className="news-summary">{noticia.summary}</p>
                   <div className="news-meta">
                     <span className={`priority ${priority.class}`}>
                       <i className="fas fa-flag" />
@@ -149,7 +149,7 @@ function ManageNews() {
                     </span>
                     <span className="date">
                       <i className="far fa-calendar-alt" />
-                      {new Date(noticia.dataPublicacao).toLocaleDateString('pt-BR')}
+                      {new Date(noticia.publicationDate).toLocaleDateString('pt-BR')}
                     </span>
                   </div>
                   <div className="news-actions">

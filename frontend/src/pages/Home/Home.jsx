@@ -41,42 +41,38 @@ function Home() {
         const receivedNews = Array.isArray(response?.data) ? response.data : [];
 
         // Ordena as notícias por prioridade e, em seguida, por data de publicação.
-        receivedNews.sort((a, b) => b.prioridade - a.prioridade || new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
+        receivedNews.sort((a, b) => b.priority - a.priority || new Date(b.publicationDate) - new Date(a.publicationDate));
 
         // NOTE: Bloco de fallback com dados mockados caso a API não retorne notícias.
         // Isso garante que a interface sempre tenha conteúdo para ser exibido.
         const mockNews = [
           {
             id: 'm1',
-            titulo: 'Plano de mobilidade urbana traz mudanças nas principais vias',
-            subtitulo: 'Trânsito deve fluir melhor com novas faixas exclusivas e ciclovias',
-            resumo: 'Cidade anuncia pacote de melhorias para o tráfego e transporte público.',
-            imagemUrl: 'https://images.unsplash.com/photo-1508057198894-247b23fe5ade?q=80&w=1600&auto=format&fit=crop',
-            dataPublicacao: new Date().toISOString(),
+            title: 'Plano de mobilidade urbana traz mudanças nas principais vias',
+            summary: 'Cidade anuncia pacote de melhorias para o tráfego e transporte público.',
+            featuredImageUrl: 'https://images.unsplash.com/photo-1508057198894-247b23fe5ade?q=80&w=1600&auto=format&fit=crop',
+            publicationDate: new Date().toISOString(),
           },
           {
             id: 'm2',
-            titulo: 'Educação: escolas ampliam projetos de tempo integral',
-            subtitulo: 'Alunos terão mais atividades no contraturno',
-            resumo: 'Iniciativa visa melhorar desempenho e reduzir evasão escolar.',
-            imagemUrl: 'https://images.unsplash.com/photo-1588072432836-e10032774350?q=80&w=1600&auto=format&fit=crop',
-            dataPublicacao: new Date().toISOString(),
+            title: 'Educação: escolas ampliam projetos de tempo integral',
+            summary: 'Iniciativa visa melhorar desempenho e reduzir evasão escolar.',
+            featuredImageUrl: 'https://images.unsplash.com/photo-1588072432836-e10032774350?q=80&w=1600&auto=format&fit=crop',
+            publicationDate: new Date().toISOString(),
           },
           {
             id: 'm3',
-            titulo: 'Economia criativa movimenta o centro histórico no fim de semana',
-            subtitulo: 'Feiras e shows valorizam artistas locais',
-            resumo: 'Programação especial inclui oficinas e apresentações gratuitas.',
-            imagemUrl: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop',
-            dataPublicacao: new Date().toISOString(),
+            title: 'Economia criativa movimenta o centro histórico no fim de semana',
+            summary: 'Programação especial inclui oficinas e apresentações gratuitas.',
+            featuredImageUrl: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop',
+            publicationDate: new Date().toISOString(),
           },
           ...Array.from({ length: 9 }).map((_, i) => ({
             id: `s${i+1}`,
-            titulo: `Notícia breve ${i+1}: título ilustrativo para card`,
-            subtitulo: 'Resumo curto para demonstração da listagem de notícias.',
-            resumo: 'Resumo curto para demonstração da listagem de notícias.',
-            imagemUrl: `https://picsum.photos/seed/jcpm-${i+1}/600/400`,
-            dataPublicacao: new Date(Date.now() - (i+1) * 86400000).toISOString(),
+            title: `Notícia breve ${i+1}: título ilustrativo para card`,
+            summary: 'Summary curto para demonstração da listagem de notícias.',
+            featuredImageUrl: `https://picsum.photos/seed/jcpm-${i+1}/600/400`,
+            publicationDate: new Date(Date.now() - (i+1) * 86400000).toISOString(),
           })),
         ];
 
@@ -190,20 +186,20 @@ function Home() {
         <section className="hero-grid">
           {featured && (
             <article className="hero-large">
-              <div className="card-media" style={{ backgroundImage: `url(${featured.imagemUrl || ''})` }} />
+              <div className="card-media" style={{ backgroundImage: `url(${featured.featuredImageUrl || ''})` }} />
               <div className="card-overlay">
                 <span className="card-tag">Destaque</span>
-                <h1 className="card-title">{featured.titulo}</h1>
-                <p className="card-subtitle">{featured.subtitulo || featured.resumo}</p>
+                <h1 className="card-title">{featured.title}</h1>
+                <p className="card-subtitle">{featured.summary}</p>
               </div>
             </article>
           )}
           {main.map((n) => (
             <article key={n.id} className="hero-medium">
-              <div className="card-media" style={{ backgroundImage: `url(${n.imagemUrl || ''})` }} />
+              <div className="card-media" style={{ backgroundImage: `url(${n.featuredImageUrl || ''})` }} />
               <div className="card-overlay">
-                <h2 className="card-title">{n.titulo}</h2>
-                <p className="card-subtitle">{n.subtitulo || n.resumo}</p>
+                <h2 className="card-title">{n.title}</h2>
+                <p className="card-subtitle">{n.summary}</p>
               </div>
             </article>
           ))}
@@ -214,12 +210,12 @@ function Home() {
         <section className="news-grid">
           {small.map((n) => (
             <article key={n.id} className="news-card">
-              <div className="card-media" style={{ backgroundImage: `url(${n.imagemUrl || ''})` }} />
+              <div className="card-media" style={{ backgroundImage: `url(${n.featuredImageUrl || ''})` }} />
               <div className="card-body">
-                <h2 className="card-title">{n.titulo}</h2>
-                <p className="card-subtitle">{n.subtitulo || n.resumo}</p>
+                <h2 className="card-title">{n.title}</h2>
+                <p className="card-subtitle">{n.summary}</p>
                 <div className="card-meta">
-                  <span><i className="far fa-clock" /> {new Date(n.dataPublicacao || Date.now()).toLocaleDateString('pt-BR')}</span>
+                  <span><i className="far fa-clock" /> {new Date(n.publicationDate || Date.now()).toLocaleDateString('pt-BR')}</span>
                 </div>
               </div>
             </article>

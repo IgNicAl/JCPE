@@ -59,8 +59,8 @@ function Login() {
         username: response.data.username,
         email: response.data.email,
         name: response.data.name,
-        tipoUser: response.data.tipoUser,
-        token: response.data.accessToken,
+        userType: response.data.userType,
+        token: response.data.token,
       };
 
       login(userData);

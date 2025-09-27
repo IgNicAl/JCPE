@@ -4,17 +4,15 @@ import { newsService } from '@/lib/api';
 import './CreateNews.css';
 
 const INITIAL_FORM_STATE = {
-  titulo: '',
-  subtitulo: '',
-  resumo: '',
-  conteudo: '',
-  imagemUrl: '',
-  prioridade: 1,
+  title: '',
+  summary: '',
+  content: '',
+  featuredImageUrl: '',
+  priority: 1,
 };
 
 /**
  * @description Página com formulário para criação de uma nova notícia.
- * Acessível por jornalistas e administradores.
  * @returns {JSX.Element} A página de criação de notícia.
  */
 function CreateNews() {
@@ -26,8 +24,7 @@ function CreateNews() {
   const handleChange = ({ target: { name, value } }) => {
     setFormData((prev) => ({
       ...prev,
-      // Garante que o valor da prioridade seja sempre um número.
-      [name]: name === 'prioridade' ? parseInt(value, 10) : value,
+      [name]: name === 'priority' ? parseInt(value, 10) : value,
     }));
   };
 
@@ -65,7 +62,38 @@ function CreateNews() {
         )}
 
         <form onSubmit={handleSubmit} className="create-news-form">
-          {/* O código do formulário JSX foi omitido por ser repetitivo, mas estaria aqui */}
+          <div className="form-group">
+            <label htmlFor="title"><i className="fas fa-heading" /> Título *</label>
+            <input type="text" id="title" name="title" value={formData.title} onChange={handleChange} required />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="summary"><i className="fas fa-align-left" /> Resumo *</label>
+            <textarea id="summary" name="summary" value={formData.summary} onChange={handleChange} required />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="content"><i className="fas fa-file-alt" /> Conteúdo Completo *</label>
+            <textarea id="content" name="content" value={formData.content} onChange={handleChange} required />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="featuredImageUrl"><i className="fas fa-image" /> URL da Imagem de Capa</label>
+            <input type="text" id="featuredImageUrl" name="featuredImageUrl" value={formData.featuredImageUrl} onChange={handleChange} />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="priority"><i className="fas fa-star" /> Prioridade *</label>
+            <select id="priority" name="priority" value={formData.priority} onChange={handleChange}>
+              <option value={1}>Normal</option>
+              <option value={2}>Alta</option>
+              <option value={3}>Urgente</option>
+            </select>
+          </div>
+
+          <button type="submit" className="submit-btn" disabled={loading}>
+            {loading ? <><i className="fas fa-spinner fa-spin" /> Criando...</> : <><i className="fas fa-save" /> Criar Notícia</>}
+          </button>
         </form>
       </div>
     </div>

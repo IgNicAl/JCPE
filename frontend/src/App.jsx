@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
 import { AuthProvider } from './features/auth/contexts/AuthContext';
 import ProtectedRoute from './features/auth/routes/ProtectedRoute';
@@ -15,6 +15,25 @@ import ManageNews from './features/news/pages/ManageNews/ManageNews';
 import EditNews from './features/news/pages/EditNews/EditNews';
 
 /**
+ * @description Componente que não renderiza UI, mas gerencia o redirecionamento
+ * quando um evento 'unauthorized' é recebido de qualquer parte da aplicação.
+ * @returns {null}
+ */
+const RedirectController = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      navigate('/login');
+    };
+    window.addEventListener('unauthorized', handleUnauthorized);
+    return () => {
+      window.removeEventListener('unauthorized', handleUnauthorized);
+    };
+  }, [navigate]);
+  return null;
+};
+
+/**
  * @description Componente principal da aplicação que configura o provedor de autenticação,
  * o roteamento e a estrutura de layout geral com Navbar e conteúdo principal.
  * @returns {JSX.Element} O componente raiz da aplicação.
@@ -23,6 +42,7 @@ export function App() {
   return (
     <AuthProvider>
       <Router>
+        <RedirectController />
         <div className="App">
           <Navbar />
           <main className="main-content">
@@ -32,8 +52,7 @@ export function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/cadastro" element={<UserRegistration />} />
 
-              {/* Rota para cadastro de admin/jornalista */}
-              {/* FIXME: O componente ProtectedRoute parece ter uma prop 'roles' que não é usada. A lógica atual usa 'requireAdmin'. Isso é um bug intencional. */}
+              {/* Rota para cadastro de admin/jornalista, deve ser protegida */}
               <Route
                 path="/cadastro-interno"
                 element={
@@ -44,7 +63,6 @@ export function App() {
               />
 
               {/* Rotas de Admin */}
-               {/* FIXME: O componente ProtectedRoute parece ter uma prop 'roles' que não é usada. A lógica atual usa 'requireAdmin'. Isso é um bug intencional. */}
               <Route
                 path="/admin/usuarios"
                 element={
@@ -55,11 +73,10 @@ export function App() {
               />
 
               {/* Rotas Protegidas para Jornalistas e Admins */}
-               {/* FIXME: O componente ProtectedRoute parece ter uma prop 'roles' que não é usada. A lógica atual usa 'requireAdmin'. Isso é um bug intencional. */}
               <Route
                 path="/noticias/criar"
                 element={
-                  <ProtectedRoute roles={['JORNALISTA', 'ADMIN']}>
+                  <ProtectedRoute roles={['JOURNALIST', 'ADMIN']}>
                     <CreateNews />
                   </ProtectedRoute>
                 }
@@ -67,7 +84,7 @@ export function App() {
               <Route
                 path="/noticias/gerenciar"
                 element={
-                  <ProtectedRoute roles={['JORNALISTA', 'ADMIN']}>
+                  <ProtectedRoute roles={['JOURNALIST', 'ADMIN']}>
                     <ManageNews />
                   </ProtectedRoute>
                 }
@@ -75,7 +92,7 @@ export function App() {
               <Route
                 path="/noticias/editar/:id"
                 element={
-                  <ProtectedRoute roles={['JORNALISTA', 'ADMIN']}>
+                  <ProtectedRoute roles={['JOURNALIST', 'ADMIN']}>
                     <EditNews />
                   </ProtectedRoute>
                 }
@@ -85,7 +102,7 @@ export function App() {
               <Route
                 path="/users"
                 element={
-                  <ProtectedRoute requireAdmin>
+                  <ProtectedRoute roles={['ADMIN']}>
                     <UserList />
                   </ProtectedRoute>
                 }
@@ -93,7 +110,7 @@ export function App() {
                <Route
                 path="/cadastro-admin"
                 element={
-                  <ProtectedRoute requireAdmin>
+                  <ProtectedRoute roles={['ADMIN']}>
                     <InternalRegistration />
                   </ProtectedRoute>
                 }

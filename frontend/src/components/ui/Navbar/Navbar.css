@@ -43,7 +43,7 @@
   color: #e74c3c;
 }
 
-.nav-user-actions {
+.nav-menu {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -62,38 +62,18 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
 }
 
-.nav-btn-login {
-  background-color: #e74c3c;
-  color: #fff;
-}
-
-.nav-btn-login:hover {
-  background-color: #c0392b;
-  transform: translateY(-2px);
-}
-
-.nav-btn-register {
-  background-color: transparent;
-  color: #e74c3c;
-  border: 2px solid #e74c3c;
-}
-
-.nav-btn-register:hover {
-  background-color: #e74c3c;
-  color: #fff;
-}
-
-.nav-btn-admin {
-  background-color: #3498db;
-  color: #fff;
-}
-
-.nav-btn-admin:hover {
-  background-color: #2980b9;
-  transform: translateY(-2px);
-}
+/* Estilos dos botões */
+.nav-btn-login { background-color: #e74c3c; color: #fff; }
+.nav-btn-login:hover { background-color: #c0392b; transform: translateY(-2px); }
+.nav-btn-register { background-color: transparent; color: #e74c3c; border: 2px solid #e74c3c; }
+.nav-btn-register:hover { background-color: #e74c3c; color: #fff; }
+.nav-btn-admin { background-color: #3498db; color: #fff; }
+.nav-btn-admin:hover { background-color: #2980b9; transform: translateY(-2px); }
+.nav-btn-logout { background-color: #95a5a6; color: #fff; }
+.nav-btn-logout:hover { background-color: #7f8c8d; }
 
 .nav-user-info {
   display: flex;
@@ -106,26 +86,54 @@
   font-size: 1rem;
 }
 
-.nav-btn-logout {
-  background-color: #95a5a6;
-  color: #fff;
-}
-
-.nav-btn-logout:hover {
-  background-color: #7f8c8d;
-}
-
 .menu-icon {
-  display: none; /* Oculto em telas maiores */
+  display: none;
 }
 
+/* Estilos para o Menu Mobile */
 @media screen and (max-width: 960px) {
+  .nav-menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: absolute;
+    top: 80px;
+    left: -100%;
+    opacity: 1;
+    transition: all 0.5s ease;
+    padding: 20px 0;
+    gap: 20px;
+  }
+
+  .nav-menu.active {
+    background: #fdfdfd;
+    left: 0;
+    opacity: 1;
+    transition: all 0.5s ease;
+    z-index: 1;
+    box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-btn {
+    text-align: center;
+    padding: 1rem;
+    width: 90%;
+    display: table;
+  }
+
+  .nav-user-info {
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+  }
+
   .navbar-container {
     padding: 0 20px;
   }
-  .nav-user-actions {
-    /* Adapte para menu hamburguer se necessário */
-    flex-wrap: wrap;
-    justify-content: flex-end;
+
+  .menu-icon {
+    display: block;
+    font-size: 1.8rem;
+    cursor: pointer;
   }
 }

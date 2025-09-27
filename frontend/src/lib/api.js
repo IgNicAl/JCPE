@@ -30,17 +30,16 @@ api.interceptors.request.use(
 /**
  * Interceptor de respostas do Axios.
  * @description Trata erros globais da API. Se o erro for 401 (Não Autorizado),
- * remove o usuário do localStorage e redireciona para a página de login.
+ * o usuário é removido do localStorage e um evento 'unauthorized' é disparado
+ * para que a UI possa reagir e redirecionar o usuário para o login.
  */
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     console.error('Erro na API:', error.response?.data || error.message);
-    // FIXME: O redirecionamento via `window.location.href` pode causar a perda
-    // de estado no React. Considerar uma abordagem de roteamento mais integrada.
     if (error.response?.status === 401) {
         localStorage.removeItem('user');
-        window.location.href = '/login';
+        window.dispatchEvent(new Event('unauthorized')); // Dispara evento global
     }
     return Promise.reject(error);
   }

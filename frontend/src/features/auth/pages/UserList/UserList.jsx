@@ -133,9 +133,9 @@ function UserList() {
                   <i className="fas fa-envelope" />
                   {user.email}
                 </p>
-                <span className={`user-type ${user.tipoUser.toLowerCase()}`}>
-                  <i className={`fas ${user.tipoUser === 'ADMIN' ? 'fa-user-shield' : 'fa-user'}`} />
-                  {user.tipoUser === 'ADMIN' ? 'Administrador' : 'Jornalista'}
+                <span className={`user-type ${user.userType.toLowerCase()}`}>
+                  <i className={`fas ${user.userType === 'ADMIN' ? 'fa-user-shield' : 'fa-user'}`} />
+                  {user.userType === 'ADMIN' ? 'Administrador' : 'Jornalista'}
                 </span>
               </div>
               <div className="user-actions">

@@ -1,20 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { newsService } from '@/lib/api';
-import '../CreateNews/CreateNews.css'; // NOTE: Reutiliza o CSS da página de criação.
+import '../CreateNews/CreateNews.css';
 
 const INITIAL_FORM_STATE = {
-  titulo: '',
-  subtitulo: '',
-  resumo: '',
-  conteudo: '',
-  imagemUrl: '',
-  prioridade: 1,
+  title: '',
+  summary: '',
+  content: '',
+  featuredImageUrl: '',
+  priority: 1,
 };
 
 /**
  * @description Página com formulário para editar uma notícia existente.
- * Carrega os dados da notícia com base no ID da URL.
  * @returns {JSX.Element} A página de edição de notícia.
  */
 function EditNews() {
@@ -29,7 +27,8 @@ function EditNews() {
     async function loadNews() {
       try {
         const response = await newsService.getById(id);
-        setFormData(response.data);
+        const { title, summary, content, featuredImageUrl, priority } = response.data;
+        setFormData({ title, summary, content, featuredImageUrl, priority });
       } catch (error) {
         setMessage({ type: 'error', text: 'Erro ao carregar notícia. Tente novamente.' });
         console.error('Erro ao carregar notícia:', error);
@@ -41,7 +40,7 @@ function EditNews() {
   }, [id]);
 
   const handleChange = ({ target: { name, value } }) => {
-    setFormData((prev) => ({ ...prev, [name]: name === 'prioridade' ? parseInt(value, 10) : value }));
+    setFormData((prev) => ({ ...prev, [name]: name === 'priority' ? parseInt(value, 10) : value }));
   };
 
   const handleSubmit = async (e) => {
@@ -89,7 +88,38 @@ function EditNews() {
         )}
 
         <form onSubmit={handleSubmit} className="create-news-form">
-          {/* O código do formulário JSX foi omitido por ser repetitivo, mas estaria aqui */}
+          <div className="form-group">
+            <label htmlFor="title"><i className="fas fa-heading" /> Título *</label>
+            <input type="text" id="title" name="title" value={formData.title} onChange={handleChange} required />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="summary"><i className="fas fa-align-left" /> Resumo *</label>
+            <textarea id="summary" name="summary" value={formData.summary} onChange={handleChange} required />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="content"><i className="fas fa-file-alt" /> Conteúdo Completo *</label>
+            <textarea id="content" name="content" value={formData.content} onChange={handleChange} required />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="featuredImageUrl"><i className="fas fa-image" /> URL da Imagem de Capa</label>
+            <input type="text" id="featuredImageUrl" name="featuredImageUrl" value={formData.featuredImageUrl} onChange={handleChange} />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="priority"><i className="fas fa-star" /> Prioridade *</label>
+            <select id="priority" name="priority" value={formData.priority} onChange={handleChange}>
+              <option value={1}>Normal</option>
+              <option value={2}>Alta</option>
+              <option value={3}>Urgente</option>
+            </select>
+          </div>
+
+          <button type="submit" className="submit-btn" disabled={saving}>
+            {saving ? <><i className="fas fa-spinner fa-spin" /> Salvando...</> : <><i className="fas fa-save" /> Salvar Alterações</>}
+          </button>
         </form>
       </div>
     </div>

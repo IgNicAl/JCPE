@@ -5,7 +5,6 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <!-- Corrigido: Alterado para uma versão estável recente do Spring Boot -->
         <version>3.2.5</version>
         <relativePath/>
     </parent>
@@ -15,7 +14,7 @@
     <name>backend</name>
     <description>API para o projeto JCPM</description>
     <properties>
-        <java.version>21</java.version> <!-- Corrigido: Ajustado para Java 21 conforme solicitado -->
+        <java.version>21</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -54,16 +53,12 @@
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- Corrigido: Adicionada dependência do Lombok para reduzir boilerplate -->
+            </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -80,7 +75,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <!-- Corrigido: Adicionada configuração do Lombok ao plugin -->
                 <configuration>
                     <excludes>
                         <exclude>
@@ -93,4 +87,3 @@
         </plugins>
     </build>
 </project>
-
