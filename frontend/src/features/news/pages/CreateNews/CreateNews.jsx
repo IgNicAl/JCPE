@@ -17,6 +17,9 @@ const INITIAL_FORM_STATE = {
   summary: '',
   featuredImageUrl: '',
   priority: 1,
+  category: 'noticias', // Nova opção
+  page: 'noticias', // Nova: página onde a notícia será publicada
+  isFeatured: false, // Nova: se é notícia principal
 };
 
 function CreateNews() {
@@ -25,6 +28,21 @@ function CreateNews() {
   const [message, setMessage] = useState({ type: '', text: '' });
   const navigate = useNavigate();
   const editorRef = useRef(null);
+
+  const CATEGORIES = [
+    { value: 'noticias', label: 'Notícias' },
+    { value: 'esportes', label: 'Esportes' },
+    { value: 'politica', label: 'Política' },
+    { value: 'economia', label: 'Economia' },
+  ];
+
+  const PAGES = [
+    { value: 'noticias', label: 'Página Notícias' },
+    { value: 'recife', label: 'Recife em 5 Minutos' },
+    { value: 'clima', label: 'Clima' },
+    { value: 'empreendedorismo', label: 'Empreendedorismo' },
+    { value: 'jogos', label: 'Jogos' },
+  ];
 
   useEffect(() => {
     if (!editorRef.current) {
@@ -87,6 +105,9 @@ function CreateNews() {
         summary: draftData.summary || '',
         featuredImageUrl: draftData.featuredImageUrl || '',
         priority: draftData.priority || 1,
+        category: draftData.category || 'noticias',
+        page: draftData.page || 'noticias',
+        isFeatured: draftData.isFeatured || false,
       });
       if (editorRef.current) {
         editorRef.current.isReady
@@ -102,6 +123,15 @@ function CreateNews() {
     const updatedFormData = {
       ...formData,
       [name]: name === 'priority' ? parseInt(value, 10) : value,
+    };
+    setFormData(updatedFormData);
+    saveDraft(updatedFormData);
+  };
+
+  const handleCheckboxChange = ({ target: { name, checked } }) => {
+    const updatedFormData = {
+      ...formData,
+      [name]: checked,
     };
     setFormData(updatedFormData);
     saveDraft(updatedFormData);
@@ -140,6 +170,8 @@ function CreateNews() {
         status: 'PUBLICADO',
       };
 
+      console.log('Enviando dados da notícia:', newsData);
+      
       await newsService.create(newsData);
       setMessage({ type: 'success', text: 'Notícia criada com sucesso!' });
       localStorage.removeItem('newsDraft');
@@ -148,8 +180,9 @@ function CreateNews() {
         navigate('/noticias/gerenciar');
       }, 2000);
     } catch (error) {
-      setMessage({ type: 'error', text: 'Erro ao criar notícia. Tente novamente.' });
-      console.error('Erro ao criar:', error);
+      const errorMsg = error.response?.data?.message || error.message || 'Erro ao criar notícia. Tente novamente.';
+      setMessage({ type: 'error', text: errorMsg });
+      console.error('Erro ao criar:', error.response?.data || error);
     } finally {
       setLoading(false);
     }
@@ -191,13 +224,49 @@ function CreateNews() {
             <input type="text" id="featuredImageUrl" name="featuredImageUrl" value={formData.featuredImageUrl} onChange={handleChange} />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="priority"><i className="fas fa-star" /> Prioridade *</label>
-            <select id="priority" name="priority" value={formData.priority} onChange={handleChange}>
-              <option value={1}>Normal</option>
-              <option value={2}>Alta</option>
-              <option value={3}>Urgente</option>
-            </select>
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="category"><i className="fas fa-folder" /> Seção *</label>
+              <select id="category" name="category" value={formData.category} onChange={handleChange}>
+                {CATEGORIES.map((cat) => (
+                  <option key={cat.value} value={cat.value}>{cat.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="priority"><i className="fas fa-star" /> Prioridade *</label>
+              <select id="priority" name="priority" value={formData.priority} onChange={handleChange}>
+                <option value={1}>Normal</option>
+                <option value={2}>Alta</option>
+                <option value={3}>Urgente</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="page"><i className="fas fa-file-alt" /> Publicar em *</label>
+              <select id="page" name="page" value={formData.page} onChange={handleChange}>
+                {PAGES.map((p) => (
+                  <option key={p.value} value={p.value}>{p.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group checkbox-group">
+              <label htmlFor="isFeatured">
+                <input 
+                  type="checkbox" 
+                  id="isFeatured" 
+                  name="isFeatured" 
+                  checked={formData.isFeatured} 
+                  onChange={handleCheckboxChange}
+                />
+                <span><i className="fas fa-certificate" /> Notícia Principal</span>
+              </label>
+              <small>Marca esta notícia como destaque principal na página</small>
+            </div>
           </div>
 
           <button type="submit" className="submit-btn" disabled={loading}>

@@ -60,13 +60,13 @@ public class News {
   @Column(columnDefinition = "TEXT", nullable = false)
   private String content;
 
-  @JdbcTypeCode(SqlTypes.JSON)
   @Lob
-  @Column(columnDefinition = "JSON")
+  @Column(columnDefinition = "LONGTEXT", nullable = true)
   private String contentJson;
 
-  @NotBlank(message = "URL da imagem de destaque é obrigatória")
-  @Column(nullable = false)
+  // imagem de destaque agora pode ser opcional (nullable) — frontend pode não
+  // enviar
+  @Column(nullable = true)
   private String featuredImageUrl;
 
   @NotNull(message = "Prioridade é obrigatória")
@@ -77,9 +77,130 @@ public class News {
   @Column(nullable = false)
   private String status = "RASCUNHO"; // RASCUNHO ou PUBLICADO
 
+  @Column(nullable = true)
+  private String page = "noticias"; // página onde a notícia será publicada
+
+  @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
+  private Boolean isFeatured = false; // se é notícia principal/destaque
+
   @CreationTimestamp
   @Column(nullable = false, updatable = false)
   private LocalDateTime publicationDate;
 
-  @UpdateTimestamp private LocalDateTime updateDate;
+  @UpdateTimestamp
+  private LocalDateTime updateDate;
+
+  // Getters e Setters Explícitos (gerados por Lombok @Data, mas adicionados para
+  // suporte IDE)
+  public UUID getId() {
+    return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public User getAuthor() {
+    return author;
+  }
+
+  public void setAuthor(User author) {
+    this.author = author;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getSlug() {
+    return slug;
+  }
+
+  public void setSlug(String slug) {
+    this.slug = slug;
+  }
+
+  public String getSummary() {
+    return summary;
+  }
+
+  public void setSummary(String summary) {
+    this.summary = summary;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
+  public String getContentJson() {
+    return contentJson;
+  }
+
+  public void setContentJson(String contentJson) {
+    this.contentJson = contentJson;
+  }
+
+  public String getFeaturedImageUrl() {
+    return featuredImageUrl;
+  }
+
+  public void setFeaturedImageUrl(String featuredImageUrl) {
+    this.featuredImageUrl = featuredImageUrl;
+  }
+
+  public Integer getPriority() {
+    return priority;
+  }
+
+  public void setPriority(Integer priority) {
+    this.priority = priority;
+  }
+
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  public String getPage() {
+    return page;
+  }
+
+  public void setPage(String page) {
+    this.page = page;
+  }
+
+  public Boolean getIsFeatured() {
+    return isFeatured;
+  }
+
+  public void setIsFeatured(Boolean isFeatured) {
+    this.isFeatured = isFeatured;
+  }
+
+  public LocalDateTime getPublicationDate() {
+    return publicationDate;
+  }
+
+  public void setPublicationDate(LocalDateTime publicationDate) {
+    this.publicationDate = publicationDate;
+  }
+
+  public LocalDateTime getUpdateDate() {
+    return updateDate;
+  }
+
+  public void setUpdateDate(LocalDateTime updateDate) {
+    this.updateDate = updateDate;
+  }
 }

@@ -1,6 +1,9 @@
-import React, { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext, useRef, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../features/auth/contexts/AuthContext';
+import { userService } from '@/lib/api';
+import logo from '../../../assets/logo.svg';
+import NextPoint from '../NextPoint/NextPoint';
 import './Navbar.css';
 
 const ROUTE = {
@@ -18,59 +21,139 @@ const LOGO_TEXT = 'JCPM News';
  */
 function Navbar() {
   const { user, logout, isAdmin, isJournalist } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const dropdownRef = useRef(null);
 
   const toggleMenu = () => setMenuOpen(!isMenuOpen);
   const closeMobileMenu = () => setMenuOpen(false);
 
-  const renderAuthenticatedActions = () => (
-    <>
-      {(isAdmin() || isJournalist()) && (
-        <Link to={ROUTE.MANAGE_NEWS} className="nav-btn nav-btn-admin" onClick={closeMobileMenu}>
-          <i className="fas fa-edit" /> Gerenciar Notícias
-        </Link>
-      )}
-      {isAdmin() && (
-        <Link to={ROUTE.MANAGE_USERS} className="nav-btn nav-btn-admin" onClick={closeMobileMenu}>
-          <i className="fas fa-users-cog" /> Gerenciar Usuários
-        </Link>
-      )}
-      {user && (
-        <div className="nav-user-info">
-          <span className="nav-welcome">
-            Olá, <strong>{user.name}</strong>
-          </span>
-          <button type="button" onClick={() => { logout(); closeMobileMenu(); }} className="nav-btn nav-btn-logout">
-            <i className="fas fa-sign-out-alt" /> Sair
-          </button>
-        </div>
-      )}
-    </>
-  );
+  useEffect(()=>{
+    let mounted = true;
+    // try to get profile info (may include avatar url)
+    async function load() {
+      try{
+        const res = await userService.getMyProfile();
+        if(!mounted) return;
+        // assume API returns a field like `avatarUrl` or `photoUrl` - check common keys
+        const data = res.data || {};
+        setAvatarUrl(data.avatarUrl || data.photoUrl || data.photo || null);
+      }catch(e){
+        // ignore - profile may not be available until later
+      }
+    }
+    if(user){
+      load();
+      // fallback to locally stored avatar (selected by user) if server doesn't provide
+      const local = localStorage.getItem('jcpm_avatar');
+      if(local){
+        setAvatarUrl(local);
+      }
+    }
+    return ()=>{ mounted = false };
+  },[user]);
+
+  const handleDocumentClick = (e)=>{
+    if(dropdownRef.current && !dropdownRef.current.contains(e.target)){
+      setDropdownOpen(false);
+    }
+  }
+
+  useEffect(()=>{
+    if(dropdownOpen){
+      document.addEventListener('click', handleDocumentClick);
+    } else {
+      document.removeEventListener('click', handleDocumentClick);
+    }
+    return ()=> document.removeEventListener('click', handleDocumentClick);
+  },[dropdownOpen]);
+
+  const renderAuthenticatedActions = () => {
+    const initials = (user?.name || user?.username || 'U').split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase();
+    return (
+      <div className="avatar-wrapper" ref={dropdownRef}>
+        <button className="avatar-button" onClick={()=>setDropdownOpen(!dropdownOpen)} aria-label="menu do usuário">
+          {avatarUrl ? (
+            <img src={avatarUrl} alt="avatar" className="avatar-img" />
+          ) : (
+            <div className="avatar-initials">{initials}</div>
+          )}
+        </button>
+        {dropdownOpen && (
+          <div className="avatar-dropdown">
+            <Link to="/usuario" className="avatar-dropdown-item" onClick={()=>{setDropdownOpen(false); closeMobileMenu()}}>Meu dados</Link>
+            <Link to="/pontos" className="avatar-dropdown-item" onClick={()=>{setDropdownOpen(false); closeMobileMenu()}}>Meus benefícios</Link>
+            <button className="avatar-dropdown-item avatar-logout" onClick={()=>{ setDropdownOpen(false); logout(); }}>Sair</button>
+          </div>
+        )}
+      </div>
+    )
+  };
 
   const renderVisitorActions = () => (
     <>
       <Link to={ROUTE.LOGIN} className="nav-btn nav-btn-login" onClick={closeMobileMenu}>
-        <i className="fas fa-sign-in-alt" /> Login
+        LOGIN
       </Link>
       <Link to={ROUTE.REGISTER_USER} className="nav-btn nav-btn-register" onClick={closeMobileMenu}>
-        <i className="fas fa-user-plus" /> Cadastrar
+        CADASTRO
       </Link>
     </>
   );
 
   return (
     <nav className="navbar">
-      <div className="navbar-container">
-        <Link to={ROUTE.HOME} className="navbar-logo" onClick={closeMobileMenu}>
-          <i className="fas fa-newspaper" /> {LOGO_TEXT}
+      {/* TOP SECTION - Logo and Auth */}
+      <div className="navbar-top">
+        <Link to={ROUTE.HOME} className="navbar-logo-container" onClick={closeMobileMenu}>
+          <img src={logo} alt="JCPM Logo" className="navbar-logo-img" />
         </Link>
-        <div className="menu-icon" onClick={toggleMenu}>
-          <i className={isMenuOpen ? 'fas fa-times' : 'fas fa-bars'} />
-        </div>
-        <div className={isMenuOpen ? 'nav-menu active' : 'nav-menu'}>
+        <div className="nav-auth">
+          {user && <NextPoint />}
           {user ? renderAuthenticatedActions() : renderVisitorActions()}
         </div>
+      </div>
+
+      {/* BOTTOM SECTION - Menu and Search */}
+      <div className="navbar-bottom">
+        <div className={isMenuOpen ? 'nav-menu active' : 'nav-menu'}>
+          <Link to="/" className="nav-menu-item" onClick={closeMobileMenu}>SOBRE</Link>
+          <Link to="/noticias" className="nav-menu-item" onClick={closeMobileMenu}>NOTÍCIAS</Link>
+          <Link to="/recife" className="nav-menu-item" onClick={closeMobileMenu}>RECIFE EM 5 MIN</Link>
+          <Link to="/jogos" className="nav-menu-item" onClick={closeMobileMenu}>JOGOS</Link>
+          <Link to="/clima" className="nav-menu-item" onClick={closeMobileMenu}>CLIMA</Link>
+          <Link to="/empreendedorismo" className="nav-menu-item" onClick={closeMobileMenu}>EMPREENDEDORISMO</Link>
+          
+          {/* Admin/Journalist Dashboard Links */}
+          {user && isAdmin() && (
+            <Link to={ROUTE.MANAGE_NEWS} className="nav-menu-item nav-menu-admin" onClick={closeMobileMenu}>
+              GERENCIAR NOTÍCIAS
+            </Link>
+          )}
+          {user && isAdmin() && (
+            <Link to={ROUTE.MANAGE_USERS} className="nav-menu-item nav-menu-admin" onClick={closeMobileMenu}>
+              GERENCIAR USUÁRIOS
+            </Link>
+          )}
+          {user && isJournalist() && (
+            <Link to={ROUTE.MANAGE_NEWS} className="nav-menu-item nav-menu-journalist" onClick={closeMobileMenu}>
+              MINHAS NOTÍCIAS
+            </Link>
+          )}
+        </div>
+        
+        <div className="navbar-search">
+          <input type="text" placeholder="PESQUISAR" className="search-input" />
+          <button type="button" className="search-btn">
+            <i className="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+
+      <div className="menu-icon" onClick={toggleMenu}>
+        <i className={isMenuOpen ? 'fas fa-times' : 'fas fa-bars'} />
       </div>
     </nav>
   );

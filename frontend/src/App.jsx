@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'r
 import { AuthProvider } from './features/auth/contexts/AuthContext';
 import ProtectedRoute from './features/auth/routes/ProtectedRoute';
 import Navbar from './components/ui/Navbar/Navbar';
+import Footer from './components/ui/Footer/Footer';
 
 import Home from './pages/Home/Home';
 import Login from './features/auth/pages/Login/Login';
@@ -15,6 +16,11 @@ import CreateNews from './features/news/pages/CreateNews/CreateNews';
 import ManageNews from './features/news/pages/ManageNews/ManageNews';
 import EditNews from './features/news/pages/EditNews/EditNews';
 import NewsPage from './features/news/pages/NewsPage/NewsPage'; // NOVO
+import Jogos from './pages/Jogos/Jogos';
+import Clima from './pages/Clima/Clima';
+import Recife from './pages/Recife/Recife';
+import Empreendedorismo from './pages/Empreendedorismo/Empreendedorismo';
+import Points from './pages/Points/Points';
 
 const RedirectController = () => {
   const navigate = useNavigate();
@@ -44,6 +50,11 @@ export function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/cadastro" element={<UserRegistration />} />
               <Route path="/noticia/:slug" element={<NewsPage />} /> {/* NOVO */}
+              <Route path="/jogos" element={<Jogos />} />
+              <Route path="/clima" element={<Clima />} />
+              <Route path="/recife" element={<Recife />} />
+              <Route path="/empreendedorismo" element={<Empreendedorismo />} />
+              <Route path="/noticias" element={<Home />} />
 
               <Route
                 path="/cadastro-interno"
@@ -98,6 +109,15 @@ export function App() {
               />
 
               <Route
+                path="/pontos"
+                element={
+                  <ProtectedRoute roles={['USER']}>
+                    <Points />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
                 path="/users"
                 element={
                   <ProtectedRoute roles={['ADMIN']}>
@@ -117,6 +137,7 @@ export function App() {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
+          <Footer />
         </div>
       </Router>
     </AuthProvider>

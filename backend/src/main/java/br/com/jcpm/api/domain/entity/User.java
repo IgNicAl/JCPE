@@ -1,5 +1,18 @@
 package br.com.jcpm.api.domain.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import br.com.jcpm.api.domain.enums.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,23 +25,13 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * Representa a entidade Usuário no banco de dados e implementa a interface UserDetails do Spring Security.
+ * Representa a entidade Usuário no banco de dados e implementa a interface
+ * UserDetails do Spring Security.
  */
 @Data
 @NoArgsConstructor
@@ -82,6 +85,14 @@ public class User implements UserDetails {
   @Column(nullable = false, updatable = false)
   private LocalDateTime registrationDate;
 
+  // Tempo total de tela em segundos acumulado pelo usuário
+  @Column(name = "total_screen_time_seconds", nullable = false)
+  private long totalScreenTimeSeconds = 0L;
+
+  // Pontos acumulados (regra: 1 ponto a cada 60 segundos)
+  @Column(name = "points", nullable = false)
+  private int points = 0;
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority("ROLE_" + userType.name()));
@@ -105,5 +116,105 @@ public class User implements UserDetails {
   @Override
   public boolean isEnabled() {
     return this.active;
+  }
+
+  @Override
+  public String getUsername() {
+    return this.username;
+  }
+
+  // Getters e Setters Explícitos (gerados por Lombok @Data, mas adicionados para
+  // suporte IDE)
+  public UUID getId() {
+    return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public UserType getUserType() {
+    return userType;
+  }
+
+  public void setUserType(UserType userType) {
+    this.userType = userType;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  @Override
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public String getProfileImageUrl() {
+    return profileImageUrl;
+  }
+
+  public void setProfileImageUrl(String profileImageUrl) {
+    this.profileImageUrl = profileImageUrl;
+  }
+
+  public String getBiography() {
+    return biography;
+  }
+
+  public void setBiography(String biography) {
+    this.biography = biography;
+  }
+
+  public String getGender() {
+    return gender;
+  }
+
+  public void setGender(String gender) {
+    this.gender = gender;
+  }
+
+  public LocalDate getBirthDate() {
+    return birthDate;
+  }
+
+  public void setBirthDate(LocalDate birthDate) {
+    this.birthDate = birthDate;
+  }
+
+  public Boolean getActive() {
+    return active;
+  }
+
+  public void setActive(Boolean active) {
+    this.active = active;
+  }
+
+  public LocalDateTime getRegistrationDate() {
+    return registrationDate;
+  }
+
+  public void setRegistrationDate(LocalDateTime registrationDate) {
+    this.registrationDate = registrationDate;
   }
 }

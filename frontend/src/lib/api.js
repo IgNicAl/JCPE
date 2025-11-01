@@ -42,10 +42,16 @@ export const userService = {
   getUserById: (id) => api.get(`/api/users/${id}`),
   updateUser: (id, user) => api.put(`/api/users/${id}`, user),
   deleteUser: (id) => api.delete(`/api/users/${id}`),
+  // screen time endpoints
+  sendScreenTime: (seconds) => api.post('/api/users/me/screentime', { seconds }),
+  getMyPoints: () => api.get('/api/users/me/points'),
+  // get authenticated user's profile
+  getMyProfile: () => api.get('/api/users/me'),
 };
 
 export const newsService = {
-  getAll: () => api.get('/api/noticias'),
+  // getAll accepts optional page param: getAll() or getAll('recife')
+  getAll: (page) => api.get('/api/noticias' + (page ? `?page=${encodeURIComponent(page)}` : '')),
   // ROTA CORRIGIDA para corresponder ao backend
   getBySlug: (slug) => api.get(`/api/noticias/slug/${slug}`),
   getAllForManagement: () => api.get('/api/noticias/manage'),

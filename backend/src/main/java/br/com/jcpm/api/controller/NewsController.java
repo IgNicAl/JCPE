@@ -1,17 +1,12 @@
 package br.com.jcpm.api.controller;
 
-import br.com.jcpm.api.domain.entity.News;
-import br.com.jcpm.api.domain.entity.User;
-import br.com.jcpm.api.dto.NewsRequest;
-import br.com.jcpm.api.repository.NewsRepository;
-import jakarta.validation.Valid;
 import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +19,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import br.com.jcpm.api.domain.entity.News;
+import br.com.jcpm.api.domain.entity.User;
+import br.com.jcpm.api.dto.NewsRequest;
+import br.com.jcpm.api.repository.NewsRepository;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/noticias")
@@ -32,7 +34,6 @@ public class NewsController {
 
   private final NewsRepository newsRepository;
 
-  @Autowired
   public NewsController(NewsRepository newsRepository) {
     this.newsRepository = newsRepository;
   }
@@ -46,13 +47,18 @@ public class NewsController {
     int count = 1;
     String finalSlug = slug;
     while (newsRepository.existsBySlug(finalSlug)) {
-        finalSlug = slug + "-" + count++;
+      finalSlug = slug + "-" + count++;
     }
     return finalSlug;
   }
 
   @GetMapping
-  public ResponseEntity<List<News>> getAllPublicNews() {
+  public ResponseEntity<List<News>> getAllPublicNews(@RequestParam(required = false) String page) {
+    if (page != null && !page.isBlank()) {
+      // retornar apenas notícias daquela página, ordenadas por prioridade e data
+      return ResponseEntity.ok(
+          newsRepository.findAllByPageAndStatusOrderByPriorityDescPublicationDateDesc(page, "PUBLICADO"));
+    }
     return ResponseEntity.ok(newsRepository.findAllByStatusOrderByPublicationDateDesc("PUBLICADO"));
   }
 
@@ -101,6 +107,8 @@ public class NewsController {
     news.setContentJson(newsRequest.getContentJson());
     news.setFeaturedImageUrl(newsRequest.getFeaturedImageUrl());
     news.setPriority(newsRequest.getPriority());
+    news.setPage(newsRequest.getPage() != null ? newsRequest.getPage() : "noticias");
+    news.setIsFeatured(newsRequest.getIsFeatured() != null ? newsRequest.getIsFeatured() : false);
     news.setAuthor(currentUser);
     news.setPublicationDate(LocalDateTime.now());
     news.setStatus(newsRequest.getStatus() != null ? newsRequest.getStatus() : "PUBLICADO");
@@ -135,6 +143,9 @@ public class NewsController {
               news.setContentJson(newsRequest.getContentJson());
               news.setFeaturedImageUrl(newsRequest.getFeaturedImageUrl());
               news.setPriority(newsRequest.getPriority());
+              news.setPage(newsRequest.getPage() != null ? newsRequest.getPage() : news.getPage());
+              news.setIsFeatured(
+                  newsRequest.getIsFeatured() != null ? newsRequest.getIsFeatured() : news.getIsFeatured());
               news.setUpdateDate(LocalDateTime.now());
               news.setStatus(newsRequest.getStatus() != null ? newsRequest.getStatus() : news.getStatus());
 
