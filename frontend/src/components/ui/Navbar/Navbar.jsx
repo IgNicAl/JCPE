@@ -12,12 +12,15 @@ const ROUTE = {
   MANAGE_USERS: '/users',
   LOGIN: '/login',
   REGISTER_USER: '/cadastro',
+  CHAT_AI: '/chat', // <-- Adicionada rota do chat
 };
 const LOGO_TEXT = 'JCPM News';
 
 /**
- * @description Componente de navegação principal da aplicação.
- * @returns {JSX.Element} A barra de navegação.
+ * Componente de navegação principal da aplicação.
+ * Inclui o logo, links de navegação, botões de autenticação
+ * e o menu do usuário (avatar).
+ * * @returns {JSX.Element} A barra de navegação.
  */
 function Navbar() {
   const { user, logout, isAdmin, isJournalist } = useContext(AuthContext);
@@ -30,23 +33,21 @@ function Navbar() {
   const toggleMenu = () => setMenuOpen(!isMenuOpen);
   const closeMobileMenu = () => setMenuOpen(false);
 
+  // Efeito para buscar a URL do avatar do usuário (se disponível)
   useEffect(()=>{
     let mounted = true;
-    // try to get profile info (may include avatar url)
     async function load() {
       try{
         const res = await userService.getMyProfile();
         if(!mounted) return;
-        // assume API returns a field like `avatarUrl` or `photoUrl` - check common keys
         const data = res.data || {};
         setAvatarUrl(data.avatarUrl || data.photoUrl || data.photo || null);
       }catch(e){
-        // ignore - profile may not be available until later
+        // ignora
       }
     }
     if(user){
       load();
-      // fallback to locally stored avatar (selected by user) if server doesn't provide
       const local = localStorage.getItem('jcpm_avatar');
       if(local){
         setAvatarUrl(local);
@@ -55,12 +56,12 @@ function Navbar() {
     return ()=>{ mounted = false };
   },[user]);
 
+  // Efeito para fechar o dropdown do avatar se clicar fora dele
   const handleDocumentClick = (e)=>{
     if(dropdownRef.current && !dropdownRef.current.contains(e.target)){
       setDropdownOpen(false);
     }
   }
-
   useEffect(()=>{
     if(dropdownOpen){
       document.addEventListener('click', handleDocumentClick);
@@ -70,6 +71,9 @@ function Navbar() {
     return ()=> document.removeEventListener('click', handleDocumentClick);
   },[dropdownOpen]);
 
+  /**
+   * Renderiza o menu do avatar (dropdown) para usuários logados.
+   */
   const renderAuthenticatedActions = () => {
     const initials = (user?.name || user?.username || 'U').split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase();
     return (
@@ -92,6 +96,9 @@ function Navbar() {
     )
   };
 
+  /**
+   * Renderiza os botões de Login e Cadastro para visitantes.
+   */
   const renderVisitorActions = () => (
     <>
       <Link to={ROUTE.LOGIN} className="nav-btn nav-btn-login" onClick={closeMobileMenu}>
@@ -105,7 +112,7 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      {/* TOP SECTION - Logo and Auth */}
+      {/* Seção Superior: Logo e Autenticação */}
       <div className="navbar-top">
         <Link to={ROUTE.HOME} className="navbar-logo-container" onClick={closeMobileMenu}>
           <img src={logo} alt="JCPM Logo" className="navbar-logo-img" />
@@ -116,17 +123,28 @@ function Navbar() {
         </div>
       </div>
 
-      {/* BOTTOM SECTION - Menu and Search */}
+      {/* Seção Inferior: Menu de Navegação e Pesquisa */}
       <div className="navbar-bottom">
         <div className={isMenuOpen ? 'nav-menu active' : 'nav-menu'}>
           <Link to="/" className="nav-menu-item" onClick={closeMobileMenu}>SOBRE</Link>
           <Link to="/noticias" className="nav-menu-item" onClick={closeMobileMenu}>NOTÍCIAS</Link>
+
+          {/* NOVO LINK: Assistente de IA
+            Aparece apenas se o usuário estiver logado.
+          */}
+          {user && (
+            <Link to={ROUTE.CHAT_AI} className="nav-menu-item" onClick={closeMobileMenu}>
+              <i className="fas fa-robot" style={{marginRight: '6px', opacity: 0.8}}></i>
+              ASSISTENTE IA
+            </Link>
+          )}
+
           <Link to="/recife" className="nav-menu-item" onClick={closeMobileMenu}>RECIFE EM 5 MIN</Link>
           <Link to="/jogos" className="nav-menu-item" onClick={closeMobileMenu}>JOGOS</Link>
           <Link to="/clima" className="nav-menu-item" onClick={closeMobileMenu}>CLIMA</Link>
           <Link to="/empreendedorismo" className="nav-menu-item" onClick={closeMobileMenu}>EMPREENDEDORISMO</Link>
-          
-          {/* Admin/Journalist Dashboard Links */}
+
+          {/* Links de Admin/Jornalista (condicionais) */}
           {user && isAdmin() && (
             <Link to={ROUTE.MANAGE_NEWS} className="nav-menu-item nav-menu-admin" onClick={closeMobileMenu}>
               GERENCIAR NOTÍCIAS
@@ -143,7 +161,8 @@ function Navbar() {
             </Link>
           )}
         </div>
-        
+
+        {/* Barra de Pesquisa */}
         <div className="navbar-search">
           <input type="text" placeholder="PESQUISAR" className="search-input" />
           <button type="button" className="search-btn">
@@ -152,6 +171,7 @@ function Navbar() {
         </div>
       </div>
 
+      {/* Ícone de Menu Hamburguer (Mobile) */}
       <div className="menu-icon" onClick={toggleMenu}>
         <i className={isMenuOpen ? 'fas fa-times' : 'fas fa-bars'} />
       </div>

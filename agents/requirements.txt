@@ -1,0 +1,12 @@
+crewai
+langchain
+langchain-google-genai
+fastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+requests
+pytest
+SQLAlchemy
+pymysql
+newsapi-python
