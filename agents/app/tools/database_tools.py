@@ -9,6 +9,9 @@ from config.database import SessionLocal
 from app.models import User, UserPreference
 import uuid
 
+# Define as chaves de preferência permitidas para aumentar a segurança
+ALLOWED_PREFERENCE_KEYS = {'topic', 'source', 'author'}
+
 
 def get_user_preferences(user_id: str) -> list[dict]:
     """Busca as preferências de um usuário no banco de dados.
@@ -38,13 +41,17 @@ def save_user_preference(user_id: str, key: str, value: str) -> dict:
 
     Args:
         user_id: O ID do usuário (UUID como string).
-        key: A chave da preferência (ex: 'topicos').
-        value: O valor da preferência (ex: 'politica').
+        key: A chave da preferência (deve ser uma das chaves permitidas).
+        value: O valor da preferência.
 
     Returns:
         dict: Um dicionário indicando o status ("success" ou "error")
               e uma mensagem descritiva.
     """
+    # Validação de Segurança: Garante que apenas chaves permitidas sejam salvas.
+    if key not in ALLOWED_PREFERENCE_KEYS:
+        return {"status": "error", "message": f"A chave de preferência '{key}' não é permitida."}
+
     db: Session = SessionLocal()
     try:
         user_uuid = uuid.UUID(user_id)

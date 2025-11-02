@@ -68,20 +68,3 @@ async def chat(request: ChatRequest) -> ChatResponse:
     crew_result = run_crew(request.user_id, request.query)
 
     return ChatResponse(response=crew_result)
-
-
-@app.get("/debug-env", tags=["Debugging"])
-def debug_env():
-    """Endpoint de depuração (opcional) para verificar as variáveis de ambiente.
-
-    Cuidado: Evite expor dados sensíveis em produção.
-
-    Retorna:
-        dict: Status de carregamento das principais variáveis de ambiente.
-    """
-    return {
-        "gemini_api_key_loaded": bool(os.getenv("GEMINI_API_KEY")),
-        "news_api_key_loaded": bool(os.getenv("NEWS_API_KEY")),
-        "db_host": os.getenv("DB_HOST"),
-        "db_name": os.getenv("DB_NAME")
-    }

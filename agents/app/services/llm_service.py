@@ -7,7 +7,7 @@ Fornece funções auxiliares como 'get_llm' e 'summarize_text'.
 """
 
 import os
-from langchain_google_genai import ChatGoogleGenerativeAI
+from crewai.llm import LLM
 from langchain_core.prompts import ChatPromptTemplate
 
 # Carrega a API Key (fornecida pelo main.py)
@@ -17,19 +17,17 @@ if not GEMINI_API_KEY:
     raise ValueError("Variável de ambiente GEMINI_API_KEY não definida.")
 
 # Configura e instancia o LLM
-llm = ChatGoogleGenerativeAI(
-    model="gemini-1.5-flash",
-    google_api_key=GEMINI_API_KEY,
-    temperature=0.7,  # Adiciona um pouco de criatividade
-    top_p=0.95
+llm = LLM(
+    model="gemini/gemini-2.0-flash",
+    api_key=GEMINI_API_KEY,
 )
 
 
-def get_llm() -> ChatGoogleGenerativeAI:
+def get_llm() -> LLM:
     """Retorna a instância configurada do LLM.
 
     Returns:
-        ChatGoogleGenerativeAI: A instância global do LLM.
+        LLM: A instância global do LLM.
     """
     return llm
 
@@ -51,7 +49,7 @@ def summarize_text(text: str, query: str) -> str:
         ]
     )
 
-    chain = prompt_template | llm
+    chain = prompt_template | llm.client
 
     try:
         response = chain.invoke({"text": text, "query": query})

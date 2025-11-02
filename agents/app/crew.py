@@ -58,8 +58,9 @@ def run_crew(user_id: str, query: str) -> str:
     # Tarefa 3: Compilar e resumir (Gerente)
     summary_task = Task(
         description=(
-            "Usando o perfil do usuário (da 'preference_task') e o resultado da 'search_task' (que pode ser artigos ou uma pergunta), "
-            "gere uma resposta final coesa, amigável e personalizada em PT-BR."
+            "Usando o perfil do usuário (da 'preference_task') e o resultado da 'search_task', gere uma resposta final coesa e personalizada em PT-BR. "
+            "Se o perfil for 'nenhuma preferência encontrada', sua resposta deve ser uma mensagem de boas-vindas que delega ao 'Assistente Geral' a tarefa de perguntar ao usuário sobre seus interesses. "
+            "Se houver artigos, justifique brevemente por que foram escolhidos."
         ),
         expected_output="Um resumo formatado (PT-BR) das notícias OU a pergunta de esclarecimento, pronto para o usuário.",
         agent=orchestrator_agent,
@@ -91,7 +92,7 @@ def run_crew(user_id: str, query: str) -> str:
         process=Process.hierarchical,
         llm=llm,  # LLM para os agentes trabalhadores
         manager_llm=llm,  # LLM para o gerente
-        verbose=2
+        verbose=True
     )
 
     try:

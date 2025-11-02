@@ -10,15 +10,14 @@ função-fábrica _create_specialist_agent para seguir o princípio DRY.
 """
 
 from crewai import Agent
-from app.tools.toolkit import db_tool, news_search_tool
-from langchain_google_genai import ChatGoogleGenerativeAI # Importar o tipo do LLM
+from app.tools.toolkit import get_user_preferences_tool, save_user_preference_tool, news_search_tool
+from crewai.llm import LLM
 
 # Define as ferramentas que serão distribuídas aos agentes
-db_utility_tool = db_tool
 search_utility_tool = news_search_tool
 
 
-def _create_specialist_agent(role: str, goal: str, backstory: str, llm: ChatGoogleGenerativeAI) -> Agent:
+def _create_specialist_agent(role: str, goal: str, backstory: str, llm: LLM) -> Agent:
     """Fábrica interna para criar agentes especialistas em notícias.
 
     Esta função consolida a lógica repetida de configuração dos agentes
@@ -28,7 +27,7 @@ def _create_specialist_agent(role: str, goal: str, backstory: str, llm: ChatGoog
         role: O papel (função) do agente.
         goal: O objetivo principal do agente.
         backstory: A história de fundo (contexto) do agente.
-        llm: A instância do LLM (ChatGoogleGenerativeAI) a ser usada.
+        llm: A instância do LLM (LLM) a ser usada.
 
     Returns:
         Um objeto Agent configurado.
@@ -51,11 +50,11 @@ class NewsAgents:
     execução da equipe (Crew).
     """
 
-    def __init__(self, llm: ChatGoogleGenerativeAI):
+    def __init__(self, llm: LLM):
         """Inicializa a fábrica de agentes com um LLM específico.
 
         Args:
-            llm: A instância do LLM (ex: ChatGoogleGenerativeAI)
+            llm: A instância do LLM (ex: LLM)
                  a ser usada por todos os agentes criados por esta fábrica.
         """
         self.llm = llm
@@ -73,7 +72,7 @@ class NewsAgents:
                 "Você é um especialista em análise de dados de usuários. Sua função é examinar as preferências salvas "
                 "de um usuário (usando o db_tool) para identificar temas e palavras-chave que guiarão a busca por notícias."
             ),
-            tools=[db_utility_tool],
+            tools=[get_user_preferences_tool],
             llm=self.llm,  # <-- Injeta o LLM explicitamente
             verbose=True,
             allow_delegation=False
@@ -88,15 +87,17 @@ class NewsAgents:
         return Agent(
             role="Orquestrador de Notícias e Redator Chefe (Gerente)",
             goal=(
-                "Coordenar todo o processo de atendimento ao usuário. Primeiro, entender o perfil do usuário (delegando ao Gerenciador de Preferências). "
-                "Segundo, analisar a query do usuário e o perfil para ROTEIRIZAR a tarefa para o Agente Especialista correto (ex: Política, Esportes, etc.). "
-                "Se a query for vaga ou não se encaixar, delegue ao 'Assistente Geral'. "
-                "Finalmente, compilar os resultados em uma resposta final coesa em PT-BR."
+                "Coordenar o processo de atendimento ao usuário de ponta a ponta. Primeiro, delegar ao Gerenciador de Preferências para entender o perfil do usuário. "
+                "Segundo, analisar a consulta do usuário e o perfil para roteirizar a tarefa para o especialista correto (ex: Política, Esportes). "
+                "Para evitar a 'bolha de filtro', introduza esporadicamente um tópico relevante, mas que esteja fora das preferências diretas do usuário. "
+                "Se a consulta for vaga, delegue ao 'Assistente Geral'. "
+                "Finalmente, compilar os resultados em uma resposta final coesa em PT-BR, explicando brevemente por que cada notícia foi selecionada (ex: 'Com base no seu interesse em X...' ou 'Como uma sugestão de tópico novo...')."
             ),
             backstory=(
                 "Você é o editor-chefe e gerente desta equipe. Você recebe a consulta, busca contexto interno, "
                 "e delega a busca de notícias ao especialista apropriado da sua equipe. Você é o único que fala com o usuário."
             ),
+            tools=[get_user_preferences_tool, news_search_tool, save_user_preference_tool],
             llm=self.llm,  # <-- Injeta o LLM explicitamente
             verbose=True,
             allow_delegation=True

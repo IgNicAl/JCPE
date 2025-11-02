@@ -1,6 +1,9 @@
-crewai
+crewai[google-genai]
+crewai-tools
 langchain
 langchain-google-genai
+google-generativeai
+langgraph-prebuilt
 fastapi
 uvicorn[standard]
 pydantic
