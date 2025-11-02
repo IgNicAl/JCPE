@@ -1,0 +1,133 @@
+/* JOGOS PAGE */
+
+.jogos-page {
+  background: #fff;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.jogos-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.jogos-header {
+  text-align: center;
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.jogos-header i {
+  font-size: 48px;
+  color: #00aa44;
+}
+
+.jogos-header h1 {
+  font-size: 42px;
+  font-weight: 900;
+  color: #333;
+  margin: 0;
+}
+
+.jogos-header p {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.game-card {
+  background: linear-gradient(135deg, #00aa44 0%, #008533 100%);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 170, 68, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.game-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(0, 170, 68, 0.25);
+}
+
+.game-status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  backdrop-filter: blur(8px);
+}
+
+.game-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.team {
+  display: flex;
+  justify-content: center;
+}
+
+.team-name {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.game-score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.score {
+  font-size: 48px;
+  font-weight: 900;
+  color: #fff;
+  min-width: 60px;
+  text-align: center;
+}
+
+.separator {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 24px;
+  font-weight: 300;
+}
+
+@media (max-width: 1024px) {
+  .games-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .jogos-header h1 {
+    font-size: 32px;
+  }
+
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .score {
+    font-size: 36px;
+  }
+}

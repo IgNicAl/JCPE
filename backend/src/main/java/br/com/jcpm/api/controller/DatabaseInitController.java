@@ -14,17 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controlador para inicialização de dados básicos no sistema, como usuários de teste e administrador.
- * // TODO: Este controlador deve ser usado apenas em ambiente de desenvolvimento e desabilitado em
- * produção.
+ * 
+ * ⚠️ AVISO DE SEGURANÇA: Este controlador deve ser usado apenas em ambiente de desenvolvimento
+ * e DESABILITADO em produção através de profiles do Spring (spring.profiles.active=prod).
+ * 
+ * Em produção, remova as rotas /api/init da aplicação ou implemente autenticação adicional.
  */
 @RestController
 @RequestMapping("/api/init")
 @CrossOrigin(origins = "http://localhost:3000")
 public class DatabaseInitController {
 
-  @Autowired private UserService userService;
+  @Autowired 
+  private UserService userService;
 
-  @Autowired private PasswordEncoder passwordEncoder;
+  @Autowired 
+  private PasswordEncoder passwordEncoder;
 
   /**
    * Cria o usuário administrador padrão se ele ainda não existir.
@@ -45,7 +50,7 @@ public class DatabaseInitController {
       admin.setName("Administrador do Sistema");
       admin.setUserType(UserType.ADMIN);
       admin.setActive(true);
-      admin.setRegistrationDate(LocalDateTime.now());
+      // registrationDate é definida automaticamente pelo Hibernate (@CreationTimestamp)
       admin.setBiography("Administrador responsável pelo sistema JCPM");
       admin.setProfileImageUrl("https://via.placeholder.com/150");
 
@@ -74,7 +79,7 @@ public class DatabaseInitController {
         journalist1.setName("Maria Silva");
         journalist1.setUserType(UserType.JOURNALIST);
         journalist1.setActive(true);
-        journalist1.setRegistrationDate(LocalDateTime.now());
+        // registrationDate é definida automaticamente pelo Hibernate
         journalist1.setBiography("Jornalista especializada em política e economia");
         journalist1.setProfileImageUrl("https://via.placeholder.com/150");
         userService.save(journalist1);

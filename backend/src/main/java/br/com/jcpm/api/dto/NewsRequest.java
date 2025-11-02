@@ -22,11 +22,89 @@ public class NewsRequest {
 
   private String contentJson;
 
-  @NotBlank(message = "URL da imagem não pode ser vazia")
+  // imagem de capa agora é opcional no request (frontend pode enviar vazia)
   private String featuredImageUrl;
 
   @NotNull(message = "Prioridade não pode ser nula")
   private Integer priority;
 
   private String status;
+
+  private String page; // página onde a notícia será publicada
+
+  private Boolean isFeatured; // se é notícia principal/destaque
+
+  // Getters e Setters Explícitos (gerados por Lombok @Getter/@Setter, mas
+  // adicionados para suporte IDE)
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getSummary() {
+    return summary;
+  }
+
+  public void setSummary(String summary) {
+    this.summary = summary;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
+  public String getContentJson() {
+    return contentJson;
+  }
+
+  public void setContentJson(String contentJson) {
+    this.contentJson = contentJson;
+  }
+
+  public String getFeaturedImageUrl() {
+    return featuredImageUrl;
+  }
+
+  public void setFeaturedImageUrl(String featuredImageUrl) {
+    this.featuredImageUrl = featuredImageUrl;
+  }
+
+  public Integer getPriority() {
+    return priority;
+  }
+
+  public void setPriority(Integer priority) {
+    this.priority = priority;
+  }
+
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  public String getPage() {
+    return page;
+  }
+
+  public void setPage(String page) {
+    this.page = page;
+  }
+
+  public Boolean getIsFeatured() {
+    return isFeatured;
+  }
+
+  public void setIsFeatured(Boolean isFeatured) {
+    this.isFeatured = isFeatured;
+  }
 }

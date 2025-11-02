@@ -4,7 +4,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'r
 import { AuthProvider } from './features/auth/contexts/AuthContext';
 import ProtectedRoute from './features/auth/routes/ProtectedRoute';
 import Navbar from './components/ui/Navbar/Navbar';
+import Footer from './components/ui/Footer/Footer';
 
+// Importações das Páginas
 import Home from './pages/Home/Home';
 import Login from './features/auth/pages/Login/Login';
 import UserRegistration from './features/auth/pages/UserRegistration/UserRegistration';
@@ -14,8 +16,18 @@ import EditUser from './features/auth/pages/EditUser/EditUser';
 import CreateNews from './features/news/pages/CreateNews/CreateNews';
 import ManageNews from './features/news/pages/ManageNews/ManageNews';
 import EditNews from './features/news/pages/EditNews/EditNews';
-import NewsPage from './features/news/pages/NewsPage/NewsPage'; // NOVO
+import NewsPage from './features/news/pages/NewsPage/NewsPage';
+import Jogos from './pages/Jogos/Jogos';
+import Clima from './pages/Clima/Clima';
+import Recife from './pages/Recife/Recife';
+import Empreendedorismo from './pages/Empreendedorismo/Empreendedorismo';
+import Points from './pages/Points/Points';
+import AgentChat from './pages/AgentChat/AgentChat';
 
+/**
+ * Componente que ouve o evento global 'unauthorized' (disparado pela api.js)
+ * e força o redirecionamento para a página de login.
+ */
 const RedirectController = () => {
   const navigate = useNavigate();
   useEffect(() => {
@@ -43,8 +55,26 @@ export function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/cadastro" element={<UserRegistration />} />
-              <Route path="/noticia/:slug" element={<NewsPage />} /> {/* NOVO */}
+              <Route path="/noticia/:slug" element={<NewsPage />} />
+              <Route path="/jogos" element={<Jogos />} />
+              <Route path="/clima" element={<Clima />} />
+              <Route path="/recife" element={<Recife />} />
+              <Route path="/empreendedorismo" element={<Empreendedorismo />} />
+              <Route path="/noticias" element={<Home />} />
 
+              {/* NOVA ROTA: /chat
+                Protegida por 'ProtectedRoute' (requer login básico).
+              */}
+              <Route
+                path="/chat"
+                element={
+                  <ProtectedRoute>
+                    <AgentChat />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Rotas Protegidas (Exigem login) */}
               <Route
                 path="/cadastro-interno"
                 element={
@@ -98,6 +128,15 @@ export function App() {
               />
 
               <Route
+                path="/pontos"
+                element={
+                  <ProtectedRoute roles={['USER']}>
+                    <Points />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
                 path="/users"
                 element={
                   <ProtectedRoute roles={['ADMIN']}>
@@ -114,9 +153,11 @@ export function App() {
                 }
               />
 
+              {/* Rota Padrão (Fallback) */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
+          <Footer />
         </div>
       </Router>
     </AuthProvider>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom'; // Importar o Link
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { newsService } from '@/lib/api';
 import './Home.css';
 
@@ -22,10 +23,83 @@ const STOCK_MARKET = [
   { stock: 'ITUB4', value: 28.75, variation: '+0.8%', color: 'green' }
 ];
 
+const NEWS_CATEGORIES = [
+  { id: 'noticias', label: 'Notícias', icon: 'fa-newspaper', color: '#c41e3a' },
+  { id: 'esportes', label: 'Esportes', icon: 'fa-futbol', color: '#00aa44' },
+  { id: 'politica', label: 'Política', icon: 'fa-landmark', color: '#003d82' },
+  { id: 'economia', label: 'Economia', icon: 'fa-chart-line', color: '#ffc107' },
+];
+
+// Cards de teste para visualização
+const MOCK_NEWS = [
+  {
+    id: 1,
+    title: 'Pernambuco investe em infraestrutura digital para empresas',
+    summary: 'Governo anuncia R$ 100 milhões em investimentos para modernizar a infraestrutura tecnológica do estado.',
+    category: 'economia',
+    featuredImageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&h=400&fit=crop',
+    slug: 'infraestrutura-digital-pe',
+    publicationDate: new Date().toISOString(),
+    priority: 1
+  },
+  {
+    id: 2,
+    title: 'Recife sedia conferência internacional de tecnologia',
+    summary: 'Evento reúne empreendedores e investidores de 50 países para discutir inovação e startups.',
+    category: 'noticias',
+    featuredImageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
+    slug: 'conferencia-tech-recife',
+    publicationDate: new Date().toISOString(),
+    priority: 2
+  },
+  {
+    id: 3,
+    title: 'Economia de Pernambuco cresce 3.2% no trimestre',
+    summary: 'Indústria, comércio e serviços apresentam recuperação significativa conforme dados do IBGE.',
+    category: 'economia',
+    featuredImageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop',
+    slug: 'economia-pe-crescimento',
+    publicationDate: new Date().toISOString(),
+    priority: 3
+  },
+  {
+    id: 4,
+    title: 'Nova legislação ambiental entra em vigor em Pernambuco',
+    summary: 'Lei visa proteger biomas locais e incentivar empresas a adotarem práticas sustentáveis.',
+    category: 'politica',
+    featuredImageUrl: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop',
+    slug: 'legislacao-ambiental-pe',
+    publicationDate: new Date().toISOString(),
+    priority: 1
+  },
+  {
+    id: 5,
+    title: 'Turismo em Recife quebra recorde de visitantes',
+    summary: 'Número de turistas internacionais chega a 1 milhão de pessoas em 2025.',
+    category: 'noticias',
+    featuredImageUrl: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&h=400&fit=crop',
+    slug: 'turismo-recife-recorde',
+    publicationDate: new Date().toISOString(),
+    priority: 2
+  },
+  {
+    id: 6,
+    title: 'Câmara aprova novo orçamento para educação em PE',
+    summary: 'Investimento de R$ 2 bilhões reforça políticas de alfabetização e tecnologia nas escolas.',
+    category: 'politica',
+    featuredImageUrl: 'https://images.unsplash.com/photo-1427504494785-411a473e9f7f?w=600&h=400&fit=crop',
+    slug: 'orcamento-educacao-pe',
+    publicationDate: new Date().toISOString(),
+    priority: 3
+  },
+];
+
 function Home() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { user, isAdmin, isJournalist } = useAuth();
 
   useEffect(() => {
     async function loadNews() {
@@ -37,9 +111,10 @@ function Home() {
 
         receivedNews.sort((a, b) => b.priority - a.priority || new Date(b.publicationDate) - new Date(a.publicationDate));
 
-        setNews(receivedNews);
+        setNews(receivedNews.length > 0 ? receivedNews : MOCK_NEWS);
       } catch (err) {
-        setError('Não foi possível carregar as notícias.');
+        console.log('Usando dados de teste (backend indisponível)');
+        setNews(MOCK_NEWS);
       } finally {
         setLoading(false);
       }
@@ -47,10 +122,8 @@ function Home() {
     loadNews();
   }, []);
 
-  const featured = useMemo(() => (news.length > 0 ? news[0] : null), [news]);
-  const remaining = useMemo(() => (news.length > 1 ? news.slice(1) : []), [news]);
-  const main = useMemo(() => remaining.slice(0, 2), [remaining]);
-  const small = useMemo(() => remaining.slice(2), [remaining]);
+  const featured = useMemo(() => news.find(n => n.isFeatured) || (news.length > 0 ? news[0] : null), [news]);
+  const remaining = useMemo(() => news.filter(n => n.id !== featured?.id), [news, featured]);
 
   if (loading) {
     return (
@@ -75,105 +148,114 @@ function Home() {
   }
 
   return (
-    <div className="home-container">
-      {/* Sidebar com widgets */}
-      <div className="home-sidebar">
-        <div className="widget score-widget">
-          <h3><i className="fas fa-futbol" /> Placar dos Jogos</h3>
-          <div className="game-list">
-            {GAME_SCORES.map((game, index) => (
-              <div key={index} className="game-item">
-                <div className="game-teams">
-                  <span className="team">{game.team1}</span>
-                  <span className="score">{game.score1} x {game.score2}</span>
-                  <span className="team">{game.team2}</span>
-                </div>
-                <div className="game-status">{game.status}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="widget weather-widget">
-          <h3><i className="fas fa-cloud-sun" /> Previsão do Tempo</h3>
-          <div className="weather-info">
-            <div className="weather-main">
-              <span className="city">{WEATHER_FORECAST.city}</span>
-              <span className="temperature">{WEATHER_FORECAST.temperature}°C</span>
-              <span className="description">{WEATHER_FORECAST.description}</span>
+    <div className="home-page">
+      {/* Conteúdo principal com notícias por categoria */}
+      <div className="home-content">
+        {/* Coluna principal (notícias) */}
+        <div className="main-column full-width">
+          {/* Botões de ação para Admins e Jornalistas */}
+          {user && (isAdmin() || isJournalist()) && (
+            <div className="action-buttons-section">
+              {isJournalist() && (
+                <>
+                  <button className="action-btn journalist-btn" onClick={() => navigate('/noticias/criar')}>
+                    <i className="fas fa-plus"></i> Criar Notícia
+                  </button>
+                  <button className="action-btn journalist-btn" onClick={() => navigate('/noticias/gerenciar')}>
+                    <i className="fas fa-edit"></i> Gerenciar
+                  </button>
+                </>
+              )}
+              {isAdmin() && (
+                <>
+                  <button className="action-btn admin-btn" onClick={() => navigate('/admin/usuarios')}>
+                    <i className="fas fa-users"></i> Usuários
+                  </button>
+                  <button className="action-btn admin-btn" onClick={() => navigate('/cadastro-admin')}>
+                    <i className="fas fa-user-plus"></i> Novo Admin
+                  </button>
+                  <button className="action-btn admin-btn" onClick={() => navigate('/noticias/criar')}>
+                    <i className="fas fa-plus"></i> Criar
+                  </button>
+                  <button className="action-btn admin-btn" onClick={() => navigate('/noticias/gerenciar')}>
+                    <i className="fas fa-cogs"></i> Gerenciar
+                  </button>
+                </>
+              )}
             </div>
-            <div className="weather-details">
-              <div className="detail">
-                <i className="fas fa-tint" />
-                <span>Umidade: {WEATHER_FORECAST.humidity}%</span>
-              </div>
-              <div className="detail">
-                <i className="fas fa-wind" />
-                <span>Vento: {WEATHER_FORECAST.wind}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="widget stock-widget">
-          <h3><i className="fas fa-chart-line" /> Bolsa de Valores</h3>
-          <div className="stock-list">
-            {STOCK_MARKET.map((stock, index) => (
-              <div key={index} className="stock-item">
-                <span className="stock-name">{stock.stock}</span>
-                <span className="stock-value">R$ {stock.value}</span>
-                <span className={`stock-variation ${stock.color}`}>{stock.variation}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Conteúdo principal */}
-      <div className="home-main">
-        {/* Destaques (1 grande + 2 médios) */}
-        <section className="hero-grid">
-          {featured && (
-            <Link to={`/noticia/${featured.slug}`} className="card-link">
-              <article className="hero-large">
-                <div className="card-media" style={{ backgroundImage: `url(${featured.featuredImageUrl || ''})` }} />
-                <div className="card-overlay">
-                  <span className="card-tag">Destaque</span>
-                  <h1 className="card-title">{featured.title}</h1>
-                  <p className="card-subtitle">{featured.summary}</p>
-                </div>
-              </article>
-            </Link>
           )}
-          {main.map((n) => (
-            <Link key={n.id} to={`/noticia/${n.slug}`} className="card-link">
-              <article className="hero-medium">
-                <div className="card-media" style={{ backgroundImage: `url(${n.featuredImageUrl || ''})` }} />
-                <div className="card-overlay">
-                  <h2 className="card-title">{n.title}</h2>
-                  <p className="card-subtitle">{n.summary}</p>
-                </div>
-              </article>
-            </Link>
-          ))}
-        </section>
 
-        {/* Demais notícias (cards menores) */}
-        <h3 className="section-title">Últimas Notícias</h3>
-        <section className="news-grid">
-          {small.map((n) => (
-            <Link key={n.id} to={`/noticia/${n.slug}`} className="card-link">
-              <article className="news-card">
-                <div className="card-media" style={{ backgroundImage: `url(${n.featuredImageUrl || ''})` }} />
-                <div className="card-body">
-                  <h2 className="card-title">{n.title}</h2>
-                  <p className="card-subtitle">{n.summary}</p>
-                  <div className="card-meta">
-                    <span><i className="far fa-clock" /> {new Date(n.publicationDate || Date.now()).toLocaleDateString('pt-BR')}</span>
+          {loading && (
+            <div className="loading-container">
+              <i className="fas fa-spinner fa-spin"></i>
+              <p>Carregando notícias...</p>
+            </div>
+          )}
+
+          {error && (
+            <div className="error-container">
+              <i className="fas fa-exclamation-circle"></i>
+              <p>{error}</p>
+            </div>
+          )}
+
+          {!loading && !error && (
+            <>
+              {/* Notícia Principal - Card Maior */}
+              {featured && (
+                <Link to={`/noticia/${featured.slug}`} className="featured-link">
+                  <div className="featured-news">
+                    <div className="featured-image" style={{ backgroundImage: `url(${featured.featuredImageUrl})` }}></div>
+                    <div className="featured-content">
+                      <div className="featured-badge">
+                        <i className="fas fa-star" /> DESTAQUE
+                      </div>
+                      <h2 className="featured-title">{featured.title}</h2>
+                      <p className="featured-summary">{featured.summary}</p>
+                      <div className="featured-meta">
+                        <span><i className="far fa-calendar"></i> {new Date(featured.publicationDate).toLocaleDateString('pt-BR')}</span>
+                      </div>
+                    </div>
                   </div>
+                </Link>
+              )}
+
+              {/* Grid de cards normais */}
+              {remaining.length > 0 ? (
+                <div className="all-news-grid">
+                  {remaining.map((n) => {
+                    const category = NEWS_CATEGORIES.find(c => c.id === (n.category || 'noticias')) || NEWS_CATEGORIES[0];
+                    return (
+                      <Link key={n.id} to={`/noticia/${n.slug}`} className="category-card">
+                        <div className="card-image" style={{ backgroundImage: `url(${n.featuredImageUrl})` }}>
+                          <span className="card-badge" style={{ backgroundColor: category.color }}>
+                            {category.label}
+                          </span>
+                          <h3 className="card-title">{n.title}</h3>
+                        </div>
+                        <div className="card-content">
+                          <p className="card-summary">{n.summary}</p>
+                          <div className="card-footer">
+                            <span className="card-date">
+                              <i className="far fa-calendar"></i>
+                              {new Date(n.publicationDate).toLocaleDateString('pt-BR')}
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
                 </div>
-              </article>
-            </Link>
-          ))}
-        </section>
+              ) : (
+                !featured && (
+                  <div className="no-news">
+                    <p>Nenhuma notícia disponível</p>
+                  </div>
+                )
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
