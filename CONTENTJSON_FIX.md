@@ -39,7 +39,7 @@ private String contentJson;
 
 ### 1. Recompilar o Backend
 ```bash
-cd c:\Users\eriva\Documents\code\JCPM\backend
+cd c:\Users\eriva\Documents\code\jcpe\backend
 mvnw.cmd clean package -DskipTests
 ```
 

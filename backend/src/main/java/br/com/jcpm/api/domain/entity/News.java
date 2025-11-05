@@ -1,4 +1,4 @@
-package br.com.jcpm.api.domain.entity;
+package br.com.jcpe.api.domain.entity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

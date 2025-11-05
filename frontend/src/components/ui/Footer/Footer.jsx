@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="footer-container">
         {/* Logo Section */}
         <div className="footer-logo-section">
-          <img src={logo} alt="JCPM Logo" className="footer-logo-img" />
+          <img src={logo} alt="jcpe Logo" className="footer-logo-img" />
           <div className="footer-social">
             <a href="#" className="social-icon"><i className="fab fa-facebook"></i></a>
             <a href="#" className="social-icon"><i className="fab fa-instagram"></i></a>
@@ -69,7 +69,7 @@ const Footer = () => {
             <h4 className="column-title">INSTITUCIONAL</h4>
             <ul>
               <li><a href="#">Quem somos</a></li>
-              <li><a href="#">Práticas ASG JCPM</a></li>
+              <li><a href="#">Práticas ASG jcpe</a></li>
               <li><a href="#">Privacidade</a></li>
               <li><a href="#">LGPD</a></li>
               <li><a href="#">Fale conosco</a></li>
@@ -92,7 +92,7 @@ const Footer = () => {
 
       {/* Bottom Section */}
       <div className="footer-bottom">
-        <p>Jornal @ 2025 - Uma empresa do grupo JCPM</p>
+        <p>Jornal @ 2025 - Uma empresa do grupo jcpe</p>
         <p>
           PARA SOLICITAÇÃO DE LICENCIAMENTO, CONTACTAR{' '}
           <a href="mailto:EDITORES@NE10.COM.BR">EDITORES@NE10.COM.BR</a>

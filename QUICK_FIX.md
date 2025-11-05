@@ -6,7 +6,7 @@
 - **Antes:** `@Column(nullable = false) private Boolean isFeatured;`
 - **Depois:** `@Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0") private Boolean isFeatured;`
 
-### 2. **Controlled Input Warning** ❌ → ✅  
+### 2. **Controlled Input Warning** ❌ → ✅
 - Adicionados campos `page` e `isFeatured` ao restaurar draft no frontend
 
 ### 3. **API 401 Error** ❌ → ✅
@@ -19,7 +19,7 @@
 ### PASSO 1: Recompilar Backend
 ```
 1. Abra o prompt de comando
-2. Navegue até: c:\Users\eriva\Documents\code\JCPM\backend
+2. Navegue até: c:\Users\eriva\Documents\code\jcpe\backend
 3. Execute: mvnw.cmd clean package -DskipTests
 
 OU simplesmente execute o arquivo: backend/compile.bat
@@ -39,7 +39,7 @@ OU simplesmente execute o arquivo: backend/start.bat
 
 **Espere até ver:**
 ```
-Started JcpmApplication in X.XXX seconds
+Started jcpeApplication in X.XXX seconds
 ```
 
 ### PASSO 3: Testar
@@ -70,7 +70,7 @@ Started JcpmApplication in X.XXX seconds
 ### Erro: `mvnw.cmd não encontrado`
 ```bash
 # Verifique se está no diretório certo:
-cd c:\Users\eriva\Documents\code\JCPM\backend
+cd c:\Users\eriva\Documents\code\jcpe\backend
 dir mvnw.cmd
 ```
 

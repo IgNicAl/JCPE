@@ -38,7 +38,7 @@
 └──────────────────────────────────────────────────────────────┘
 
 PASSO 1️⃣  - RECOMPILAR
-   └─ Abra: c:\Users\eriva\Documents\code\JCPM\backend
+   └─ Abra: c:\Users\eriva\Documents\code\jcpe\backend
    └─ Execute: mvnw.cmd clean package -DskipTests
    └─ OU clique em: compile.bat
 
@@ -49,7 +49,7 @@ PASSO 2️⃣  - AGUARDE BUILD SUCCESS
 PASSO 3️⃣  - INICIAR BACKEND
    └─ Execute: mvnw.cmd spring-boot:run
    └─ OU clique em: start.bat
-   └─ Aguarde: Started JcpmApplication in X.XXX seconds
+   └─ Aguarde: Started jcpeApplication in X.XXX seconds
 
 PASSO 4️⃣  - TESTAR
    └─ Acesse: http://localhost:3001/noticias/criar
@@ -66,7 +66,7 @@ PASSO 4️⃣  - TESTAR
 [ ] Backend recompilado (mvnw.cmd clean package -DskipTests)
 [ ] Build SUCCESS exibido no console
 [ ] Backend iniciado (mvnw.cmd spring-boot:run)
-[ ] "Started JcpmApplication..." no console
+[ ] "Started jcpeApplication..." no console
 [ ] Acesso a http://localhost:8080 disponível
 [ ] Formulário acessível em http://localhost:3001/noticias/criar
 [ ] Notícia criada com sucesso
@@ -83,7 +83,7 @@ PASSO 4️⃣  - TESTAR
 → Execute: java -version
 
 "Erro: mvnw.cmd não encontrado"
-→ Certifique-se que está em: c:\Users\eriva\Documents\code\JCPM\backend
+→ Certifique-se que está em: c:\Users\eriva\Documents\code\jcpe\backend
 → Execute: dir mvnw.cmd
 
 "Erro: SQL Syntax ainda persiste"

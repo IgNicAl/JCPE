@@ -36,7 +36,7 @@ export default function NextPoint(){
 
     function tick(){
       // compute live total = backendTotal + global accumulated + elapsed
-      const mgr = window.__jcpm_screen_timer__;
+      const mgr = window.__jcpe_screen_timer__;
       let live = backendTotalRef.current || 0;
       if(mgr){
         const acc = Number(mgr.accumulated || 0);

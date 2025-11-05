@@ -46,7 +46,7 @@ export default function Points() {
       return;
     }
     // if a global screen-timer manager exists (created by AuthContext), read from it
-    const mgr = window.__jcpm_screen_timer__;
+    const mgr = window.__jcpe_screen_timer__;
     if (mgr) {
       function syncFromGlobal(){
         try{

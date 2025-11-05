@@ -26,7 +26,7 @@
 
 ## ✅ Correção #1: Proteger /api/init em Produção
 
-**Tempo:** 3 minutos  
+**Tempo:** 3 minutos
 **Arquivo:** `DatabaseInitController.java`
 
 ### Passo 1: Adicionar anotação na classe
@@ -83,7 +83,7 @@ cd backend
 
 ## ✅ Correção #2: Refatorar NewsController
 
-**Tempo:** 3 minutos  
+**Tempo:** 3 minutos
 **Arquivo:** `NewsController.java`
 
 ### Passo 1: Adicionar @RequiredArgsConstructor
@@ -132,7 +132,7 @@ public class NewsController {
   private String generateSlug(String title) {
     // ... resto do código igual
   }
-  
+
   // Todos os métodos idênticos
 }
 ```
@@ -148,7 +148,7 @@ cd backend
 
 ## ✅ Correção #3: Adicionar Try-Catch em Login
 
-**Tempo:** 5 minutos  
+**Tempo:** 5 minutos
 **Arquivo:** `AuthController.java`
 
 ### Passo 1: Modificar assinatura do método
@@ -254,7 +254,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 
 ### Opcional: Remover setRegistrationDate() redundante
 
-**Arquivo:** `DatabaseInitController.java`  
+**Arquivo:** `DatabaseInitController.java`
 **Tempo:** 2 minutos
 
 ```java
@@ -263,7 +263,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 // Linha ~97
 journalist2.setRegistrationDate(LocalDateTime.now());
 
-// Linha ~110  
+// Linha ~110
 commonUser1.setRegistrationDate(LocalDateTime.now());
 
 // Linha ~123
@@ -390,7 +390,7 @@ Se algo der errado:
 
 3. **Revert de mudanças?**
    ```bash
-   git checkout backend/src/main/java/br/com/jcpm/api/controller/
+   git checkout backend/src/main/java/br/com/jcpe/api/controller/
    ```
 
 ---

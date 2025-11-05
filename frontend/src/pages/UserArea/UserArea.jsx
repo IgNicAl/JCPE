@@ -21,7 +21,7 @@ export default function UserArea() {
     }
     load();
     // load locally stored avatar preview (if user uploaded in browser)
-    const saved = localStorage.getItem('jcpm_avatar');
+    const saved = localStorage.getItem('jcpe_avatar');
     if(saved){ setLocalAvatar(saved); }
   }, []);
 
@@ -33,7 +33,7 @@ export default function UserArea() {
       const dataUrl = ev.target.result;
       // show preview locally
       setLocalAvatar(dataUrl);
-      localStorage.setItem('jcpm_avatar', dataUrl);
+      localStorage.setItem('jcpe_avatar', dataUrl);
       // try to send to server (best-effort) if API supports update
       try{
         if(profile && profile.id){

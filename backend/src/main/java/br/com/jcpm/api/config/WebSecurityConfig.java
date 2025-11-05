@@ -1,8 +1,8 @@
-package br.com.jcpm.api.config;
+package br.com.jcpe.api.config;
 
-import br.com.jcpm.api.security.JwtAuthenticationEntryPoint;
-import br.com.jcpm.api.security.JwtRequestFilter;
-import br.com.jcpm.api.service.UserService;
+import br.com.jcpe.api.security.JwtAuthenticationEntryPoint;
+import br.com.jcpe.api.security.JwtRequestFilter;
+import br.com.jcpe.api.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

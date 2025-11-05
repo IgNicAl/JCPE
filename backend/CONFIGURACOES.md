@@ -1,4 +1,4 @@
-# 📋 Documentação das Configurações - JCPM API
+# 📋 Documentação das Configurações - jcpe API
 
 ## 🔧 Melhorias Implementadas
 
@@ -44,7 +44,7 @@ server.tomcat.min-spare-threads=10                    # Mínimo 10 threads ocios
 
 ```properties
 # URL do Banco com Parâmetros de Segurança
-spring.datasource.url=jdbc:mysql://localhost:3306/jcpm_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo&characterEncoding=utf8&useUnicode=true
+spring.datasource.url=jdbc:mysql://localhost:3306/jcpe_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo&characterEncoding=utf8&useUnicode=true
 
 # JWT (Para Produção use variáveis de ambiente)
 jwt.secret=mySecretKey123456789abcdefghijklmnopqrstuvwxyz

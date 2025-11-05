@@ -1,8 +1,8 @@
-package br.com.jcpm.api.dto;
+package br.com.jcpe.api.dto;
 
 import java.time.LocalDate;
 
-import br.com.jcpm.api.domain.enums.UserType;
+import br.com.jcpe.api.domain.enums.UserType;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,7 +1,7 @@
-package br.com.jcpm.api.dto;
+package br.com.jcpe.api.dto;
 
-import br.com.jcpm.api.domain.entity.User;
-import br.com.jcpm.api.domain.enums.UserType;
+import br.com.jcpe.api.domain.entity.User;
+import br.com.jcpe.api.domain.enums.UserType;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Getter;

@@ -34,11 +34,11 @@ mvnw.cmd clean spring-boot:run
 1. Abra o MySQL/MariaDB
 2. Execute o script `add-featured-columns.sql`:
 ```bash
-mysql -u root -p jcpm_db < add-featured-columns.sql
+mysql -u root -p jcpe_db < add-featured-columns.sql
 ```
 
 ### Opção 3: Pelo MySQL Workbench ou phpMyAdmin
-1. Conecte ao banco `jcpm_db`
+1. Conecte ao banco `jcpe_db`
 2. Execute o conteúdo do arquivo `add-featured-columns.sql`
 
 ## Campos Adicionados

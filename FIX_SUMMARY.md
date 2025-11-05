@@ -51,7 +51,7 @@ setFormData({
 ### ❌ Erro 3: API 401 (Não Autorizado)
 **Problema:** Backend retornava 401 após criar notícia
 
-**Causa:** 
+**Causa:**
 1. Backend não reconhecia os novos campos `page` e `isFeatured`
 2. Enviava erro ao validar
 
@@ -112,7 +112,7 @@ news.setIsFeatured(newsRequest.getIsFeatured() != null ? newsRequest.getIsFeatur
 
 ### 1️⃣ Recompilar o Backend
 ```bash
-cd c:\Users\eriva\Documents\code\JCPM\backend
+cd c:\Users\eriva\Documents\code\jcpe\backend
 
 # Opção A: Maven Wrapper (recomendado)
 mvnw.cmd clean package -DskipTests

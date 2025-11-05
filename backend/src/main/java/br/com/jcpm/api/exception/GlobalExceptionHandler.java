@@ -1,4 +1,4 @@
-package br.com.jcpm.api.exception;
+package br.com.jcpe.api.exception;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -18,7 +18,7 @@
 
 ### ➊ Abra um terminal na pasta do backend:
 ```
-cd c:\Users\eriva\Documents\code\JCPM\backend
+cd c:\Users\eriva\Documents\code\jcpe\backend
 ```
 
 ### ➋ Compile o projeto:
@@ -42,7 +42,7 @@ mvnw.cmd spring-boot:run
 
 **Aguarde até ver:**
 ```
-Started JcpmApplication in X.XXX seconds
+Started jcpeApplication in X.XXX seconds
 ```
 
 ---
@@ -54,7 +54,7 @@ Quando o backend iniciar, você verá:
 2024-10-24 ... Hibernate: create table noticias (...)
 2024-10-24 ... Hibernate: alter table noticias add column page varchar(50)
 2024-10-24 ... Hibernate: alter table noticias add column is_featured tinyint(1)
-2024-10-24 ... Started JcpmApplication in X.XXX seconds
+2024-10-24 ... Started jcpeApplication in X.XXX seconds
 ```
 
 ✅ **Tudo OK** - Pode testar!

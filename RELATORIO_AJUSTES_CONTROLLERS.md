@@ -1,7 +1,7 @@
 # ✅ Relatório Final - Ajustes nos Controllers
 
-**Data:** 23 de outubro de 2025  
-**Status:** ✅ **TODOS OS ALERTAS CORRIGIDOS**  
+**Data:** 23 de outubro de 2025
+**Status:** ✅ **TODOS OS ALERTAS CORRIGIDOS**
 **Build Maven:** BUILD SUCCESS
 
 ---
@@ -23,7 +23,7 @@
 
 ### 1. **Entidades - Getters/Setters Explícitos**
 
-#### 📄 `User.java` 
+#### 📄 `User.java`
 - ✅ Adicionados getters/setters explícitos (gerados por Lombok `@Data`)
 - ✅ Adicionado `@Override` no método `getPassword()` (implementa `UserDetails`)
 - ✅ Métodos adicionados:
@@ -127,13 +127,13 @@ Warnings críticos: 0
 
 ### Arquivos Modificados
 ```
-✅ backend/src/main/java/br/com/jcpm/api/domain/entity/User.java
-✅ backend/src/main/java/br/com/jcpm/api/domain/entity/News.java
-✅ backend/src/main/java/br/com/jcpm/api/dto/LoginRequest.java
-✅ backend/src/main/java/br/com/jcpm/api/dto/RegisterRequest.java
-✅ backend/src/main/java/br/com/jcpm/api/dto/NewsRequest.java
-✅ backend/src/main/java/br/com/jcpm/api/dto/UserUpdateRequest.java
-✅ backend/src/main/java/br/com/jcpm/api/controller/NewsController.java
+✅ backend/src/main/java/br/com/jcpe/api/domain/entity/User.java
+✅ backend/src/main/java/br/com/jcpe/api/domain/entity/News.java
+✅ backend/src/main/java/br/com/jcpe/api/dto/LoginRequest.java
+✅ backend/src/main/java/br/com/jcpe/api/dto/RegisterRequest.java
+✅ backend/src/main/java/br/com/jcpe/api/dto/NewsRequest.java
+✅ backend/src/main/java/br/com/jcpe/api/dto/UserUpdateRequest.java
+✅ backend/src/main/java/br/com/jcpe/api/controller/NewsController.java
 ```
 
 ---
@@ -217,9 +217,9 @@ O VS Code usa o **Java Language Server** que depende de plugins Lombok para reco
 
 ---
 
-**Projeto JCPM - Controllers Completamente Verificados e Otimizados! 🎉**
+**Projeto jcpe - Controllers Completamente Verificados e Otimizados! 🎉**
 
 ---
 
-*Gerado em: 23 de outubro de 2025*  
+*Gerado em: 23 de outubro de 2025*
 *Próxima revisão: Após implementar novos endpoints*
