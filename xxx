@@ -2,24 +2,24 @@
 # Configuração do Agente (Python)
 # ===================================
 # Chave da API do Google Gemini (https://aistudio.google.com/app/apikey)
-GEMINI_API_KEY=SUA_CHAVE_GEMINI_AQUI
+GEMINI_API_KEY=AIzaSyAjNWL8VQEDUw69F5oClWy5U_0YTuC2uEA
 
 # Chave da NewsAPI (https://newsapi.org/)
-NEWS_API_KEY=SUA_CHAVE_NEWSAPI_AQUI
+NEWS_API_KEY=e59e4eb04bc14dcc82e4db52c728d77a
 
 # ===================================
 # Configuração do Banco de Dados (Usado por Java e Python)
 # ===================================
 DB_HOST=localhost
 DB_PORT=3306
-DB_NAME=jcpm_db
+DB_NAME=jcpe_db
 DB_USER=root
-DB_PASSWORD=SUA_SENHA_DO_BANCO_DE_DADOS_AQUI
+DB_PASSWORD=51190290
 
 # ===================================
 # Configuração do Backend (Java)
 # ===================================
 # Segredo para assinatura dos tokens JWT (Java)
-JWT_SECRET=UmSegredoLongoParaProtegerTokensJWTSubstituaIsso
+JWT_SECRET=0bec231deb12c69c5aab70ee7bab1ac6ffc9a0bc175426dc4fce07675bb6ca2ad1354c4daf67b675c8a0ff4f06482eb99a7e1c93f3c66eaa568e31796df60ca8
 # Expiração do token (Java) - 86400000ms = 24 horas
 JWT_EXPIRATION=86400000

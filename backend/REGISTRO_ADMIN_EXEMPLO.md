@@ -1,4 +1,4 @@
-# 🔑 Como Cadastrar o Primeiro Admin - JCPM API
+# 🔑 Como Cadastrar o Primeiro Admin - jcpe API
 
 ## 🚨 **PROBLEMA IDENTIFICADO E SOLUÇÃO**
 
@@ -40,7 +40,7 @@ const cadastrarAdmin = async () => {
   try {
     const adminData = {
       username: "admin",
-      email: "admin@jcpm.com",
+      email: "admin@jcpe.com",
       password: "admin123",
       name: "Administrador",
       tipoUser: "ADMIN",  // Opcional - padrão é USER
@@ -103,7 +103,7 @@ const loginAdmin = async () => {
 ```json
 {
   "username": "admin",           // ✅ Obrigatório
-  "email": "admin@jcpm.com",    // ✅ Obrigatório
+  "email": "admin@jcpe.com",    // ✅ Obrigatório
   "password": "admin123",        // ✅ Obrigatório (min 6 chars)
   "name": "Administrador",       // ✅ Obrigatório
   "tipoUser": "ADMIN",        // ❓ Opcional (USER, JORNALISTA, ADMIN)
@@ -119,7 +119,7 @@ const loginAdmin = async () => {
   "tokenType": "Bearer",
   "id": 1,
   "username": "admin",
-  "email": "admin@jcpm.com",
+  "email": "admin@jcpe.com",
   "name": "Administrador",
   "tipoUser": "ADMIN"
 }

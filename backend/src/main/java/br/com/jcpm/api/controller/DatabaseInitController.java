@@ -1,8 +1,8 @@
-package br.com.jcpm.api.controller;
+package br.com.jcpe.api.controller;
 
-import br.com.jcpm.api.domain.entity.User;
-import br.com.jcpm.api.domain.enums.UserType;
-import br.com.jcpm.api.service.UserService;
+import br.com.jcpe.api.domain.entity.User;
+import br.com.jcpe.api.domain.enums.UserType;
+import br.com.jcpe.api.service.UserService;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controlador para inicialização de dados básicos no sistema, como usuários de teste e administrador.
- * 
+ *
  * ⚠️ AVISO DE SEGURANÇA: Este controlador deve ser usado apenas em ambiente de desenvolvimento
  * e DESABILITADO em produção através de profiles do Spring (spring.profiles.active=prod).
- * 
+ *
  * Em produção, remova as rotas /api/init da aplicação ou implemente autenticação adicional.
  */
 @RestController
@@ -25,10 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:3000")
 public class DatabaseInitController {
 
-  @Autowired 
+  @Autowired
   private UserService userService;
 
-  @Autowired 
+  @Autowired
   private PasswordEncoder passwordEncoder;
 
   /**
@@ -45,13 +45,13 @@ public class DatabaseInitController {
 
       User admin = new User();
       admin.setUsername("admin");
-      admin.setEmail("admin@jcpm.com");
+      admin.setEmail("admin@jcpe.com");
       admin.setPassword(passwordEncoder.encode("admcesar"));
       admin.setName("Administrador do Sistema");
       admin.setUserType(UserType.ADMIN);
       admin.setActive(true);
       // registrationDate é definida automaticamente pelo Hibernate (@CreationTimestamp)
-      admin.setBiography("Administrador responsável pelo sistema JCPM");
+      admin.setBiography("Administrador responsável pelo sistema jcpe");
       admin.setProfileImageUrl("https://via.placeholder.com/150");
 
       userService.save(admin);
@@ -74,7 +74,7 @@ public class DatabaseInitController {
       if (!userService.existsByUsername("jornalista1")) {
         User journalist1 = new User();
         journalist1.setUsername("jornalista1");
-        journalist1.setEmail("jornalista1@jcpm.com");
+        journalist1.setEmail("jornalista1@jcpe.com");
         journalist1.setPassword(passwordEncoder.encode("123456"));
         journalist1.setName("Maria Silva");
         journalist1.setUserType(UserType.JOURNALIST);
@@ -88,7 +88,7 @@ public class DatabaseInitController {
       if (!userService.existsByUsername("jornalista2")) {
         User journalist2 = new User();
         journalist2.setUsername("jornalista2");
-        journalist2.setEmail("jornalista2@jcpm.com");
+        journalist2.setEmail("jornalista2@jcpe.com");
         journalist2.setPassword(passwordEncoder.encode("123456"));
         journalist2.setName("João Santos");
         journalist2.setUserType(UserType.JOURNALIST);
@@ -102,7 +102,7 @@ public class DatabaseInitController {
       if (!userService.existsByUsername("user1")) {
         User commonUser1 = new User();
         commonUser1.setUsername("user1");
-        commonUser1.setEmail("user1@jcpm.com");
+        commonUser1.setEmail("user1@jcpe.com");
         commonUser1.setPassword(passwordEncoder.encode("123456"));
         commonUser1.setName("Ana Costa");
         commonUser1.setUserType(UserType.USER);
@@ -116,7 +116,7 @@ public class DatabaseInitController {
       if (!userService.existsByUsername("user2")) {
         User commonUser2 = new User();
         commonUser2.setUsername("user2");
-        commonUser2.setEmail("user2@jcpm.com");
+        commonUser2.setEmail("user2@jcpe.com");
         commonUser2.setPassword(passwordEncoder.encode("123456"));
         commonUser2.setName("Pedro Oliveira");
         commonUser2.setUserType(UserType.USER);

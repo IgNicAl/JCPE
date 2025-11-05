@@ -1,4 +1,4 @@
-package br.com.jcpm.api.domain.entity;
+package br.com.jcpe.api.domain.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import br.com.jcpm.api.domain.enums.UserType;
+import br.com.jcpe.api.domain.enums.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

@@ -84,7 +84,7 @@ const SCREEN_SEND_INTERVAL = 30; // segundos
 
 function startScreenTimer() {
   // singleton manager stored on window to survive hot reloads
-  const mgr = window.__jcpm_screen_timer__ || {
+  const mgr = window.__jcpe_screen_timer__ || {
     running: false,
     accumulated: 0,
     lastTick: Date.now(),
@@ -119,11 +119,11 @@ function startScreenTimer() {
     }
   }, 1000);
 
-  window.__jcpm_screen_timer__ = mgr;
+  window.__jcpe_screen_timer__ = mgr;
 }
 
 function stopScreenTimer(sendRemaining = false) {
-  const mgr = window.__jcpm_screen_timer__;
+  const mgr = window.__jcpe_screen_timer__;
   if (!mgr) return;
   mgr.running = false;
   if (mgr.intervalId) {

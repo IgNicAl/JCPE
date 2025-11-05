@@ -1,4 +1,4 @@
-package br.com.jcpm.api.controller;
+package br.com.jcpe.api.controller;
 
 import java.text.Normalizer;
 import java.time.LocalDateTime;
@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.jcpm.api.domain.entity.News;
-import br.com.jcpm.api.domain.entity.User;
-import br.com.jcpm.api.dto.NewsRequest;
-import br.com.jcpm.api.repository.NewsRepository;
+import br.com.jcpe.api.domain.entity.News;
+import br.com.jcpe.api.domain.entity.User;
+import br.com.jcpe.api.dto.NewsRequest;
+import br.com.jcpe.api.repository.NewsRepository;
 import jakarta.validation.Valid;
 
 @RestController

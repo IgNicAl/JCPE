@@ -3,12 +3,12 @@
 .next-point-widget .clock-icon{opacity:0.95}
 .next-point-widget .next-text{color:#fff}
 
-@keyframes jcpm-pulse-small {
+@keyframes jcpe-pulse-small {
   0% { transform: scale(1); }
   50% { transform: scale(1.08); }
   100% { transform: scale(1); }
 }
-.next-point-widget.pulse{ animation: jcpm-pulse-small 0.9s ease-in-out 1; box-shadow: 0 6px 18px rgba(255,255,255,0.06); }
+.next-point-widget.pulse{ animation: jcpe-pulse-small 0.9s ease-in-out 1; box-shadow: 0 6px 18px rgba(255,255,255,0.06); }
 
 @media (max-width: 768px){
   .next-point-widget{padding:6px 8px;font-size:12px;margin-right:6px}

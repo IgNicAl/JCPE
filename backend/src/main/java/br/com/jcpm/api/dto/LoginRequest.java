@@ -1,4 +1,4 @@
-package br.com.jcpm.api.dto;
+package br.com.jcpe.api.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

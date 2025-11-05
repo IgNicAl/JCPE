@@ -82,7 +82,7 @@ export default function AgentChat() {
       <div className="chat-box-container">
         {/* Cabeçalho da caixa de chat */}
         <div className="chat-header">
-          <h2>Assistente de Notícias JCPM</h2>
+          <h2>Assistente de Notícias jcpe</h2>
           <span>Online</span>
         </div>
 

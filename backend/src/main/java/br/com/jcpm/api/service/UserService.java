@@ -1,4 +1,4 @@
-package br.com.jcpm.api.service;
+package br.com.jcpe.api.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,9 +11,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.jcpm.api.domain.entity.User;
-import br.com.jcpm.api.domain.enums.UserType;
-import br.com.jcpm.api.repository.UserRepository;
+import br.com.jcpe.api.domain.entity.User;
+import br.com.jcpe.api.domain.enums.UserType;
+import br.com.jcpe.api.repository.UserRepository;
 
 /**
  * Serviço que implementa a lógica de negócio para usuários e a interface

@@ -2,8 +2,8 @@
 
 ## 📌 Issue #1: DatabaseInitController - setRegistrationDate() Redundante
 
-**Severidade:** 🟡 Baixa  
-**Arquivo:** `DatabaseInitController.java`  
+**Severidade:** 🟡 Baixa
+**Arquivo:** `DatabaseInitController.java`
 **Linhas:** 97, 110, 123
 
 ### Problema
@@ -41,8 +41,8 @@ journalist2.setBiography("Jornalista de esportes e entretenimento");
 
 ## 📌 Issue #2: NewsController - Injeção de Dependências Inconsistente
 
-**Severidade:** 🟡 Média (Inconsistência)  
-**Arquivo:** `NewsController.java`  
+**Severidade:** 🟡 Média (Inconsistência)
+**Arquivo:** `NewsController.java`
 **Linhas:** 30-34
 
 ### Problema
@@ -95,7 +95,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NewsController {
   private final NewsRepository newsRepository;
-  
+
   // Constructor removido (gerado pelo Lombok)
   // ... resto do código idêntico
 }
@@ -109,12 +109,12 @@ public class NewsController {
 
 ### Código Completo Refatorado
 ```java
-package br.com.jcpm.api.controller;
+package br.com.jcpe.api.controller;
 
-import br.com.jcpm.api.domain.entity.News;
-import br.com.jcpm.api.domain.entity.User;
-import br.com.jcpm.api.dto.NewsRequest;
-import br.com.jcpm.api.repository.NewsRepository;
+import br.com.jcpe.api.domain.entity.News;
+import br.com.jcpe.api.domain.entity.User;
+import br.com.jcpe.api.dto.NewsRequest;
+import br.com.jcpe.api.repository.NewsRepository;
 import jakarta.validation.Valid;
 import java.text.Normalizer;
 import java.time.LocalDateTime;
@@ -152,8 +152,8 @@ public class NewsController {
 
 ## 📌 Issue #3: DatabaseInitController Sem Proteção em Produção
 
-**Severidade:** 🔴 ALTA (Segurança)  
-**Arquivo:** `DatabaseInitController.java`  
+**Severidade:** 🔴 ALTA (Segurança)
+**Arquivo:** `DatabaseInitController.java`
 **Linhas:** 20-27
 
 ### Problema
@@ -230,8 +230,8 @@ java -jar app.jar --spring.profiles.active=dev
 
 ## 📌 Issue #4: AuthController - Sem Tratamento de Exceções
 
-**Severidade:** 🟡 Média (UX/API)  
-**Arquivo:** `AuthController.java`  
+**Severidade:** 🟡 Média (UX/API)
+**Arquivo:** `AuthController.java`
 **Linhas:** 44-60
 
 ### Problema
@@ -305,8 +305,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 ## 📌 Issue #5: UserController - Ambiguidade Potencial de Rota
 
-**Severidade:** 🟢 Baixa (Já Funcionando)  
-**Arquivo:** `UserController.java`  
+**Severidade:** 🟢 Baixa (Já Funcionando)
+**Arquivo:** `UserController.java`
 **Linhas:** 118 e 105
 
 ### Problema Potencial

@@ -1,6 +1,6 @@
-# JCPM Frontend
+# jcpe Frontend
 
-Frontend React para o sistema JCPM com página de cadastro de usuários.
+Frontend React para o sistema jcpe com página de cadastro de usuários.
 
 ## 🚀 Funcionalidades
 

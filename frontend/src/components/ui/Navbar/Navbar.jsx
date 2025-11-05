@@ -14,7 +14,7 @@ const ROUTE = {
   REGISTER_USER: '/cadastro',
   CHAT_AI: '/chat', // <-- Adicionada rota do chat
 };
-const LOGO_TEXT = 'JCPM News';
+const LOGO_TEXT = 'jcpe News';
 
 /**
  * Componente de navegação principal da aplicação.
@@ -48,7 +48,7 @@ function Navbar() {
     }
     if(user){
       load();
-      const local = localStorage.getItem('jcpm_avatar');
+      const local = localStorage.getItem('jcpe_avatar');
       if(local){
         setAvatarUrl(local);
       }
@@ -115,7 +115,7 @@ function Navbar() {
       {/* Seção Superior: Logo e Autenticação */}
       <div className="navbar-top">
         <Link to={ROUTE.HOME} className="navbar-logo-container" onClick={closeMobileMenu}>
-          <img src={logo} alt="JCPM Logo" className="navbar-logo-img" />
+          <img src={logo} alt="jcpe Logo" className="navbar-logo-img" />
         </Link>
         <div className="nav-auth">
           {user && <NextPoint />}

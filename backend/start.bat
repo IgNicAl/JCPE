@@ -4,7 +4,7 @@ REM Execute este arquivo para rodar o servidor backend
 
 echo.
 echo ====================================================
-echo  Iniciando Backend JCPM na porta 8080
+echo  Iniciando Backend jcpe na porta 8080
 echo ====================================================
 echo.
 

@@ -1,4 +1,4 @@
-package br.com.jcpm.api.controller;
+package br.com.jcpe.api.controller;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.jcpm.api.domain.entity.User;
-import br.com.jcpm.api.domain.enums.UserType;
-import br.com.jcpm.api.dto.PointsResponse;
-import br.com.jcpm.api.dto.ScreenTimeRequest;
-import br.com.jcpm.api.dto.UserResponse;
-import br.com.jcpm.api.dto.UserUpdateRequest;
-import br.com.jcpm.api.service.UserService;
+import br.com.jcpe.api.domain.entity.User;
+import br.com.jcpe.api.domain.enums.UserType;
+import br.com.jcpe.api.dto.PointsResponse;
+import br.com.jcpe.api.dto.ScreenTimeRequest;
+import br.com.jcpe.api.dto.UserResponse;
+import br.com.jcpe.api.dto.UserUpdateRequest;
+import br.com.jcpe.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController

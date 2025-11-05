@@ -1,6 +1,6 @@
-package br.com.jcpm.api.repository;
+package br.com.jcpe.api.repository;
 
-import br.com.jcpm.api.domain.entity.User;
+import br.com.jcpe.api.domain.entity.User;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,6 @@
-package br.com.jcpm.api.security;
+package br.com.jcpe.api.security;
 
-import br.com.jcpm.api.service.UserService;
+import br.com.jcpe.api.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

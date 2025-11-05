@@ -4,7 +4,7 @@ REM Execute este arquivo para recompilar o projeto
 
 echo.
 echo ====================================================
-echo  Compilando Backend JCPM com Maven Wrapper
+echo  Compilando Backend jcpe com Maven Wrapper
 echo ====================================================
 echo.
 

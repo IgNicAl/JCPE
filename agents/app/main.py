@@ -18,8 +18,8 @@ dotenv_path = Path(__file__).resolve().parent.parent.parent / '.env'
 load_dotenv(dotenv_path=dotenv_path)
 
 app = FastAPI(
-    title="JCPM News Agent API",
-    description="API para interagir com o sistema de agentes de notícias JCPM.",
+    title="jcpe News Agent API",
+    description="API para interagir com o sistema de agentes de notícias jcpe.",
     version="0.1.0"
 )
 
@@ -46,7 +46,7 @@ def read_root():
     Retorna:
         dict: Um objeto JSON indicando que a API está operacional.
     """
-    return {"status": "ok", "message": "Bem-vindo à API de Agentes JCPM!"}
+    return {"status": "ok", "message": "Bem-vindo à API de Agentes jcpe!"}
 
 
 @app.post("/chat", response_model=ChatResponse, tags=["Chat"])
