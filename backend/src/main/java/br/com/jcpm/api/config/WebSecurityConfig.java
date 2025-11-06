@@ -113,7 +113,14 @@ public class WebSecurityConfig {
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+    configuration.setAllowedOrigins(List.of(
+        "http://localhost:3000", // Mantém para desenvolvimento local
+        "http://localhost:8000", // Nova porta do frontend
+        "http://192.168.0.24",   // IP direto sem porta (se houver proxy)
+        "http://192.168.0.24:8000", // IP direto com a nova porta
+        "http://jcpe.online",    // Domínio configurado no Cloudflare
+        "https://jcpe.online"    // Domínio configurado no Cloudflare (HTTPS)
+    ));
     configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(List.of("*"));
     configuration.setAllowCredentials(true);

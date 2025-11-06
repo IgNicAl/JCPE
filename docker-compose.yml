@@ -1,9 +1,33 @@
 version: "3.9"
 
+# Define uma rede interna única para que os containers possam
+# se comunicar uns com os outros por nome (ex: 'database', 'backend').
+networks:
+  jcpe_net:
+    driver: bridge
+
 services:
+  # =======================================================================
+  # 1. CLOUDFLARE TUNNEL (cloudflared)
+  # Função: Expõe sua aplicação à internet de forma segura.
+  # =======================================================================
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: jcpe-tunnel
+    restart: unless-stopped
+    # Este é o seu NOVO token, que você acabou de gerar:
+    command: tunnel --no-autoupdate run --token eyJhIjoiNzRlZGE5MDU3MzExZGMyNjhmNDY1YTRmZDFkNGFiNTIiLCJ0IjoiYmM5MzkxOTktYmQxOS00MDM1LWI3MmMtODQ1OWU5MjIwNWYzIiwicyI6Ik1EVm1OVFkyTVRRdFpHWmhZUzAwT1dNd0xUbGxPREl0WlRKaFpETTVOMkV4Wm1ZMiJ9
+    # Conecta o tunnel à rede interna para que ele possa encontrar o 'jcpe-frontend'.
+    networks:
+      - jcpe_net
+
+  # =======================================================================
+  # 2. BANCO DE DADOS (MYSQL)
+  # =======================================================================
   database:
     image: mysql:8.4
     restart: unless-stopped
+    env_file: ./.env
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -18,14 +42,18 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - jcpe_net
 
+  # =======================================================================
+  # 3. BACKEND (JAVA SPRING BOOT)
+  # =======================================================================
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     restart: unless-stopped
-    env_file:
-      - ./.env
+    env_file: ./.env
     environment:
       DB_HOST: database
       DB_PORT: 3306
@@ -33,40 +61,47 @@ services:
     depends_on:
       database:
         condition: service_healthy
-    ports:
-      - "${BACKEND_PORT:-8080}:8080"
+    networks:
+      - jcpe_net
 
+  # =======================================================================
+  # 4. AGENTES DE IA (PYTHON FASTAPI)
+  # =======================================================================
   agents:
     build:
       context: ./agents
       dockerfile: Dockerfile
     restart: unless-stopped
-    env_file:
-      - ./.env
+    env_file: ./.env
     environment:
       DB_HOST: database
       DB_PORT: 3306
     depends_on:
       database:
         condition: service_healthy
-    ports:
-      - "${AGENTS_PORT:-8001}:8001"
+    networks:
+      - jcpe_net
 
+  # =======================================================================
+  # 5. FRONTEND (REACT + NGINX REVERSE PROXY)
+  # Nenhuma porta pública é mais necessária. O Tunnel acessa pela rede interna.
+  # =======================================================================
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    container_name: jcpe-frontend # Nome fixo para o Tunnel encontrar
     restart: unless-stopped
-    env_file:
-      - ./.env
+    env_file: ./.env
     depends_on:
       backend:
         condition: service_started
       agents:
         condition: service_started
-    ports:
-      - "${FRONTEND_PORT:-3000}:80"
+    networks:
+      - jcpe_net
+    # Nenhuma porta (ports:) é necessária aqui
 
 volumes:
+  # Volume para persistir os dados do banco de dados
   mysql_data:
-
