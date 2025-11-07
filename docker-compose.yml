@@ -1,4 +1,3 @@
-version: "3.9"
 
 # Define uma rede interna única para que os containers possam
 # se comunicar uns com os outros por nome (ex: 'database', 'backend').
