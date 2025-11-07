@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { newsService } from '@/lib/api';
+import { newsService } from '@/services/api';
 import Output from 'editorjs-react-renderer';
 import './NewsPage.css';
 

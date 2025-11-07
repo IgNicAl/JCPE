@@ -1,0 +1,36 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badgeDefault {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--color-gray-700);
+}
+
+.badgePrimary {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.badgeSuccess {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.badgeError {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.badgeWarning {
+  background: rgba(255, 193, 7, 0.2);
+  color: #856404;
+}
+

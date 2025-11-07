@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { newsService } from '@/lib/api';
+import { newsService } from '@/services/api';
 import './ManageNews.css';
 
 // NOTE: Objeto para mapear valores de priority a labels e classes CSS.

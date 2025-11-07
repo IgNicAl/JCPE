@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { authService } from '@/lib/api';
+import { authService } from '@/services/api';
 import './UserRegistration.css';
 
 const INITIAL_FORM_STATE = {

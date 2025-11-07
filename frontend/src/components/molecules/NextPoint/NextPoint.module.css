@@ -1,0 +1,51 @@
+.nextPointWidget {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-white);
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.nextPointWidget:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.clockIcon {
+  opacity: 0.95;
+}
+
+.nextText {
+  color: var(--color-white);
+}
+
+@keyframes jcpe-pulse-small {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pulse {
+  animation: jcpe-pulse-small 0.9s ease-in-out 1;
+  box-shadow: 0 6px 18px rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 768px) {
+  .nextPointWidget {
+    padding: 6px 8px;
+    font-size: var(--font-size-sm);
+    margin-right: 6px;
+  }
+}
+

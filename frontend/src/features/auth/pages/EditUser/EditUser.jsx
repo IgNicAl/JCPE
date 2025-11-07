@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { userService } from '@/lib/api';
+import { userService } from '@/services/api';
 import './EditUser.css';
 
 function EditUser() {
