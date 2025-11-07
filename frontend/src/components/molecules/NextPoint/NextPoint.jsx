@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './NextPoint.css';
 import { AuthContext } from '@/features/auth/contexts/AuthContext';
-import { userService } from '@/lib/api';
-
-function pad(n){ return String(n).padStart(2,'0'); }
+import { userService } from '@/services/api';
+import { pad } from '@/utils/helpers';
+import styles from './NextPoint.module.css';
 
 export default function NextPoint(){
   const navigate = useNavigate();
@@ -53,7 +52,7 @@ export default function NextPoint(){
     intervalRef.current = setInterval(tick, 1000);
 
     return ()=>{ mounted=false; if(intervalRef.current){ clearInterval(intervalRef.current); intervalRef.current=null; } };
-  },[isAuthenticated, user]);
+  },[user]);
 
   if(!show) return null;
 
@@ -63,18 +62,36 @@ export default function NextPoint(){
 
   return (
     <div
-      className={"next-point-widget" + (remaining===0? ' pulse':'' )}
+      className={`${styles.nextPointWidget} ${remaining === 0 ? styles.pulse : ''}`}
       title="Tempo até o próximo ponto"
       role="button"
       tabIndex={0}
       onClick={() => navigate('/pontos')}
-      onKeyDown={(e)=>{ if(e.key==='Enter' || e.key===' ') navigate('/pontos'); }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') navigate('/pontos');
+      }}
     >
-      <svg className="clock-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-        <circle cx="12" cy="12" r="9" stroke="#fff" strokeWidth="1.6" opacity="0.9"/>
-        <path d="M12 7v6l4 2" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+      <svg
+        className={styles.clockIcon}
+        viewBox="0 0 24 24"
+        width="18"
+        height="18"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden
+      >
+        <circle cx="12" cy="12" r="9" stroke="#fff" strokeWidth="1.6" opacity="0.9" />
+        <path
+          d="M12 7v6l4 2"
+          stroke="#fff"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
-      <div className="next-text">{mins>0? `${mins}:${pad(secs)}` : `${secs}s`}</div>
+      <div className={styles.nextText}>
+        {mins > 0 ? `${mins}:${pad(secs)}` : `${secs}s`}
+      </div>
     </div>
   );
 }

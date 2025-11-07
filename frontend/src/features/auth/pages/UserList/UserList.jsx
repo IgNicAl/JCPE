@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { userService } from '@/lib/api';
+import { userService } from '@/services/api';
 import { AuthContext } from '@/features/auth/contexts/AuthContext';
 import './UserList.css';
 

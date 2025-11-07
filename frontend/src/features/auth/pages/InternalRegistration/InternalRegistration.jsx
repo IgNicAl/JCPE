@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '@/lib/api';
+import { authService } from '@/services/api';
 import './InternalRegistration.css';
 
 const INITIAL_FORM_STATE = {

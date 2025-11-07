@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'r
 
 import { AuthProvider } from './features/auth/contexts/AuthContext';
 import ProtectedRoute from './features/auth/routes/ProtectedRoute';
-import Navbar from './components/ui/Navbar/Navbar';
-import Footer from './components/ui/Footer/Footer';
+import Navbar from './components/organisms/Navbar';
+import Footer from './components/organisms/Footer';
 
 // Importações das Páginas
 import Home from './pages/Home/Home';

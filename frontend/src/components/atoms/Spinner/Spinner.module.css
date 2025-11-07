@@ -1,0 +1,19 @@
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+}
+
+.spinnerSm {
+  font-size: var(--font-size-md);
+}
+
+.spinnerMd {
+  font-size: var(--font-size-xl);
+}
+
+.spinnerLg {
+  font-size: 48px;
+}
+

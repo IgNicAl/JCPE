@@ -1,8 +1,13 @@
 import { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '@/features/auth/contexts/AuthContext';
-import { authService } from '@/lib/api';
-import './Login.css';
+import { authService } from '@/services/api';
+import FormField from '@/components/molecules/FormField';
+import FormMessage from '@/components/molecules/FormMessage';
+import Button from '@/components/atoms/Button';
+import Icon from '@/components/atoms/Icon';
+import { ROUTES } from '@/utils/constants';
+import styles from './Login.module.css';
 
 const INITIAL_FORM_STATE = {
   username: '',
@@ -85,60 +90,53 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <div className="login-header">
-          <h1><i className="fas fa-sign-in-alt" /> Login</h1>
+    <div className={styles.loginContainer}>
+      <div className={styles.loginCard}>
+        <div className={styles.loginHeader}>
+          <h1>
+            <Icon name="fa-sign-in-alt" /> Login
+          </h1>
           <p>Entre com suas credenciais para acessar o sistema</p>
         </div>
 
-        {message.text && (
-          <div className={`message ${message.type}`}>
-            <i className={`fas ${message.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}`} />
-            {message.text}
-          </div>
-        )}
+        <FormMessage type={message.type} message={message.text} />
 
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label htmlFor="username">Usuário</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              disabled={loading}
-              required
-            />
-          </div>
+        <form onSubmit={handleSubmit} className={styles.loginForm}>
+          <FormField
+            id="username"
+            label="Usuário"
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            disabled={loading}
+            required
+          />
 
-          <div className="form-group">
-            <label htmlFor="password">Senha</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              disabled={loading}
-              required
-            />
-          </div>
+          <FormField
+            id="password"
+            label="Senha"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            disabled={loading}
+            required
+          />
 
-          <div className="form-actions">
-            <button type="submit" className="btn-primary" disabled={loading}>
+          <div className={styles.formActions}>
+            <Button type="submit" variant="primary" loading={loading} disabled={loading}>
               {loading ? 'Entrando...' : 'Entrar'}
-            </button>
+            </Button>
           </div>
         </form>
 
-        <div className="login-footer">
+        <div className={styles.loginFooter}>
           <p>
             Não tem uma conta?
-            <a href="/cadastro">
-              <i className="fas fa-user-plus" /> Cadastre-se aqui
-            </a>
+            <Link to={ROUTES.REGISTER}>
+              <Icon name="fa-user-plus" /> Cadastre-se aqui
+            </Link>
           </p>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
-import { userService } from '@/lib/api';
+import { userService } from '@/services/api';
 import './Points.css';
 
 function formatTime(seconds) {

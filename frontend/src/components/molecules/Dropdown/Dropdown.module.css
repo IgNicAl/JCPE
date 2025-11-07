@@ -1,0 +1,25 @@
+.dropdown {
+  position: absolute;
+  top: 52px;
+  background: var(--color-white);
+  color: #111;
+  border-radius: var(--border-radius-sm);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  min-width: 180px;
+  z-index: 50;
+  padding: var(--spacing-sm) 0;
+}
+
+.dropdownRight {
+  right: 0;
+}
+
+.dropdownLeft {
+  left: 0;
+}
+
+.dropdownCenter {
+  left: 50%;
+  transform: translateX(-50%);
+}
+

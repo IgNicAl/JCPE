@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
-import { agentService } from '@/lib/api';
+import { agentService } from '@/services/api';
 import './AgentChat.css';
 
 /**

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
-import { newsService } from '@/lib/api';
+import { newsService } from '@/services/api';
 import './Recife.css';
 
 const NEWS_CATEGORIES = [

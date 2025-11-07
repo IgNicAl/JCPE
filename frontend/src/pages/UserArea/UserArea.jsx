@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
-import { userService } from '@/lib/api';
+import { userService } from '@/services/api';
 import Points from '../Points/Points';
 import './UserArea.css';
 

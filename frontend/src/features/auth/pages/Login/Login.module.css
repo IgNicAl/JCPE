@@ -1,0 +1,83 @@
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 90px);
+  padding: var(--spacing-lg);
+}
+
+.loginCard {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: var(--spacing-xl);
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.loginHeader {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.loginHeader h1 {
+  color: var(--color-gray-700);
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+.loginHeader p {
+  color: var(--color-gray-500);
+  font-size: var(--font-size-lg);
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.formActions {
+  margin-top: var(--spacing-sm);
+}
+
+.loginFooter {
+  margin-top: var(--spacing-lg);
+  text-align: center;
+}
+
+.loginFooter p {
+  color: var(--color-gray-500);
+  font-size: var(--font-size-md);
+}
+
+.loginFooter a {
+  color: var(--color-primary);
+  text-decoration: none;
+  margin-left: var(--spacing-xs);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.loginFooter a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .loginContainer {
+    padding: var(--spacing-md);
+  }
+
+  .loginCard {
+    padding: var(--spacing-lg);
+  }
+}
+
