@@ -1,0 +1,215 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: sticky;
+  top: 120px;
+  height: fit-content;
+  width: 350px;
+  flex-shrink: 0;
+}
+
+.widget {
+  background: var(--color-white);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  border-top: 6px solid var(--primary-red);
+  transition: all 0.3s ease;
+}
+
+.widget:hover {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+}
+
+.widgetHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid rgba(196, 30, 58, 0.15);
+}
+
+.widgetHeader i {
+  font-size: 26px;
+  color: var(--primary-red);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(196, 30, 58, 0.1);
+  border-radius: 8px;
+}
+
+.widgetHeader h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+/* WEATHER WIDGET */
+.weatherWidgetContent {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.temperatureDisplay {
+  text-align: center;
+  padding: 28px 20px;
+  background: linear-gradient(135deg, var(--primary-red) 0%, #8b1428 100%);
+  border-radius: 12px;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(196, 30, 58, 0.2);
+}
+
+.temperatureDisplay .temp {
+  font-size: 48px;
+  font-weight: 900;
+  display: block;
+  line-height: 1;
+}
+
+.temperatureDisplay .desc {
+  font-size: 13px;
+  opacity: 0.95;
+  display: block;
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+.weatherMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.weatherMeta .metaItem {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 14px;
+  background: rgba(196, 30, 58, 0.08);
+  border-radius: 8px;
+  font-weight: 700;
+  border: 1px solid rgba(196, 30, 58, 0.1);
+}
+
+.weatherMeta .metaItem i {
+  color: var(--primary-red);
+  font-size: 16px;
+}
+
+/* GAMES WIDGET */
+.gamesList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gameItem {
+  padding: 16px;
+  background: rgba(196, 30, 58, 0.08);
+  border-radius: 10px;
+  border-left: 4px solid var(--secondary-yellow);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(196, 30, 58, 0.1);
+  border-left: 4px solid var(--secondary-yellow);
+}
+
+.gameItem:hover {
+  background: rgba(196, 30, 58, 0.12);
+  transform: translateX(4px);
+}
+
+.gameItem .teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.gameItem .teams .teamName {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 700;
+}
+
+.gameItem .teams .score {
+  font-weight: 900;
+  color: var(--primary-red);
+  min-width: 50px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.gameItem .gameStatus {
+  display: inline-block;
+  font-size: 11px;
+  background: var(--primary-red);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: 800;
+}
+
+/* STOCKS WIDGET */
+.stocksList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stockItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: rgba(196, 30, 58, 0.08);
+  border-radius: 10px;
+  font-size: 13px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(196, 30, 58, 0.1);
+}
+
+.stockItem:hover {
+  background: rgba(196, 30, 58, 0.12);
+  transform: translateX(4px);
+}
+
+.stockItem .stockName {
+  font-weight: 800;
+  color: var(--text-dark);
+  font-size: 14px;
+}
+
+.stockItem .stockChange {
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.stockItem .stockChange.green {
+  background: #d4edda;
+  color: #155724;
+}
+
+.stockItem .stockChange.red {
+  background: #f8d7da;
+  color: #721c24;
+}
