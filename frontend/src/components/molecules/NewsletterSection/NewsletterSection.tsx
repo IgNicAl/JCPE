@@ -35,10 +35,6 @@ const NewsletterSection: React.FC = () => {
 
   return (
     <div className={styles.newsletterSection}>
-      <div className={styles.logoContainer}>
-        <img src={logoImg} alt="JCPE Logo" className={styles.logo} />
-      </div>
-
       <div className={styles.newsletterContent}>
         <p className={styles.description}>
           Inscreva-se para receber as últimas notícias e atualizações diretamente no seu e-mail.
