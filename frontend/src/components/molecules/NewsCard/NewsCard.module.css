@@ -1,8 +1,8 @@
 .newsCard {
-  background: var(--color-white);
+  background: var(--bg-card);
   border-radius: var(--border-radius-md);
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-card);
   transition: var(--transition-normal);
   text-decoration: none;
   color: inherit;
@@ -10,61 +10,42 @@
   flex-direction: column;
   cursor: pointer;
   height: 100%;
+  padding: 10px;
 }
 
 .newsCard:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.12);
 }
 
 .cardImage {
   width: 100%;
-  height: 280px;
+  height: 190px;
   background-size: cover;
   background-position: center;
   position: relative;
   overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding: var(--spacing-md);
-}
-
-.cardImage::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 100%);
-  z-index: 1;
-}
-
-.cardBadge {
-  position: absolute;
-  top: var(--spacing-md);
-  right: var(--spacing-md);
-  z-index: 3;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  border-radius: var(--border-radius-md);
+  flex: 1 1 0;
 }
 
 .cardTitle {
-  position: absolute;
-  bottom: var(--spacing-md);
-  left: var(--spacing-md);
-  right: var(--spacing-md);
-  font-size: var(--font-size-xl);
-  font-weight: 700;
-  color: var(--color-white);
-  z-index: 2;
+  width: 100%;
+  padding: var(--spacing-md) 6px var(--spacing-md) 6px;
+}
+
+.cardTitle h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  margin: 0;
   line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-transform: capitalize;
 }
 
 .cardContent {
@@ -76,33 +57,92 @@
 
 .cardSummary {
   font-size: var(--font-size-md);
-  color: var(--color-gray-500);
-  line-height: 1.6;
-  padding: var(--spacing-lg);
+  color: var(--text-secondary);
+  line-height: 20px;
+  letter-spacing: 0.25px;
+  padding: 0 6px var(--spacing-md) 6px;
   flex: 1;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  background: var(--color-white);
+  background: var(--bg-card);
+  text-transform: capitalize;
+  min-height: 40px;
 }
 
 .cardFooter {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-top: 1px solid #e8e8e8;
-  background: var(--color-white);
+  padding: 13px var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+  margin-top: var(--spacing-md);
+  height: 72px;
+}
+
+.footerContent {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.authorAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.authorInfo {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.authorName {
+  width: 100%;
+  color: var(--text-primary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: 22px;
+  letter-spacing: 0.10px;
 }
 
 .cardDate {
   font-size: var(--font-size-sm);
-  color: #999;
+  color: var(--text-secondary);
+  line-height: 18px;
+  letter-spacing: 0.25px;
+  width: 210px;
+}
+
+.cardIcon {
   display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
+  justify-content: flex-start;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.cardIcon i {
+  width: 20px;
+  height: 19px;
+  color: var(--text-tertiary);
+  font-size: 20px;
+  font-weight: var(--font-weight-regular);
+  transition: var(--transition-normal);
+}
+
+.cardIcon:hover i {
+  color: var(--text-primary);
 }
 
 @media (max-width: 768px) {

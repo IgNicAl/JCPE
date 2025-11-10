@@ -7,22 +7,31 @@ import NextPoint from '@/components/molecules/NextPoint';
 import UserMenu from '@/components/organisms/UserMenu';
 import SearchBar from '@/components/molecules/SearchBar';
 import Button from '@/components/atoms/Button';
+import ThemeToggle from '@/components/atoms/ThemeToggle';
+import NotificationIcon from '@/components/atoms/NotificationIcon';
+import MegaMenuCategories from '@/components/molecules/MegaMenuCategories';
+import DropdownPages from '@/components/molecules/DropdownPages';
 import styles from './Navbar.module.css';
 
 /**
- * Componente de navegação principal da aplicação.
- * Inclui o logo, links de navegação, botões de autenticação
- * e o menu do usuário (avatar).
+ * Navbar redesenhado seguindo o design do Figma
+ * Layout horizontal com mega menu de categorias, páginas, busca e ferramentas
  */
 const Navbar: React.FC = () => {
-  const { user, isAdmin, isJournalist } = useAuth();
+  const { user } = useAuth();
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
+  const [notificationCount] = useState<number>(3); // TODO: integrar com sistema real de notificações
 
   const toggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
   const closeMobileMenu = useCallback(() => setMenuOpen(false), []);
 
+  const handleNotificationClick = () => {
+    // TODO: abrir painel de notificações
+    console.log('Notificações clicadas');
+  };
+
   const renderVisitorActions = () => (
-    <>
+    <div className={styles.authButtons}>
       <Link to={ROUTES.LOGIN} onClick={closeMobileMenu}>
         <Button variant="secondary" className={styles.navBtnLogin}>
           LOGIN
@@ -33,91 +42,83 @@ const Navbar: React.FC = () => {
           CADASTRO
         </Button>
       </Link>
-    </>
+    </div>
   );
 
   return (
     <nav className={styles.navbar}>
-      {/* Seção Superior: Logo e Autenticação */}
-      <div className={styles.navbarTop}>
+      <div className={styles.navbarContainer}>
+        {/* Logo */}
         <Link to={ROUTES.HOME} className={styles.logoContainer} onClick={closeMobileMenu}>
-          <img src={logo} alt="jcpe Logo" className={styles.logoImg} />
+          <img src={logo} alt="JCPE Logo" className={styles.logoImg} />
         </Link>
-        <div className={styles.navAuth}>
-          {user && <NextPoint />}
-          {user ? <UserMenu onItemClick={closeMobileMenu} /> : renderVisitorActions()}
-        </div>
-      </div>
 
-      {/* Seção Inferior: Menu de Navegação e Pesquisa */}
-      <div className={styles.navbarBottom}>
+        {/* Menu de Navegação (Desktop) */}
         <div className={`${styles.navMenu} ${isMenuOpen ? styles.active : ''}`}>
-          <Link to="/" className={styles.navMenuItem} onClick={closeMobileMenu}>
-            SOBRE
+          <MegaMenuCategories onItemClick={closeMobileMenu} />
+          <DropdownPages onItemClick={closeMobileMenu} />
+          <Link to="/contato" className={styles.navLink} onClick={closeMobileMenu}>
+            Contato
           </Link>
-          <Link to="/noticias" className={styles.navMenuItem} onClick={closeMobileMenu}>
-            NOTÍCIAS
+          <Link to="/sobre" className={styles.navLink} onClick={closeMobileMenu}>
+            Sobre
           </Link>
+        </div>
 
-          {user && (
-            <Link to={ROUTES.CHAT_AI} className={styles.navMenuItem} onClick={closeMobileMenu}>
-              <i className="fas fa-robot" /> ASSISTENTE IA
-            </Link>
-          )}
-
-          <Link to="/recife" className={styles.navMenuItem} onClick={closeMobileMenu}>
-            RECIFE EM 5 MIN
-          </Link>
-          <Link to="/jogos" className={styles.navMenuItem} onClick={closeMobileMenu}>
-            JOGOS
-          </Link>
-          <Link to="/clima" className={styles.navMenuItem} onClick={closeMobileMenu}>
-            CLIMA
-          </Link>
-          <Link
-            to="/empreendedorismo"
-            className={styles.navMenuItem}
-            onClick={closeMobileMenu}
-          >
-            EMPREENDEDORISMO
-          </Link>
-
-          {user && isAdmin() && (
-            <Link
-              to={ROUTES.MANAGE_NEWS}
-              className={`${styles.navMenuItem} ${styles.navMenuAdmin}`}
-              onClick={closeMobileMenu}
-            >
-              GERENCIAR NOTÍCIAS
-            </Link>
-          )}
-          {user && isAdmin() && (
-            <Link
-              to={ROUTES.MANAGE_USERS}
-              className={`${styles.navMenuItem} ${styles.navMenuAdmin}`}
-              onClick={closeMobileMenu}
-            >
-              GERENCIAR USUÁRIOS
-            </Link>
-          )}
-          {user && isJournalist() && (
-            <Link
-              to={ROUTES.MANAGE_NEWS}
-              className={`${styles.navMenuItem} ${styles.navMenuJournalist}`}
-              onClick={closeMobileMenu}
-            >
-              MINHAS NOTÍCIAS
-            </Link>
+        {/* Seção Direita: Ferramentas e Usuário */}
+        <div className={styles.navRightSection}>
+          <SearchBar className={styles.searchBar} />
+          <ThemeToggle className={styles.themeToggle} />
+          {user && <NextPoint />}
+          {user ? (
+            <>
+              <UserMenu onItemClick={closeMobileMenu} />
+              <NotificationIcon count={notificationCount} onClick={handleNotificationClick} />
+            </>
+          ) : (
+            renderVisitorActions()
           )}
         </div>
 
-        <SearchBar className={styles.searchBar} />
+        {/* Menu Hamburguer (Mobile) */}
+        <button
+          className={styles.menuIcon}
+          onClick={toggleMenu}
+          aria-label="Menu de navegação"
+          aria-expanded={isMenuOpen}
+        >
+          <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`} />
+        </button>
       </div>
 
-      {/* Ícone de Menu Hamburguer (Mobile) */}
-      <div className={styles.menuIcon} onClick={toggleMenu}>
-        <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`} />
-      </div>
+      {/* Menu Mobile Expandido */}
+      {isMenuOpen && (
+        <div className={styles.mobileMenu}>
+          <MegaMenuCategories onItemClick={closeMobileMenu} />
+          <DropdownPages onItemClick={closeMobileMenu} />
+          <Link to="/contato" className={styles.mobileMenuItem} onClick={closeMobileMenu}>
+            Contato
+          </Link>
+          <Link to="/sobre" className={styles.mobileMenuItem} onClick={closeMobileMenu}>
+            Sobre
+          </Link>
+
+          {!user && (
+            <div className={styles.mobileAuthButtons}>
+              <Link to={ROUTES.LOGIN} onClick={closeMobileMenu}>
+                <Button variant="secondary" className={styles.navBtnLogin}>
+                  LOGIN
+                </Button>
+              </Link>
+              <Link to={ROUTES.REGISTER} onClick={closeMobileMenu}>
+                <Button variant="secondary" className={styles.navBtnRegister}>
+                  CADASTRO
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
     </nav>
   );
 };

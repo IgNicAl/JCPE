@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
+import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './features/auth/contexts/AuthContext';
 import ProtectedRoute from './features/auth/routes/ProtectedRoute';
 import Navbar from './components/organisms/Navbar';
@@ -44,13 +45,14 @@ const RedirectController: React.FC = () => {
 
 export function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <RedirectController />
-        <div className="App">
-          <Navbar />
-          <main className="main-content">
-            <Routes>
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <RedirectController />
+          <div className="App">
+            <Navbar />
+            <main className="main-content">
+              <Routes>
               {/* Rotas Públicas */}
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -161,6 +163,7 @@ export function App() {
         </div>
       </Router>
     </AuthProvider>
+    </ThemeProvider>
   );
 }
 

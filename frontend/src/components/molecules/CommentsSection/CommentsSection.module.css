@@ -1,0 +1,102 @@
+.commentsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.titleSection {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.titleIndicator {
+  width: 4px;
+  height: 10px;
+  background: #f81539;
+  border-radius: 12px;
+}
+
+.sectionTitle {
+  color: #ffffff;
+  font-size: 20px;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-weight: 500;
+  text-transform: capitalize;
+  margin: 0;
+}
+
+.commentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.commentItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.commentItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.commentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.commentAuthor {
+  color: #ffffff;
+  font-size: 14px;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.commentTime {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-weight: 400;
+}
+
+.commentText {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .commentsSection {
+    gap: 16px;
+  }
+
+  .sectionTitle {
+    font-size: 18px;
+  }
+
+  .commentsList {
+    gap: 16px;
+  }
+
+  .commentItem {
+    padding-bottom: 16px;
+  }
+}
+

@@ -9,14 +9,15 @@ import { ROUTES } from '@/utils/constants';
 import styles from './UserMenu.module.css';
 
 /**
- * Componente UserMenu para menu do usuário logado
+ * Componente UserMenu expandido com opções de gerenciamento
  */
 interface UserMenuProps {
   onItemClick?: () => void;
+  showName?: boolean;
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({ onItemClick }) => {
-  const { user, logout } = useAuth();
+const UserMenu: React.FC<UserMenuProps> = ({ onItemClick, showName = true }) => {
+  const { user, logout, isAdmin, isJournalist } = useAuth();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useClickOutside<HTMLDivElement>(() => setDropdownOpen(false));
@@ -55,34 +56,121 @@ const UserMenu: React.FC<UserMenuProps> = ({ onItemClick }) => {
     logout();
   };
 
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleDropdown();
+    } else if (e.key === 'Escape') {
+      setDropdownOpen(false);
+    }
+  };
+
   if (!user) return null;
+
+  const userName = user.name || user.email?.split('@')[0] || 'Usuário';
+  const canManageNews = isAdmin() || isJournalist();
+  const canManageUsers = isAdmin();
 
   return (
     <div className={styles.userMenu} ref={dropdownRef}>
       <button
-        className={styles.avatarButton}
-        onClick={() => setDropdownOpen(!dropdownOpen)}
-        aria-label="menu do usuário"
+        className={styles.userButton}
+        onClick={toggleDropdown}
+        onKeyDown={handleKeyDown}
+        aria-label="Menu do usuário"
+        aria-expanded={dropdownOpen}
+        aria-haspopup="true"
       >
-        <Avatar src={avatarUrl || undefined} name={user.name || user.email} size="md" />
+        <Avatar src={avatarUrl || undefined} name={userName} size="md" />
+        {showName && <span className={styles.userName}>{userName}</span>}
+        <i className={`fas fa-chevron-down ${styles.chevron} ${dropdownOpen ? styles.open : ''}`} />
       </button>
+
       <Dropdown isOpen={dropdownOpen} align="right">
+        <div className={styles.dropdownHeader}>
+          <Avatar src={avatarUrl || undefined} name={userName} size="sm" />
+          <div className={styles.userInfo}>
+            <span className={styles.userNameHeader}>{userName}</span>
+            <span className={styles.userEmail}>{user.email}</span>
+          </div>
+        </div>
+
+        <div className={styles.dropdownDivider} />
+
         <Link
           to={ROUTES.USER_AREA}
           className={styles.dropdownItem}
           onClick={handleItemClick}
         >
-          Meus dados
+          <i className="fas fa-user" />
+          <span>Perfil</span>
         </Link>
+
+        <Link
+          to={ROUTES.USER_AREA}
+          className={styles.dropdownItem}
+          onClick={handleItemClick}
+        >
+          <i className="fas fa-id-card" />
+          <span>Área do Usuário</span>
+        </Link>
+
         <Link
           to={ROUTES.POINTS}
           className={styles.dropdownItem}
           onClick={handleItemClick}
         >
-          Meus benefícios
+          <i className="fas fa-gift" />
+          <span>Meus Benefícios</span>
         </Link>
-        <button className={`${styles.dropdownItem} ${styles.logout}`} onClick={handleLogout}>
-          Sair
+
+        {canManageNews && (
+          <>
+            <div className={styles.dropdownDivider} />
+            <div className={styles.dropdownSection}>Gerenciamento</div>
+            <Link
+              to={ROUTES.MANAGE_NEWS}
+              className={`${styles.dropdownItem} ${styles.managementItem}`}
+              onClick={handleItemClick}
+            >
+              <i className="fas fa-newspaper" />
+              <span>Gerenciar Notícias</span>
+            </Link>
+          </>
+        )}
+
+        {canManageUsers && (
+          <Link
+            to={ROUTES.MANAGE_USERS}
+            className={`${styles.dropdownItem} ${styles.managementItem}`}
+            onClick={handleItemClick}
+          >
+            <i className="fas fa-users-cog" />
+            <span>Gerenciar Usuários</span>
+          </Link>
+        )}
+
+        <div className={styles.dropdownDivider} />
+
+        <Link
+          to="/configuracoes"
+          className={styles.dropdownItem}
+          onClick={handleItemClick}
+        >
+          <i className="fas fa-cog" />
+          <span>Configurações</span>
+        </Link>
+
+        <button
+          className={`${styles.dropdownItem} ${styles.logout}`}
+          onClick={handleLogout}
+        >
+          <i className="fas fa-sign-out-alt" />
+          <span>Sair</span>
         </button>
       </Dropdown>
     </div>

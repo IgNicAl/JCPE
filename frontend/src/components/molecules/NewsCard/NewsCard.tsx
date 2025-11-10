@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Badge from '@/components/atoms/Badge';
+import Avatar from '@/components/atoms/Avatar';
 import styles from './NewsCard.module.css';
 import { News } from '@/types';
 
@@ -16,6 +16,8 @@ interface NewsCardProps {
     slug: string;
     featuredImageUrl?: string;
     publicationDate: string;
+    authorName?: string;
+    authorAvatar?: string;
   };
   category?: Category;
   className?: string;
@@ -23,27 +25,44 @@ interface NewsCardProps {
 
 const NewsCard: React.FC<NewsCardProps> = ({ news, category, className = '' }) => {
   const classes = [styles.newsCard, className].filter(Boolean).join(' ');
+  const authorName = (news as any).authorName || 'Autor';
+  const authorAvatar = (news as any).authorAvatar;
 
   return (
     <Link to={`/noticia/${news.slug}`} className={classes}>
       <div
         className={styles.cardImage}
         style={{ backgroundImage: `url(${news.featuredImageUrl})` }}
-      >
-        {category && (
-          <Badge variant="primary" className={styles.cardBadge}>
-            {category.label}
-          </Badge>
-        )}
-        <h3 className={styles.cardTitle}>{news.title}</h3>
-      </div>
+      />
       <div className={styles.cardContent}>
-        <p className={styles.cardSummary}>{news.summary}</p>
+        <div className={styles.cardTitle}>
+          <h3>{news.title}</h3>
+        </div>
+        <div className={styles.cardSummary}>
+          {news.summary}
+        </div>
         <div className={styles.cardFooter}>
-          <span className={styles.cardDate}>
-            <i className="fas fa-calendar" />
-            {new Date(news.publicationDate).toLocaleDateString('pt-BR')}
-          </span>
+          <div className={styles.footerContent}>
+            <Avatar
+              src={authorAvatar}
+              name={authorName}
+              size="md"
+              className={styles.authorAvatar}
+            />
+            <div className={styles.authorInfo}>
+              <div className={styles.authorName}>{authorName}</div>
+              <div className={styles.cardDate}>
+                {new Date(news.publicationDate).toLocaleDateString('pt-BR', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+              </div>
+            </div>
+          </div>
+          <div className={styles.cardIcon}>
+            <i className="far fa-bookmark" />
+          </div>
         </div>
       </div>
     </Link>

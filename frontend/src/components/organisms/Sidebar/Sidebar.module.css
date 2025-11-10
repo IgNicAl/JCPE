@@ -10,16 +10,16 @@
 }
 
 .widget {
-  background: var(--color-white);
+  background: var(--bg-card);
   border-radius: 16px;
   padding: 28px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   border-top: 6px solid var(--primary-red);
-  transition: all 0.3s ease;
+  transition: all 0.3s ease, background-color var(--transition-normal);
 }
 
 .widget:hover {
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
   transform: translateY(-4px);
 }
 
@@ -47,9 +47,10 @@
 .widgetHeader h3 {
   font-size: 16px;
   font-weight: 800;
-  color: var(--text-dark);
+  color: var(--text-primary);
   margin: 0;
   letter-spacing: -0.3px;
+  transition: color var(--transition-normal);
 }
 
 /* WEATHER WIDGET */
@@ -142,11 +143,12 @@
 .gameItem .teams .teamName {
   flex: 1;
   font-size: 13px;
-  color: var(--text-dark);
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 700;
+  transition: color var(--transition-normal);
 }
 
 .gameItem .teams .score {
@@ -193,8 +195,9 @@
 
 .stockItem .stockName {
   font-weight: 800;
-  color: var(--text-dark);
+  color: var(--text-primary);
   font-size: 14px;
+  transition: color var(--transition-normal);
 }
 
 .stockItem .stockChange {
@@ -205,11 +208,11 @@
 }
 
 .stockItem .stockChange.green {
-  background: #d4edda;
-  color: #155724;
+  background: var(--color-success-bg);
+  color: var(--color-success);
 }
 
 .stockItem .stockChange.red {
-  background: #f8d7da;
-  color: #721c24;
+  background: var(--color-error-bg);
+  color: var(--color-error);
 }

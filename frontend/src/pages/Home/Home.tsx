@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { useNews } from '@/hooks/useNews';
 import { ROUTES } from '@/utils/constants';
-import NewsGrid from '@/components/organisms/NewsGrid';
 import Button from '@/components/atoms/Button';
-import Sidebar from '@/components/organisms/Sidebar';
-import FeaturedCard from '@/components/molecules/FeaturedCard';
+import TagScroller from '@/components/organisms/TagScroller';
+import HeroSlider from '@/components/organisms/HeroSlider';
+import PostSection from '@/components/organisms/PostSection';
 import { News } from '@/types';
 import './Home.css';
 
@@ -90,46 +90,106 @@ const Home: React.FC = () => {
   const featuredNews = news.length > 0 ? news[0] : null;
   const otherNews = news.length > 1 ? news.slice(1) : [];
 
+  // Adicionar dados de autor mock para as notícias
+  const newsWithAuthors = news.map((item, index) => ({
+    ...item,
+    authorName: ['James', 'Robert', 'Mary', 'Jon Kantner', 'Louis Hoebregts', 'Patricia'][index % 6] || 'Autor',
+    authorAvatar: `https://placehold.co/44x44?text=${encodeURIComponent((['James', 'Robert', 'Mary', 'Jon Kantner', 'Louis Hoebregts', 'Patricia'][index % 6] || 'Autor')[0])}`,
+  }));
+
+  // Dividir notícias em seções conforme o design
+  const popularNews = newsWithAuthors.slice(0, 4);
+  const trendyNews = newsWithAuthors.slice(4, 8);
+  const newNews = newsWithAuthors.slice(8, 12);
+
+  // Dados para o HeroSlider
+  const heroSlides = news.length > 0
+    ? [
+        {
+          id: news[0].id,
+          title: news[0].title,
+          summary: (news[0] as MockNews).summary,
+          imageUrl: (news[0] as MockNews).featuredImageUrl || 'https://placehold.co/744x452',
+          slug: (news[0] as MockNews).slug,
+        },
+      ]
+    : [];
+
   return (
     <div className="home-page">
       <div className="home-content">
-        <div className="main-column">
-          {user && (isAdmin() || isJournalist()) && (
-            <div className="action-buttons-section">
-              {isJournalist() && (
-                <>
-                  <Button variant="primary" onClick={() => navigate(ROUTES.CREATE_NEWS)}>
-                    <i className="fas fa-plus" /> Criar Notícia
-                  </Button>
-                  <Button variant="secondary" onClick={() => navigate(ROUTES.MANAGE_NEWS)}>
-                    <i className="fas fa-edit" /> Gerenciar
-                  </Button>
-                </>
-              )}
-              {isAdmin() && (
-                <>
-                  <Button variant="primary" onClick={() => navigate(ROUTES.MANAGE_USERS)}>
-                    <i className="fas fa-users" /> Usuários
-                  </Button>
-                  <Button variant="primary" onClick={() => navigate(ROUTES.ADMIN_REGISTER)}>
-                    <i className="fas fa-user-plus" /> Novo Admin
-                  </Button>
-                  <Button variant="primary" onClick={() => navigate(ROUTES.CREATE_NEWS)}>
-                    <i className="fas fa-plus" /> Criar
-                  </Button>
-                  <Button variant="secondary" onClick={() => navigate(ROUTES.MANAGE_NEWS)}>
-                    <i className="fas fa-cogs" /> Gerenciar
-                  </Button>
-                </>
-              )}
-            </div>
-          )}
+        {/* Tags Scroller */}
+        <TagScroller className="home-tag-scroller" />
 
-          {featuredNews && <FeaturedCard news={featuredNews as MockNews & { summary: string; slug: string; publicationDate: string }} />}
-
-          <NewsGrid news={otherNews as MockNews[]} loading={loading} error={error || undefined} />
+        {/* Hero Slider e Cards Laterais */}
+        <div className="hero-section">
+          <HeroSlider slides={heroSlides} className="hero-slider-main" />
         </div>
-        <Sidebar />
+
+        {/* Seção de Posts Populares */}
+        {popularNews.length > 0 && (
+          <PostSection
+            title="popular posts"
+            news={popularNews as MockNews[]}
+            showArrows={true}
+            leftArrowDisabled={true}
+            rightArrowDisabled={false}
+          />
+        )}
+
+        {/* Seção de Novos Posts */}
+        {newNews.length > 0 && (
+          <PostSection
+            title="new posts"
+            news={newNews as MockNews[]}
+            showButton={true}
+            buttonText="Show all"
+            onButtonClick={() => navigate('/noticias')}
+          />
+        )}
+
+        {/* Seção de Posts em Tendência */}
+        {trendyNews.length > 0 && (
+          <PostSection
+            title="trendy posts"
+            news={trendyNews as MockNews[]}
+            showArrows={true}
+            leftArrowDisabled={true}
+            rightArrowDisabled={false}
+          />
+        )}
+
+        {/* Botões de Ação para Admin/Journalist */}
+        {user && (isAdmin() || isJournalist()) && (
+          <div className="action-buttons-section">
+            {isJournalist() && (
+              <>
+                <Button variant="primary" onClick={() => navigate(ROUTES.CREATE_NEWS)}>
+                  <i className="fas fa-plus" /> Criar Notícia
+                </Button>
+                <Button variant="secondary" onClick={() => navigate(ROUTES.MANAGE_NEWS)}>
+                  <i className="fas fa-edit" /> Gerenciar
+                </Button>
+              </>
+            )}
+            {isAdmin() && (
+              <>
+                <Button variant="primary" onClick={() => navigate(ROUTES.MANAGE_USERS)}>
+                  <i className="fas fa-users" /> Usuários
+                </Button>
+                <Button variant="primary" onClick={() => navigate(ROUTES.ADMIN_REGISTER)}>
+                  <i className="fas fa-user-plus" /> Novo Admin
+                </Button>
+                <Button variant="primary" onClick={() => navigate(ROUTES.CREATE_NEWS)}>
+                  <i className="fas fa-plus" /> Criar
+                </Button>
+                <Button variant="secondary" onClick={() => navigate(ROUTES.MANAGE_NEWS)}>
+                  <i className="fas fa-cogs" /> Gerenciar
+                </Button>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
