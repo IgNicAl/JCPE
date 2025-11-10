@@ -1,0 +1,139 @@
+.headerSection {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.titleSection {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 6px;
+}
+
+.accentBar {
+  width: 4px;
+  height: 10px;
+  background: var(--primary-red);
+  border-radius: 12px;
+}
+
+.title {
+  color: var(--text-primary);
+  font-size: var(--font-size-xl);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  text-transform: capitalize;
+  margin: 0;
+  transition: color var(--transition-normal);
+}
+
+.arrowSlider {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+}
+
+.arrow {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrowBackground {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+  transition: var(--transition-normal);
+}
+
+.arrow i {
+  position: relative;
+  z-index: 1;
+  font-size: var(--font-size-lg);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-black);
+  transition: color var(--transition-normal);
+}
+
+.arrow.disabled .arrowBackground {
+  background: var(--bg-secondary);
+}
+
+.arrow.disabled i {
+  color: var(--text-tertiary);
+}
+
+.arrow:not(.disabled):hover .arrowBackground {
+  background: var(--bg-hover);
+}
+
+.showAllButton {
+  padding: 10px 24px 10px 16px;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+  border: none;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  text-transform: capitalize;
+  color: var(--text-secondary);
+}
+
+.showAllButton:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.showAllButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.showAllButton i {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-black);
+}
+
+@media (max-width: 768px) {
+  .headerSection {
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+  }
+
+  .title {
+    font-size: var(--font-size-lg);
+  }
+
+  .arrow {
+    width: 36px;
+    height: 36px;
+  }
+
+  .arrowBackground {
+    width: 36px;
+    height: 36px;
+  }
+}
+

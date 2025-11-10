@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;900&display=swap');
 @import './variables.css';
 
 /* Reset e configurações globais */
@@ -8,10 +9,15 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #fff;
+  font-family: var(--font-family);
+  background: var(--bg-primary);
   min-height: 100vh;
-  color: #333;
+  color: var(--text-primary);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
 .App {
@@ -22,8 +28,9 @@ body {
 
 .main-content {
   flex: 1;
-  background: #fff;
+  background: var(--bg-primary);
   padding: 0;
+  transition: background-color var(--transition-normal);
 }
 
 /* Estilos para mensagens */

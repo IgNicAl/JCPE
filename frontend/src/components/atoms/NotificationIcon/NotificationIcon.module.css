@@ -1,0 +1,93 @@
+.notificationIcon {
+  position: relative;
+  cursor: pointer;
+  transition: var(--transition-normal);
+}
+
+.iconWrapper {
+  width: 48px;
+  height: 48px;
+  background: var(--color-surface, #f5f5f5);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: var(--transition-normal);
+}
+
+.iconWrapper i {
+  font-size: 20px;
+  color: var(--color-text-primary, #3e3232);
+  transition: var(--transition-normal);
+}
+
+.notificationIcon:hover .iconWrapper {
+  background: var(--color-surface-hover, #e8e8e8);
+  transform: translateY(-2px);
+}
+
+.notificationIcon:hover .iconWrapper i {
+  color: var(--color-primary, #0066cc);
+}
+
+.notificationIcon:focus {
+  outline: 2px solid var(--color-primary, #0066cc);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: linear-gradient(223deg, #f45c9f 0%, #ff7563 100%);
+  color: var(--color-white, #ffffff);
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border: 2px solid var(--color-background, #ffffff);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Dark mode support */
+[data-theme='dark'] .iconWrapper {
+  background: var(--color-surface-dark, #2a2a2a);
+}
+
+[data-theme='dark'] .iconWrapper i {
+  color: var(--color-text-primary-dark, #e0e0e0);
+}
+
+[data-theme='dark'] .notificationIcon:hover .iconWrapper {
+  background: var(--color-surface-hover-dark, #3a3a3a);
+}
+
+[data-theme='dark'] .badge {
+  border-color: var(--color-background-dark, #1a1a1a);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .iconWrapper {
+    width: 40px;
+    height: 40px;
+  }
+
+  .iconWrapper i {
+    font-size: 18px;
+  }
+
+  .badge {
+    font-size: 9px;
+    min-width: 16px;
+    height: 16px;
+  }
+}
+

@@ -1,20 +1,21 @@
 :root {
-  /* Cores Primárias */
-  --color-primary: #c41e3a;
-  --color-primary-dark: #8b1428;
+  /* Cores Primárias - Design Figma */
+  --color-primary: #F81539;
+  --color-primary-dark: #c41e3a;
   --color-primary-light: #e74c3c;
+  --primary-red: #F81539;
 
   /* Cores Secundárias */
   --color-secondary: #ffc107;
   --color-secondary-dark: #ff9800;
 
-  /* Cores Neutras */
+  /* Cores Neutras - Design Figma */
   --color-white: #fff;
   --color-black: #000;
-  --color-gray-100: #f5f5f5;
+  --color-gray-100: #F5F5F5;
   --color-gray-200: #e1e5e9;
-  --color-gray-500: #666;
-  --color-gray-700: #333;
+  --color-gray-500: rgba(62, 50, 50, 0.75);
+  --color-gray-700: #3E3232;
 
   /* Cores de Status */
   --color-success: #155724;
@@ -30,35 +31,137 @@
   --color-gray-600: #6c757d;
   --color-gray-700-dark: #5a6268;
 
-  /* Espaçamentos */
+  /* Espaçamentos - Design Figma */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 40px;
 
-  /* Tipografia */
-  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* Tipografia - Roboto do Design */
+  --font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   --font-size-xs: 10px;
   --font-size-sm: 12px;
   --font-size-md: 14px;
   --font-size-lg: 16px;
-  --font-size-xl: 24px;
-  --font-size-2xl: 28px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 25px;
+  --font-size-3xl: 49px;
 
-  /* Sombras */
+  /* Pesos de Fonte */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 600;
+  --font-weight-black: 900;
+
+  /* Sombras - Design Figma */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 0px 32px rgba(0, 0, 0, 0.07);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --shadow-card: 0px 0px 32px rgba(0, 0, 0, 0.07);
 
-  /* Bordas */
+  /* Bordas - Design Figma */
   --border-radius-sm: 8px;
   --border-radius-md: 12px;
   --border-radius-lg: 20px;
+  --border-radius-xl: 50px;
 
   /* Transições */
   --transition-fast: 0.2s ease;
   --transition-normal: 0.3s ease;
   --transition-slow: 0.4s ease;
+
+  /* Gradientes - Design Figma */
+  --gradient-primary: linear-gradient(223deg, #F45C9F 0%, #FF7563 100%);
+  --gradient-social-twitter: linear-gradient(228deg, #2CA5E0 0%, #67C9F5 100%);
+  --gradient-weather-petrolina: linear-gradient(135deg, rgba(250.75, 68.27, 28.21, 0.91) 0%, rgba(251, 202, 28, 0.60) 100%), rgba(0, 0, 0, 0.45);
+  --gradient-weather-garanhuns: linear-gradient(135deg, rgba(28.21, 50.46, 250.75, 0.91) 0%, rgba(28, 251, 224.24, 0.60) 100%), rgba(0, 0, 0, 0.45);
+  --gradient-weather-olinda: linear-gradient(135deg, rgba(6.51, 156.19, 39.44, 0.91) 0%, rgba(192.36, 255, 112.62, 0.60) 100%), rgba(0, 0, 0, 0.45);
+  --gradient-weather-caruaru: linear-gradient(135deg, rgba(112.77, 28.21, 250.75, 0.91) 0%, rgba(251, 28, 148.42, 0.60) 100%), rgba(0, 0, 0, 0.45);
+}
+
+/* ================================
+   TEMA LIGHT (Padrão)
+   ================================ */
+:root,
+[data-theme='light'] {
+  /* Backgrounds */
+  --bg-primary: #ffffff;
+  --bg-secondary: #F5F5F5;
+  --bg-tertiary: #e1e5e9;
+  --bg-hover: #eeeeee;
+  --bg-card: #ffffff;
+
+  /* Textos */
+  --text-primary: #3E3232;
+  --text-secondary: rgba(62, 50, 50, 0.75);
+  --text-tertiary: rgba(62, 50, 50, 0.50);
+  --text-inverse: #ffffff;
+
+  /* Compatibilidade com variáveis antigas */
+  --text-dark: #3E3232;
+  --text-muted: rgba(62, 50, 50, 0.75);
+  --text-muted-light: rgba(62, 50, 50, 0.50);
+
+  /* Bordas */
+  --border-color: #e1e5e9;
+  --border-color-hover: #d1d5d9;
+
+  /* Inputs */
+  --input-bg: #ffffff;
+  --input-border: #e1e5e9;
+  --input-text: #3E3232;
+  --input-placeholder: rgba(62, 50, 50, 0.50);
+}
+
+/* ================================
+   TEMA DARK
+   ================================ */
+[data-theme='dark'] {
+  /* Backgrounds */
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #242424;
+  --bg-tertiary: #2d2d2d;
+  --bg-hover: #333333;
+  --bg-card: #242424;
+
+  /* Textos */
+  --text-primary: #e8e8e8;
+  --text-secondary: rgba(232, 232, 232, 0.75);
+  --text-tertiary: rgba(232, 232, 232, 0.50);
+  --text-inverse: #1a1a1a;
+
+  /* Compatibilidade com variáveis antigas */
+  --text-dark: #e8e8e8;
+  --text-muted: rgba(232, 232, 232, 0.75);
+  --text-muted-light: rgba(232, 232, 232, 0.50);
+
+  /* Bordas */
+  --border-color: #3d3d3d;
+  --border-color-hover: #4d4d4d;
+
+  /* Inputs */
+  --input-bg: #2d2d2d;
+  --input-border: #3d3d3d;
+  --input-text: #e8e8e8;
+  --input-placeholder: rgba(232, 232, 232, 0.50);
+
+  /* Sombras ajustadas para dark mode */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 0px 32px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-card: 0px 0px 32px rgba(0, 0, 0, 0.4);
+
+  /* Cores de Status - Dark Mode */
+  --color-success: #4caf50;
+  --color-success-bg: rgba(76, 175, 80, 0.15);
+  --color-success-border: rgba(76, 175, 80, 0.3);
+  --color-error: #f44336;
+  --color-error-bg: rgba(244, 67, 54, 0.15);
+  --color-error-border: rgba(244, 67, 54, 0.3);
+
+  /* Ajustes nas cores cinzas */
+  --color-gray-100: #2d2d2d;
+  --color-gray-200: #3d3d3d;
 }
 

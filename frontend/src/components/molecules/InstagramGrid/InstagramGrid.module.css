@@ -1,0 +1,143 @@
+.instagramGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.titleSection {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.titleIndicator {
+  width: 4px;
+  height: 10px;
+  background: #f81539;
+  border-radius: 12px;
+}
+
+.sectionTitle {
+  color: #ffffff;
+  font-size: 20px;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-weight: 500;
+  text-transform: capitalize;
+  margin: 0;
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.gridItem {
+  position: relative;
+  aspect-ratio: 1;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.gridItem:hover {
+  transform: scale(1.05);
+}
+
+.gridItem:focus {
+  outline: 2px solid #f81539;
+  outline-offset: 2px;
+}
+
+.gridImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.gridItem:hover .overlay,
+.gridItem:focus .overlay {
+  opacity: 1;
+}
+
+.overlay i {
+  color: #ffffff;
+  font-size: 24px;
+}
+
+.followButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(223deg, #f45c9f 0%, #ff7563 100%);
+  color: #ffffff;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-weight: 500;
+  text-transform: capitalize;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  margin-top: 8px;
+}
+
+.followButton:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.followButton:active {
+  transform: translateY(0);
+}
+
+.followButton i {
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .instagramGrid {
+    gap: 16px;
+  }
+
+  .sectionTitle {
+    font-size: 18px;
+  }
+
+  .gridContainer {
+    gap: 6px;
+  }
+
+  .followButton {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gridContainer {
+    gap: 4px;
+  }
+}
+

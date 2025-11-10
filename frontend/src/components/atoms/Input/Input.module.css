@@ -6,11 +6,12 @@
 .input {
   width: 100%;
   padding: var(--spacing-md);
-  border: 2px solid var(--color-gray-200);
+  border: 2px solid var(--input-border);
   border-radius: var(--border-radius-sm);
   font-size: var(--font-size-lg);
   transition: var(--transition-normal);
-  background: var(--color-white);
+  background: var(--input-bg);
+  color: var(--input-text);
   font-family: var(--font-family);
 }
 
@@ -22,7 +23,7 @@
 }
 
 .input::placeholder {
-  color: #aaa;
+  color: var(--input-placeholder);
 }
 
 .inputError {
