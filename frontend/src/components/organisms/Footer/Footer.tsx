@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import NewsletterSection from '@/components/molecules/NewsletterSection';
 import CommentsSection from '@/components/molecules/CommentsSection';
 import InstagramGrid from '@/components/molecules/InstagramGrid';
@@ -80,7 +81,11 @@ const Footer: React.FC = () => {
 
       {/* Copyright */}
       <div className={styles.footerBottom}>
-        <p>Privacy Policy | Terms & Conditions</p>
+        <p>
+          <Link to="/sobre" style={{ color: 'inherit', marginRight: '15px' }}>Sobre</Link>
+          <Link to="/contato" style={{ color: 'inherit', marginRight: '15px' }}>Contato</Link>
+          Privacy Policy | Terms & Conditions
+        </p>
         <p>All Copyright (C) 2022 Reserved</p>
       </div>
     </footer>

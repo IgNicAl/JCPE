@@ -4,24 +4,35 @@
   gap: var(--spacing-sm);
   padding: 6px 10px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--color-white);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
   font-weight: 700;
   font-size: var(--font-size-sm);
   margin-right: 10px;
   cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
 .nextPointWidget:hover {
-  background: rgba(255, 255, 255, 0.09);
+  background: var(--bg-hover);
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .clockIcon {
   opacity: 0.95;
 }
 
+/* Ajuste do ícone do relógio para se adaptar ao tema */
+.clockIcon circle,
+.clockIcon path {
+  stroke: var(--color-primary);
+}
+
 .nextText {
-  color: var(--color-white);
+  color: var(--text-primary);
 }
 
 @keyframes jcpe-pulse-small {
@@ -38,7 +49,8 @@
 
 .pulse {
   animation: jcpe-pulse-small 0.9s ease-in-out 1;
-  box-shadow: 0 6px 18px rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 4px rgba(248, 21, 57, 0.15);
+  border-color: var(--color-primary);
 }
 
 @media (max-width: 768px) {

@@ -1,133 +1,369 @@
-/* JOGOS PAGE */
-
 .jogos-page {
-  background: #fff;
+  background: var(--bg-primary);
   min-height: 100vh;
-  padding: 40px 20px;
+  padding-bottom: var(--spacing-xl);
+  transition: background-color var(--transition-normal);
 }
 
-.jogos-container {
-  max-width: 1200px;
+.jogos-content {
+  max-width: 1512px;
   margin: 0 auto;
-}
-
-.jogos-header {
-  text-align: center;
-  margin-bottom: 50px;
+  padding: var(--spacing-lg) 204px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 16px;
+  gap: var(--spacing-xl);
 }
 
-.jogos-header i {
-  font-size: 48px;
-  color: #00aa44;
+.jogos-tag-scroller {
+  margin-bottom: var(--spacing-lg);
 }
 
-.jogos-header h1 {
-  font-size: 42px;
-  font-weight: 900;
-  color: #333;
-  margin: 0;
+.hero-section {
+  width: 100%;
+  margin-bottom: var(--spacing-xl);
 }
 
-.jogos-header p {
-  font-size: 16px;
-  color: #666;
-  margin: 0;
+.action-buttons-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
 }
 
-.games-grid {
+/* ================================
+   WIDGETS DE ESPORTES (LADO A LADO)
+   ================================ */
+.sports-widgets {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
 }
 
-.game-card {
-  background: linear-gradient(135deg, #00aa44 0%, #008533 100%);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 4px 16px rgba(0, 170, 68, 0.15);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.game-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(0, 170, 68, 0.25);
-}
-
-.game-status {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  backdrop-filter: blur(8px);
-}
-
-.game-content {
+.widget {
+  background: var(--bg-card);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--spacing-lg);
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
-.team {
-  display: flex;
-  justify-content: center;
-}
-
-.team-name {
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
-  text-align: center;
-}
-
-.game-score {
+.widget-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-black);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  gap: var(--spacing-sm);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--border-color);
 }
 
-.score {
-  font-size: 48px;
-  font-weight: 900;
-  color: #fff;
-  min-width: 60px;
+.widget-title i {
+  color: var(--color-primary);
+}
+
+.widget-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: var(--color-primary);
+  font-size: 24px;
+}
+
+/* ================================
+   WIDGET DE PLACARES (COMPACTO)
+   ================================ */
+.scores-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.score-item {
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-secondary);
+  border-left: 3px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.score-item:hover {
+  background: var(--bg-hover);
+}
+
+.score-item.live {
+  border-left-color: var(--color-primary);
+}
+
+.score-item.finished {
+  border-left-color: var(--color-green);
+}
+
+.score-item.scheduled {
+  border-left-color: var(--color-gray-200);
+}
+
+.score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.score-league {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.score-status {
+  font-size: var(--font-size-sm);
+}
+
+.score-match {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.score-team {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.score-team .team-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.score-team .team-score {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-primary);
+  min-width: 24px;
   text-align: center;
 }
 
-.separator {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 24px;
-  font-weight: 300;
+.score-vs {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  font-weight: var(--font-weight-bold);
+}
+
+.score-date {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* ================================
+   WIDGET DE CLASSIFICAÇÃO (COMPACTO)
+   ================================ */
+.standings-compact {
+  overflow-x: auto;
+  margin-bottom: var(--spacing-sm);
+}
+
+.standings-table-compact {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.standings-table-compact thead {
+  background: var(--bg-secondary);
+  position: sticky;
+  top: 0;
+}
+
+.standings-table-compact th {
+  padding: var(--spacing-sm);
+  text-align: center;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.standings-table-compact th.pos {
+  width: 35px;
+}
+
+.standings-table-compact th.team {
+  text-align: left;
+  width: auto;
+}
+
+.standings-table-compact tbody tr {
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color var(--transition-fast);
+}
+
+.standings-table-compact tbody tr:hover {
+  background-color: var(--bg-hover);
+}
+
+.standings-table-compact tbody tr:last-child {
+  border-bottom: none;
+}
+
+.standings-table-compact td {
+  padding: var(--spacing-sm);
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.standings-table-compact td.pos {
+  font-weight: var(--font-weight-bold);
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.standings-table-compact td.team {
+  text-align: left;
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.standings-table-compact td.points {
+  font-weight: var(--font-weight-black);
+  color: var(--color-primary);
+}
+
+.standings-table-compact td.positive {
+  color: var(--color-green);
+  font-weight: var(--font-weight-bold);
+}
+
+.standings-table-compact td.negative {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Zonas de Classificação - Versão Compacta */
+.standings-table-compact .zone-libertadores {
+  border-left: 3px solid var(--color-blue);
+}
+
+.standings-table-compact .zone-sulamericana {
+  border-left: 3px solid var(--color-secondary);
+}
+
+.standings-table-compact .zone-rebaixamento {
+  border-left: 3px solid var(--color-primary);
+}
+
+/* Legenda Compacta */
+.standings-legend-compact {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-sm);
+}
+
+.standings-legend-compact .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legend-dot.libertadores {
+  background-color: var(--color-blue);
+}
+
+.legend-dot.sulamericana {
+  background-color: var(--color-secondary);
+}
+
+.legend-dot.rebaixamento {
+  background-color: var(--color-primary);
+}
+
+/* ================================
+   SEÇÕES ANTIGAS (REMOVIDAS MAS MANTIDAS PARA COMPATIBILIDADE)
+   ================================ */
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+@media (max-width: 1440px) {
+  .jogos-content {
+    padding: var(--spacing-lg) var(--spacing-xl);
+  }
 }
 
 @media (max-width: 1024px) {
-  .games-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .jogos-content {
+    padding: var(--spacing-lg) var(--spacing-lg);
+    gap: var(--spacing-lg);
+  }
+
+  .sports-widgets {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
-  .jogos-header h1 {
-    font-size: 32px;
+  .jogos-content {
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
   }
 
-  .games-grid {
-    grid-template-columns: 1fr;
+  .action-buttons-section {
+    flex-direction: column;
   }
 
-  .score {
-    font-size: 36px;
+  .sports-widgets {
+    gap: var(--spacing-md);
+  }
+
+  .widget-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .score-team .team-name {
+    font-size: var(--font-size-xs);
+  }
+
+  .score-team .team-score {
+    font-size: var(--font-size-lg);
+  }
+
+  .standings-table-compact {
+    font-size: 11px;
+  }
+
+  .standings-table-compact td.team {
+    max-width: 100px;
   }
 }

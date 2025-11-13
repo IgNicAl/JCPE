@@ -21,7 +21,7 @@
 .featuredImage {
   background-size: cover;
   background-position: center;
-  background-color: #ddd;
+  background-color: var(--bg-tertiary);
   position: relative;
   overflow: hidden;
 }
@@ -41,7 +41,7 @@
   align-items: center;
   gap: var(--spacing-xs);
   background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
-  color: #000;
+  color: var(--color-black);
   padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--border-radius-lg);
   font-size: var(--font-size-sm);

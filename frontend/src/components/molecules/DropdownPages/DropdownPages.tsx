@@ -38,6 +38,8 @@ const DropdownPages: React.FC<DropdownPagesProps> = ({ className = '', onItemCli
     { path: '/jogos', label: 'Jogos', requiresAuth: false },
     { path: '/clima', label: 'Clima', requiresAuth: false },
     { path: '/empreendedorismo', label: 'Empreendedorismo', requiresAuth: false },
+    { path: '/sobre', label: 'Sobre', requiresAuth: false, icon: 'fas fa-info-circle' },
+    { path: '/contato', label: 'Contato', requiresAuth: false, icon: 'fas fa-envelope' },
     { path: '/chat-ai', label: 'Assistente IA', requiresAuth: true, icon: 'fas fa-robot' },
   ];
 
