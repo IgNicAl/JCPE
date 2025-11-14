@@ -1,0 +1,122 @@
+.singleContent {
+  width: 360px;
+  height: 452px;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius-md);
+  display: block;
+  text-decoration: none;
+  transition: transform var(--transition-normal);
+}
+
+.singleContent:hover {
+  transform: translateY(-4px);
+}
+
+.contentImage {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.imageOverlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.content {
+  position: absolute;
+  left: 10px;
+  top: 325px;
+  width: calc(100% - 20px);
+  max-width: 339px;
+}
+
+.contentWrapper {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: var(--border-radius-md);
+  backdrop-filter: blur(5px);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.contentTitle {
+  width: 100%;
+  max-width: 307px;
+  height: auto;
+  color: var(--color-black);
+  font-size: var(--font-size-2xl);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-regular);
+  margin: 0;
+  word-wrap: break-word;
+  line-height: 1.2;
+}
+
+.contentSummary {
+  width: 100%;
+  max-width: 307px;
+  height: 40px;
+  color: rgba(0, 0, 0, 0.75);
+  font-size: var(--font-size-md);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-regular);
+  text-transform: capitalize;
+  line-height: 20px;
+  letter-spacing: 0.25px;
+  margin: 0;
+  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+  .singleContent {
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .contentTitle {
+    font-size: var(--font-size-xl);
+  }
+
+  .contentSummary {
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 768px) {
+  .singleContent {
+    width: 100%;
+    height: 400px;
+  }
+
+  .content {
+    top: 280px;
+  }
+
+  .contentTitle {
+    font-size: var(--font-size-lg);
+  }
+
+  .contentSummary {
+    font-size: var(--font-size-sm);
+    height: auto;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+}

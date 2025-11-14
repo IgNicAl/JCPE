@@ -3,84 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { newsService } from '@/services/api';
 import { NEWS_CATEGORIES } from '@/utils/constants';
-import { News } from '@/types';
+import { MockNews, MOCK_NEWS } from '@/features/news/mocks/news';
 import './Empreendedorismo.css';
 
-interface NewsItem extends News {
-  summary: string;
-  slug: string;
-  category: string;
-  featuredImageUrl: string;
-  publicationDate: string;
-  priority: number;
-  isFeatured?: boolean;
-}
-
-const MOCK_NEWS: NewsItem[] = [
-  {
-    id: '1',
-    title: 'Ecossistema de startups de Recife atrai investidores internacionais',
-    summary: 'Capitalistas de risco estrangeiros apostam em inovações desenvolvidas no Polo Tecnológico de Recife.',
-    category: 'economia',
-    featuredImageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
-    slug: 'startups-recife-investimento',
-    publicationDate: new Date().toISOString(),
-    priority: 1
-  },
-  {
-    id: '2',
-    title: 'Programa de microcrédito beneficia 5 mil empreendedores em PE',
-    summary: 'Iniciativa governamental amplia acesso a capital para pequenos negócios no estado.',
-    category: 'economia',
-    featuredImageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop',
-    slug: 'microCredito-pe',
-    publicationDate: new Date().toISOString(),
-    priority: 2
-  },
-  {
-    id: '3',
-    title: 'Incubadora de empresas abre inscrições para novo programa',
-    summary: 'Oportunidade para empreendedores apresentarem ideias inovadoras e receber mentoria.',
-    category: 'noticias',
-    featuredImageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
-    slug: 'incubadora-programa',
-    publicationDate: new Date().toISOString(),
-    priority: 3
-  },
-  {
-    id: '4',
-    title: 'Mulheres empreendedoras lideram crescimento econômico de Recife',
-    summary: 'Dados mostram que empresárias geram mais de 40% dos novos empregos na região.',
-    category: 'economia',
-    featuredImageUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=400&fit=crop',
-    slug: 'mulheres-empreendedoras',
-    publicationDate: new Date().toISOString(),
-    priority: 1
-  },
-  {
-    id: '5',
-    title: 'Reforma tributária favorece micro e pequenas empresas',
-    summary: 'Governo implementa medidas para reduzir carga fiscal de pequenos negócios.',
-    category: 'politica',
-    featuredImageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop',
-    slug: 'reforma-tributaria',
-    publicationDate: new Date().toISOString(),
-    priority: 2
-  },
-  {
-    id: '6',
-    title: 'Universidade lança programa de empreendedorismo para estudantes',
-    summary: 'Capacitação prática em gestão de negócios para formar nova geração de empresários.',
-    category: 'noticias',
-    featuredImageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
-    slug: 'universidade-empreendedorismo',
-    publicationDate: new Date().toISOString(),
-    priority: 3
-  },
-];
-
 const Empreendedorismo: React.FC = () => {
-  const [news, setNews] = useState<NewsItem[]>([]);
+  const [news, setNews] = useState<MockNews[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const navigate = useNavigate();
