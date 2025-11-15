@@ -1,3 +1,7 @@
+/* ================================== */
+/* VARIÁVEIS GLOBAIS                  */
+/* ================================== */
+
 :root {
   /* Cores Primárias - Design Figma */
   --color-primary: #F81539;
@@ -80,9 +84,10 @@
   --gradient-weather-caruaru: linear-gradient(135deg, rgba(112.77, 28.21, 250.75, 0.91) 0%, rgba(251, 28, 148.42, 0.60) 100%), rgba(0, 0, 0, 0.45);
 }
 
-/* ================================
-   TEMA LIGHT (Padrão)
-   ================================ */
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 :root,
 [data-theme='light'] {
   /* Backgrounds */
@@ -112,11 +117,91 @@
   --input-border: #e1e5e9;
   --input-text: #3E3232;
   --input-placeholder: rgba(62, 50, 50, 0.50);
+
+  /* Overlays e Transparências */
+  --overlay-dark: rgba(0, 0, 0, 0.2);
+  --overlay-light: rgba(0, 0, 0, 0.05);
+  --overlay-white-light: rgba(255, 255, 255, 0.06);
+  --overlay-white-medium: rgba(255, 255, 255, 0.09);
+  --overlay-white-heavy: rgba(255, 255, 255, 0.75);
+  --overlay-white-border: rgba(255, 255, 255, 0.1);
+  --overlay-white-text-light: rgba(255, 255, 255, 0.6);
+  --overlay-white-text-medium: rgba(255, 255, 255, 0.7);
+  --overlay-white-text-heavy: rgba(255, 255, 255, 0.8);
+  --overlay-white-text-full: rgba(255, 255, 255, 0.95);
+
+  /* Cores Primárias com Transparência */
+  --primary-overlay-light: rgba(196, 30, 58, 0.05);
+  --primary-overlay-medium: rgba(196, 30, 58, 0.08);
+  --primary-overlay-heavy: rgba(196, 30, 58, 0.1);
+  --primary-overlay-border: rgba(196, 30, 58, 0.15);
+  --primary-overlay-shadow: rgba(196, 30, 58, 0.2);
+  --primary-overlay-shadow-heavy: rgba(196, 30, 58, 0.4);
+
+  /* Cores Secundárias com Transparência */
+  --secondary-overlay-light: rgba(255, 193, 7, 0.08);
+  --secondary-overlay-medium: rgba(255, 193, 7, 0.15);
+  --secondary-overlay-heavy: rgba(255, 193, 7, 0.2);
+  --secondary-overlay-border: rgba(255, 193, 7, 0.25);
+
+  /* Cores de Sucesso com Transparência */
+  --success-overlay-light: rgba(76, 175, 80, 0.1);
+  --success-overlay-border: rgba(76, 175, 80, 0.2);
+
+  /* Cores de Erro com Transparência */
+  --error-overlay-light: rgba(114, 28, 36, 0.1);
+  --error-overlay-border: rgba(114, 28, 36, 0.2);
+
+  /* Cores de Info com Transparência */
+  --info-overlay-light: rgba(0, 123, 255, 0.1);
+  --info-overlay-border: rgba(0, 123, 255, 0.2);
+  --info-text: #004085;
+
+  /* Cores de Warning com Transparência */
+  --warning-overlay-light: rgba(255, 193, 7, 0.1);
+  --warning-overlay-border: rgba(255, 193, 7, 0.2);
+  --warning-text: #856404;
+
+  /* Sombras Específicas */
+  --shadow-primary: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-primary-heavy: 0px 0px 32px rgba(0, 0, 0, 0.12);
+  --shadow-success: 0 4px 16px rgba(0, 170, 68, 0.15);
+  --shadow-success-heavy: 0 12px 32px rgba(0, 170, 68, 0.25);
+  --shadow-secondary: 0 4px 12px rgba(255, 193, 7, 0.3);
+  --shadow-primary-red: 0 8px 24px rgba(196, 30, 58, 0.2);
+  --shadow-primary-red-heavy: 0 16px 48px rgba(196, 30, 58, 0.28);
+  --shadow-primary-red-heavier: 0 24px 60px rgba(196, 30, 58, 0.35);
+
+  /* Gradientes de Background */
+  --gradient-primary-red: linear-gradient(135deg, #c41e3a 0%, #8b1428 100%);
+  --gradient-primary-red-light: linear-gradient(135deg, #c41e3a 0%, #a01830 100%);
+  --gradient-green: linear-gradient(135deg, #00aa44 0%, #008533 100%);
+  --gradient-secondary: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+  --gradient-overlay-dark: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 100%);
+  --gradient-overlay-side: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+
+  /* Cores de Texto Específicas */
+  --text-gray-light: #666;
+  --text-gray-medium: #999;
+  --text-gray-dark: #333;
+  --text-gray-darker: #222;
+  --text-gray-darkest: #111;
+  --text-gray-border: #eee;
+  --text-gray-border-light: #ddd;
+
+  /* Cores de Background Específicas */
+  --bg-gray-light: #f5f5f5;
+  --bg-gray-medium: #f1f3f5;
+  --bg-gray-hover: #eee;
+  --bg-white-overlay: rgba(255, 255, 255, 0.75);
+  --bg-white-overlay-light: rgba(255, 255, 255, 0.06);
+  --bg-white-overlay-medium: rgba(255, 255, 255, 0.09);
 }
 
-/* ================================
-   TEMA DARK
-   ================================ */
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
 [data-theme='dark'] {
   /* Backgrounds */
   --bg-primary: #1a1a1a;
@@ -146,11 +231,63 @@
   --input-text: #e8e8e8;
   --input-placeholder: rgba(232, 232, 232, 0.50);
 
+  /* Overlays e Transparências */
+  --overlay-dark: rgba(0, 0, 0, 0.4);
+  --overlay-light: rgba(0, 0, 0, 0.1);
+  --overlay-white-light: rgba(255, 255, 255, 0.08);
+  --overlay-white-medium: rgba(255, 255, 255, 0.12);
+  --overlay-white-heavy: rgba(255, 255, 255, 0.85);
+  --overlay-white-border: rgba(255, 255, 255, 0.15);
+  --overlay-white-text-light: rgba(255, 255, 255, 0.7);
+  --overlay-white-text-medium: rgba(255, 255, 255, 0.8);
+  --overlay-white-text-heavy: rgba(255, 255, 255, 0.9);
+  --overlay-white-text-full: rgba(255, 255, 255, 0.98);
+
+  /* Cores Primárias com Transparência */
+  --primary-overlay-light: rgba(196, 30, 58, 0.12);
+  --primary-overlay-medium: rgba(196, 30, 58, 0.15);
+  --primary-overlay-heavy: rgba(196, 30, 58, 0.2);
+  --primary-overlay-border: rgba(196, 30, 58, 0.25);
+  --primary-overlay-shadow: rgba(196, 30, 58, 0.3);
+  --primary-overlay-shadow-heavy: rgba(196, 30, 58, 0.5);
+
+  /* Cores Secundárias com Transparência */
+  --secondary-overlay-light: rgba(255, 193, 7, 0.15);
+  --secondary-overlay-medium: rgba(255, 193, 7, 0.2);
+  --secondary-overlay-heavy: rgba(255, 193, 7, 0.25);
+  --secondary-overlay-border: rgba(255, 193, 7, 0.3);
+
+  /* Cores de Sucesso com Transparência */
+  --success-overlay-light: rgba(76, 175, 80, 0.15);
+  --success-overlay-border: rgba(76, 175, 80, 0.3);
+
+  /* Cores de Erro com Transparência */
+  --error-overlay-light: rgba(244, 67, 54, 0.15);
+  --error-overlay-border: rgba(244, 67, 54, 0.3);
+
+  /* Cores de Info com Transparência */
+  --info-overlay-light: rgba(0, 123, 255, 0.15);
+  --info-overlay-border: rgba(0, 123, 255, 0.3);
+  --info-text: #66b3ff;
+
+  /* Cores de Warning com Transparência */
+  --warning-overlay-light: rgba(255, 193, 7, 0.15);
+  --warning-overlay-border: rgba(255, 193, 7, 0.3);
+  --warning-text: #ffd54f;
+
   /* Sombras ajustadas para dark mode */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 0px 32px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
   --shadow-card: 0px 0px 32px rgba(0, 0, 0, 0.4);
+  --shadow-primary: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-primary-heavy: 0px 0px 32px rgba(0, 0, 0, 0.5);
+  --shadow-success: 0 4px 16px rgba(0, 170, 68, 0.3);
+  --shadow-success-heavy: 0 12px 32px rgba(0, 170, 68, 0.4);
+  --shadow-secondary: 0 4px 12px rgba(255, 193, 7, 0.4);
+  --shadow-primary-red: 0 8px 24px rgba(196, 30, 58, 0.4);
+  --shadow-primary-red-heavy: 0 16px 48px rgba(196, 30, 58, 0.5);
+  --shadow-primary-red-heavier: 0 24px 60px rgba(196, 30, 58, 0.6);
 
   /* Cores de Status - Dark Mode */
   --color-success: #4caf50;
@@ -163,5 +300,22 @@
   /* Ajustes nas cores cinzas */
   --color-gray-100: #2d2d2d;
   --color-gray-200: #3d3d3d;
+
+  /* Cores de Texto Específicas */
+  --text-gray-light: #b0b0b0;
+  --text-gray-medium: #888888;
+  --text-gray-dark: #d0d0d0;
+  --text-gray-darker: #e0e0e0;
+  --text-gray-darkest: #f0f0f0;
+  --text-gray-border: #4d4d4d;
+  --text-gray-border-light: #5d5d5d;
+
+  /* Cores de Background Específicas */
+  --bg-gray-light: #2d2d2d;
+  --bg-gray-medium: #333333;
+  --bg-gray-hover: #3a3a3a;
+  --bg-white-overlay: rgba(255, 255, 255, 0.85);
+  --bg-white-overlay-light: rgba(255, 255, 255, 0.08);
+  --bg-white-overlay-medium: rgba(255, 255, 255, 0.12);
 }
 

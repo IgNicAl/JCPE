@@ -1,3 +1,7 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .newsletterSection {
   display: flex;
   flex-direction: column;
@@ -75,7 +79,7 @@
 
 .emailInput:focus {
   outline: none;
-  border-color: #f81539;
+  border-color: var(--color-primary);
 }
 
 .emailInput::placeholder {
@@ -84,8 +88,8 @@
 
 .subscribeButton {
   padding: 12px 24px;
-  background: #f81539;
-  color: #ffffff;
+  background: var(--color-primary);
+  color: var(--color-white);
   border: none;
   border-radius: 12px;
   font-size: 14px;
@@ -99,7 +103,7 @@
 }
 
 .subscribeButton:hover:not(:disabled) {
-  background: #c41e3a;
+  background: var(--color-primary-dark);
   transform: translateY(-2px);
 }
 
@@ -122,16 +126,26 @@
 }
 
 .success {
-  color: #155724;
-  background: #d4edda;
-  border: 1px solid #c3e6cb;
+  color: var(--color-success);
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
 }
 
 .error {
-  color: #721c24;
-  background: #f8d7da;
-  border: 1px solid #f5c6cb;
+  color: var(--color-error);
+  background: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
 }
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+/* Este componente usa variáveis CSS e se adapta automaticamente ao tema */
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
 
 @media (max-width: 768px) {
   .logoImg {

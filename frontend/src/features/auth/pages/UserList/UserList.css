@@ -1,3 +1,7 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .user-list-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -9,15 +13,15 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-white-overlay);
   backdrop-filter: blur(10px);
   padding: 20px;
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .user-list-header h1 {
-  color: #333;
+  color: var(--text-gray-dark);
   font-size: 28px;
   display: flex;
   align-items: center;
@@ -25,8 +29,8 @@
 }
 
 .create-user-btn {
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-  color: white;
+  background: var(--gradient-primary-red-light);
+  color: var(--color-white);
   border: none;
   padding: 12px 20px;
   border-radius: 10px;
@@ -40,32 +44,32 @@
 
 .create-user-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+  box-shadow: var(--primary-overlay-shadow-heavy);
 }
 
 .no-users {
   text-align: center;
   padding: 60px 20px;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-white-overlay);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .no-users i {
   font-size: 64px;
-  color: #ccc;
+  color: var(--text-gray-border-light);
   margin-bottom: 20px;
 }
 
 .no-users h3 {
-  color: #333;
+  color: var(--text-gray-dark);
   font-size: 24px;
   margin-bottom: 12px;
 }
 
 .no-users p {
-  color: #666;
+  color: var(--text-gray-light);
   font-size: 16px;
   margin-bottom: 30px;
 }
@@ -78,33 +82,33 @@
 }
 
 .user-card {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-white-overlay);
   backdrop-filter: blur(10px);
   border-radius: 15px;
   padding: 25px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
   transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--overlay-white-border);
   display: flex;
   flex-direction: column;
 }
 
 .user-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
 }
 
 .user-avatar {
   width: 70px;
   height: 70px;
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  background: var(--gradient-primary-red-light);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
-  overflow: hidden; /* Para a imagem se ajustar */
+  box-shadow: var(--primary-overlay-shadow);
+  overflow: hidden;
 }
 
 .user-avatar img {
@@ -115,7 +119,7 @@
 
 .user-avatar i {
   font-size: 28px;
-  color: white;
+  color: var(--color-white);
 }
 
 .user-info {
@@ -123,14 +127,14 @@
 }
 
 .user-info h3 {
-  color: #333;
+  color: var(--text-gray-dark);
   font-size: 20px;
   margin-bottom: 15px;
   font-weight: 600;
 }
 
 .user-info p {
-  color: #666;
+  color: var(--text-gray-light);
   font-size: 14px;
   margin-bottom: 8px;
   display: flex;
@@ -139,7 +143,7 @@
 }
 
 .user-info p i {
-  color: #e74c3c;
+  color: var(--color-primary-light);
   width: 16px;
 }
 
@@ -152,10 +156,20 @@
   margin-top: 10px;
 }
 
-.user-type.admin { background-color: #f8d7da; color: #721c24; }
-.user-type.journalist { background-color: #d1ecf1; color: #0c5460; }
-.user-type.user { background-color: #e2e3e5; color: #383d41; }
+.user-type.admin {
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+}
 
+.user-type.journalist {
+  background-color: rgba(209, 236, 241, 0.8);
+  color: #0c5460;
+}
+
+.user-type.user {
+  background-color: var(--bg-gray-hover);
+  color: var(--text-gray-dark);
+}
 
 .user-actions {
   margin-top: 20px;
@@ -176,8 +190,8 @@
 }
 
 .edit-btn {
-  background-color: #3498db;
-  color: white;
+  background-color: var(--color-blue);
+  color: var(--color-white);
 }
 
 .edit-btn:hover {
@@ -185,28 +199,87 @@
 }
 
 .delete-btn {
-  background-color: #e74c3c;
-  color: white;
+  background-color: var(--color-primary-light);
+  color: var(--color-white);
 }
 
 .delete-btn:hover {
-  background-color: #c0392b;
+  background-color: var(--color-primary-dark);
 }
 
 .delete-btn:disabled {
-  background-color: #ccc;
+  background-color: var(--text-gray-border-light);
   cursor: not-allowed;
 }
-
 
 .user-list-footer {
   text-align: center;
   padding: 20px;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-white-overlay);
   backdrop-filter: blur(10px);
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
 }
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+[data-theme='dark'] .user-list-header {
+  background: var(--bg-white-overlay);
+}
+
+[data-theme='dark'] .user-list-header h1 {
+  color: var(--text-gray-dark);
+}
+
+[data-theme='dark'] .no-users {
+  background: var(--bg-white-overlay);
+}
+
+[data-theme='dark'] .no-users h3 {
+  color: var(--text-gray-dark);
+}
+
+[data-theme='dark'] .no-users p {
+  color: var(--text-gray-light);
+}
+
+[data-theme='dark'] .user-card {
+  background: var(--bg-white-overlay);
+  border-color: var(--overlay-white-border);
+}
+
+[data-theme='dark'] .user-info h3 {
+  color: var(--text-gray-dark);
+}
+
+[data-theme='dark'] .user-info p {
+  color: var(--text-gray-light);
+}
+
+[data-theme='dark'] .user-type.admin {
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+[data-theme='dark'] .user-type.journalist {
+  background-color: rgba(209, 236, 241, 0.4);
+  color: #17a2b8;
+}
+
+[data-theme='dark'] .user-type.user {
+  background-color: var(--bg-gray-hover);
+  color: var(--text-gray-dark);
+}
+
+[data-theme='dark'] .user-list-footer {
+  background: var(--bg-white-overlay);
+}
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
 
 @media (max-width: 768px) {
   .user-list-container {

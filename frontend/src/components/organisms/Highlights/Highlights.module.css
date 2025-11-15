@@ -1,3 +1,7 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .highlights {
   width: 100%;
   max-width: 1512px;
@@ -22,6 +26,16 @@
   flex: 1;
   min-width: 0;
 }
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+/* Este componente usa variáveis CSS e se adapta automaticamente ao tema */
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
 
 @media (max-width: 1440px) {
   .highlights {

@@ -1,7 +1,9 @@
-/* JOGOS PAGE */
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
 
 .jogos-page {
-  background: #fff;
+  background: var(--bg-primary);
   min-height: 100vh;
   padding: 40px 20px;
 }
@@ -22,19 +24,19 @@
 
 .jogos-header i {
   font-size: 48px;
-  color: #00aa44;
+  color: var(--color-green);
 }
 
 .jogos-header h1 {
   font-size: 42px;
   font-weight: 900;
-  color: #333;
+  color: var(--text-gray-dark);
   margin: 0;
 }
 
 .jogos-header p {
   font-size: 16px;
-  color: #666;
+  color: var(--text-gray-light);
   margin: 0;
 }
 
@@ -45,10 +47,10 @@
 }
 
 .game-card {
-  background: linear-gradient(135deg, #00aa44 0%, #008533 100%);
+  background: var(--gradient-green);
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 4px 16px rgba(0, 170, 68, 0.15);
+  box-shadow: var(--shadow-success);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -57,15 +59,15 @@
 
 .game-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(0, 170, 68, 0.25);
+  box-shadow: var(--shadow-success-heavy);
 }
 
 .game-status {
   position: absolute;
   top: 12px;
   right: 12px;
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+  background: var(--overlay-white-light);
+  color: var(--color-white);
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 11px;
@@ -85,7 +87,7 @@
 }
 
 .team-name {
-  color: #fff;
+  color: var(--color-white);
   font-size: 16px;
   font-weight: 700;
   text-align: center;
@@ -101,16 +103,36 @@
 .score {
   font-size: 48px;
   font-weight: 900;
-  color: #fff;
+  color: var(--color-white);
   min-width: 60px;
   text-align: center;
 }
 
 .separator {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--overlay-white-text-light);
   font-size: 24px;
   font-weight: 300;
 }
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+[data-theme='dark'] .jogos-page {
+  background: var(--bg-primary);
+}
+
+[data-theme='dark'] .jogos-header h1 {
+  color: var(--text-gray-dark);
+}
+
+[data-theme='dark'] .jogos-header p {
+  color: var(--text-gray-light);
+}
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
 
 @media (max-width: 1024px) {
   .games-grid {

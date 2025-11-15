@@ -1,6 +1,6 @@
-/* ==========================================================================
-   FOOTER - Container Principal
-   ========================================================================== */
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
 
 .footer {
   background: var(--bg-secondary);
@@ -20,10 +20,6 @@
   gap: 24px;
   margin-bottom: 20px;
 }
-
-/* ==========================================================================
-   CONTAINERS PRINCIPAIS (Grid de 3 colunas)
-   ========================================================================== */
 
 /* Container 1: Left Footer (Logo, Newsletter, Categories, Social) */
 .leftFooter {
@@ -49,10 +45,6 @@
   flex-direction: column;
 }
 
-/* ==========================================================================
-   LEFT FOOTER - Elementos Internos
-   ========================================================================== */
-
 .footerLeftColumn {
   display: flex;
   flex-direction: column;
@@ -69,10 +61,7 @@
   flex: 1;
 }
 
-/* ==========================================================================
-   LOGO E DESCRIÇÃO
-   ========================================================================== */
-
+/* Logo e Descrição */
 .logoContainer {
   margin-bottom: 16px;
 }
@@ -91,10 +80,7 @@
   max-width: 400px;
 }
 
-/* ==========================================================================
-   SECTIONS - Títulos e Estrutura
-   ========================================================================== */
-
+/* Sections - Títulos e Estrutura */
 .section {
   display: flex;
   flex-direction: column;
@@ -110,7 +96,7 @@
 .titleIndicator {
   width: 4px;
   height: 10px;
-  background: #f81539;
+  background: var(--color-primary);
   border-radius: 12px;
 }
 
@@ -124,10 +110,7 @@
   transition: color var(--transition-normal);
 }
 
-/* ==========================================================================
-   CATEGORIES
-   ========================================================================== */
-
+/* Categories */
 .categoriesList {
   display: flex;
   flex-direction: column;
@@ -145,13 +128,10 @@
 }
 
 .categoryItem:hover {
-  color: #f81539;
+  color: var(--color-primary);
 }
 
-/* ==========================================================================
-   SOCIAL BUTTONS
-   ========================================================================== */
-
+/* Social Buttons */
 .socialButtons {
   display: flex;
   gap: 12px;
@@ -160,14 +140,14 @@
 
 .instagramButton {
   padding: 10px 24px 10px 16px;
-  background: linear-gradient(223deg, #f45c9f 0%, #ff7563 100%);
+  background: var(--gradient-primary);
   border-radius: 12px;
   border: none;
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  color: white;
+  color: var(--color-white);
   font-size: 14px;
   font-family: 'Roboto', Arial, sans-serif;
   font-weight: 500;
@@ -188,14 +168,14 @@
 .twitterButton {
   width: 40px;
   height: 40px;
-  background: linear-gradient(228deg, #2ca5e0 0%, #67c9f5 100%);
+  background: var(--gradient-social-twitter);
   border-radius: 12px;
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: white;
+  color: var(--color-white);
   font-size: 16px;
   font-family: 'Font Awesome 6 Brands';
   font-weight: 400;
@@ -206,10 +186,7 @@
   transform: translateY(-2px);
 }
 
-/* ==========================================================================
-   FOOTER BOTTOM - Copyright
-   ========================================================================== */
-
+/* Footer Bottom - Copyright */
 .footerBottom {
   max-width: 1512px;
   margin: 0 auto;
@@ -234,11 +211,16 @@
   transition: color var(--transition-normal);
 }
 
-/* ==========================================================================
-   MEDIA QUERIES - Responsividade
-   ========================================================================== */
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
 
-/* Desktop Large (1600px) */
+/* Este componente usa variáveis CSS e se adapta automaticamente ao tema */
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
+
 @media (max-width: 1600px) {
   .footerContainer {
     padding: 0 100px;
@@ -249,7 +231,6 @@
   }
 }
 
-/* Desktop Medium (1366px) */
 @media (max-width: 1366px) {
   .footerContainer {
     padding: 0 60px;
@@ -260,7 +241,6 @@
   }
 }
 
-/* Tablet (1024px) */
 @media (max-width: 1024px) {
   .footerContainer {
     padding: 0 30px;
@@ -277,7 +257,6 @@
   }
 }
 
-/* Mobile Large (768px) */
 @media (max-width: 768px) {
   .footerContainer {
     padding: 0 20px;
@@ -300,7 +279,6 @@
   }
 }
 
-/* Mobile Small (480px) */
 @media (max-width: 480px) {
   .footerContainer {
     padding: 0 16px;

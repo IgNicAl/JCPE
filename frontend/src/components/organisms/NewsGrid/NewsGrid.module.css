@@ -1,3 +1,7 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .newsGrid {
   display: flex;
   flex-direction: column;
@@ -31,7 +35,7 @@
 .loadingContainer p,
 .errorContainer p {
   font-size: var(--font-size-lg);
-  color: var(--color-gray-500);
+  color: var(--text-secondary);
 }
 
 .loadingContainer i {
@@ -47,9 +51,19 @@
 .noNews {
   text-align: center;
   padding: 60px 20px;
-  color: #999;
+  color: var(--text-gray-medium);
   font-size: var(--font-size-lg);
 }
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+/* Este componente usa variáveis CSS e se adapta automaticamente ao tema */
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
 
 @media (max-width: 1200px) {
   .newsList {
@@ -62,4 +76,3 @@
     grid-template-columns: 1fr;
   }
 }
-

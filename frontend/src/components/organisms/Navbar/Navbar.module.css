@@ -1,10 +1,13 @@
-/* Navbar - Layout horizontal inspirado no Figma */
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .navbar {
   position: sticky;
   top: 0;
   z-index: 999;
-  background: var(--color-white, #ffffff);
-  box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.07);
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-md);
   width: 100%;
 }
 
@@ -48,7 +51,7 @@
 }
 
 .navLink {
-  color: var(--color-text-primary, #3e3232);
+  color: var(--text-primary);
   font-size: 16px;
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
@@ -67,13 +70,13 @@
   left: 0;
   width: 0;
   height: 4px;
-  background: var(--color-accent, #f81539);
+  background: var(--color-primary);
   border-radius: 12px;
   transition: width 0.3s ease;
 }
 
 .navLink:hover {
-  color: var(--color-primary, #0066cc);
+  color: var(--color-primary);
 }
 
 .navLink:hover::after {
@@ -81,7 +84,7 @@
 }
 
 .navLink:focus {
-  outline: 2px solid var(--color-primary, #0066cc);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -113,7 +116,7 @@
 .navBtnLogin,
 .navBtnRegister {
   padding: 11px 24px;
-  border: 2px solid var(--color-primary, #0066cc);
+  border: 2px solid var(--color-primary);
   border-radius: 28px;
   font-size: 13px;
   font-weight: 700;
@@ -128,30 +131,30 @@
 
 .navBtnLogin {
   background: transparent;
-  color: var(--color-primary, #0066cc);
+  color: var(--color-primary);
 }
 
 .navBtnLogin:hover {
-  background: var(--color-primary, #0066cc);
-  color: var(--color-white, #ffffff);
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
 .navBtnRegister {
-  background: var(--color-primary, #0066cc);
-  color: var(--color-white, #ffffff);
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
 .navBtnRegister:hover {
-  background: var(--color-primary-dark, #0052a3);
-  border-color: var(--color-primary-dark, #0052a3);
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+  box-shadow: var(--primary-overlay-shadow-heavy);
 }
 
 /* Menu Hamburguer (Mobile) */
 .menuIcon {
   display: none;
-  background: var(--color-surface, #f5f5f5);
+  background: var(--bg-secondary);
   border: none;
   border-radius: 12px;
   width: 40px;
@@ -163,16 +166,16 @@
 }
 
 .menuIcon i {
-  color: var(--color-text-primary, #3e3232);
+  color: var(--text-primary);
   font-size: 20px;
 }
 
 .menuIcon:hover {
-  background: var(--color-surface-hover, #e8e8e8);
+  background: var(--bg-hover);
 }
 
 .menuIcon:focus {
-  outline: 2px solid var(--color-primary, #0066cc);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
@@ -182,12 +185,12 @@
   flex-direction: column;
   gap: 16px;
   padding: 24px;
-  background: var(--color-white, #ffffff);
-  border-top: 1px solid rgba(62, 50, 50, 0.1);
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
 }
 
 .mobileMenuItem {
-  color: var(--color-text-primary, #3e3232);
+  color: var(--text-primary);
   font-size: 16px;
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
@@ -199,8 +202,8 @@
 }
 
 .mobileMenuItem:hover {
-  background: var(--color-surface, #f5f5f5);
-  color: var(--color-primary, #0066cc);
+  background: var(--bg-secondary);
+  color: var(--color-primary);
 }
 
 .mobileAuthButtons {
@@ -209,50 +212,56 @@
   gap: 12px;
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid rgba(62, 50, 50, 0.1);
+  border-top: 1px solid var(--border-color);
 }
 
-/* Dark Mode Support */
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
 [data-theme='dark'] .navbar {
-  background: var(--color-surface-dark, #1a1a1a);
-  box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.5);
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-md);
 }
 
 [data-theme='dark'] .navLink {
-  color: var(--color-text-primary-dark, #e0e0e0);
+  color: var(--text-primary);
 }
 
 [data-theme='dark'] .navLink:hover {
-  color: var(--color-primary-light, #4d9fff);
+  color: var(--color-primary-light);
 }
 
 [data-theme='dark'] .menuIcon {
-  background: var(--color-surface-dark, #2a2a2a);
+  background: var(--bg-secondary);
 }
 
 [data-theme='dark'] .menuIcon i {
-  color: var(--color-text-primary-dark, #e0e0e0);
+  color: var(--text-primary);
 }
 
 [data-theme='dark'] .menuIcon:hover {
-  background: var(--color-surface-hover-dark, #3a3a3a);
+  background: var(--bg-hover);
 }
 
 [data-theme='dark'] .mobileMenu {
-  background: var(--color-surface-dark, #1a1a1a);
-  border-top-color: rgba(224, 224, 224, 0.1);
+  background: var(--bg-primary);
+  border-top-color: var(--border-color);
 }
 
 [data-theme='dark'] .mobileMenuItem {
-  color: var(--color-text-primary-dark, #e0e0e0);
+  color: var(--text-primary);
 }
 
 [data-theme='dark'] .mobileMenuItem:hover {
-  background: var(--color-surface-dark, #2a2a2a);
-  color: var(--color-primary-light, #4d9fff);
+  background: var(--bg-secondary);
+  color: var(--color-primary-light);
 }
 
-/* Responsividade */
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
+
 @media (max-width: 1600px) {
   .navbarContainer {
     padding: 0 100px;
@@ -352,7 +361,10 @@
   }
 }
 
-/* Animações */
+/* ================================== */
+/* ANIMATIONS                         */
+/* ================================== */
+
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -368,7 +380,10 @@
   animation: slideDown 0.3s ease;
 }
 
-/* Acessibilidade */
+/* ================================== */
+/* ACCESSIBILITY                      */
+/* ================================== */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

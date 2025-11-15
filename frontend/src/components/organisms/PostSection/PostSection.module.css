@@ -1,3 +1,7 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .postSection {
   width: 100%;
   margin-bottom: var(--spacing-xl);
@@ -8,6 +12,16 @@
   grid-template-columns: repeat(4, 1fr);
   gap: var(--spacing-lg);
 }
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+/* Este componente usa variáveis CSS e se adapta automaticamente ao tema */
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
 
 @media (max-width: 1440px) {
   .postsGrid {
@@ -27,4 +41,3 @@
     grid-template-columns: 1fr;
   }
 }
-

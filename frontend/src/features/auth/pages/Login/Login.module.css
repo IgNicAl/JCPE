@@ -1,3 +1,7 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .loginContainer {
   display: flex;
   justify-content: center;
@@ -7,14 +11,14 @@
 }
 
 .loginCard {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-white-overlay);
   backdrop-filter: blur(10px);
   border-radius: var(--border-radius-lg);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
   padding: var(--spacing-xl);
   width: 100%;
   max-width: 400px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--overlay-white-border);
 }
 
 .loginHeader {
@@ -23,7 +27,7 @@
 }
 
 .loginHeader h1 {
-  color: var(--color-gray-700);
+  color: var(--text-primary);
   font-size: var(--font-size-2xl);
   margin-bottom: var(--spacing-sm);
   display: flex;
@@ -33,7 +37,7 @@
 }
 
 .loginHeader p {
-  color: var(--color-gray-500);
+  color: var(--text-secondary);
   font-size: var(--font-size-lg);
 }
 
@@ -53,7 +57,7 @@
 }
 
 .loginFooter p {
-  color: var(--color-gray-500);
+  color: var(--text-secondary);
   font-size: var(--font-size-md);
 }
 
@@ -71,6 +75,31 @@
   text-decoration: underline;
 }
 
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+[data-theme='dark'] .loginCard {
+  background: var(--primary-red);
+  border-color: var(--overlay-white-border);
+}
+
+[data-theme='dark'] .loginHeader h1 {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .loginHeader p {
+  color: var(--color-black);
+}
+
+[data-theme='dark'] .loginFooter p {
+  color: var(--text-secondary);
+}
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
+
 @media (max-width: 768px) {
   .loginContainer {
     padding: var(--spacing-md);
@@ -80,4 +109,3 @@
     padding: var(--spacing-lg);
   }
 }
-

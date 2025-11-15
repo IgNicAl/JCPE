@@ -1,10 +1,14 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .label {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-sm);
   font-weight: 600;
-  color: var(--color-gray-700);
+  color: var(--text-primary);
   font-size: var(--font-size-md);
 }
 
@@ -20,3 +24,8 @@
   color: var(--color-error);
 }
 
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+/* Este componente usa variáveis CSS e se adapta automaticamente ao tema */

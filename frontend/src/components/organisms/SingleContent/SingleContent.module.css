@@ -1,3 +1,7 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .singleContent {
   width: 360px;
   height: 452px;
@@ -30,7 +34,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--overlay-dark);
 }
 
 .content {
@@ -42,7 +46,7 @@
 }
 
 .contentWrapper {
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--bg-white-overlay);
   border-radius: var(--border-radius-md);
   backdrop-filter: blur(5px);
   padding: var(--spacing-md);
@@ -68,7 +72,7 @@
   width: 100%;
   max-width: 307px;
   height: 40px;
-  color: rgba(0, 0, 0, 0.75);
+  color: var(--text-secondary);
   font-size: var(--font-size-md);
   font-family: var(--font-family);
   font-weight: var(--font-weight-regular);
@@ -83,6 +87,26 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+[data-theme='dark'] .contentWrapper {
+  background: var(--bg-white-overlay);
+}
+
+[data-theme='dark'] .contentTitle {
+  color: var(--color-black);
+}
+
+[data-theme='dark'] .contentSummary {
+  color: var(--text-secondary);
+}
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
 
 @media (max-width: 1024px) {
   .singleContent {
