@@ -4,7 +4,7 @@ import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { useNews } from '@/hooks/useNews';
 import { ROUTES } from '@/utils/constants';
 import Button from '@/components/atoms/Button';
-import Highlights from '@/components/organisms/Highlights';
+import Highlights from './components/Highlights';
 import { MOCK_NEWS, MockNews } from '@/features/news/mocks/news';
 import TagCarousel, { TagItem } from './components/TagCarousel';
 import PostGridSection from './components/PostGridSection';
