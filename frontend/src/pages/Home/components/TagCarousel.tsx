@@ -16,12 +16,15 @@ const scrollContainerClasses =
 const tagTextClasses =
   "relative text-center text-white text-base font-medium font-['Roboto'] capitalize [text-shadow:_0px_0px_2px_rgb(0_0_0_/_0.40)]";
 
+// ATUALIZADO: Adicionado suporte a dark mode para os botões
 const arrowButtonClasses =
-  'absolute top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-xl bg-neutral-100 text-stone-700 shadow-lg transition hover:text-blue-600 z-10';
+  'absolute top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-xl bg-white text-stone-700 shadow-lg transition hover:text-blue-600 dark:bg-neutral-800 dark:text-stone-200 dark:hover:text-blue-400 z-10';
 
-const TagCarousel: React.FC<TagCarouselProps> = ({ tags }) => {
+// CORREÇÃO: Adicionado valor padrão `[]` para a prop `tags`
+const TagCarousel: React.FC<TagCarouselProps> = ({ tags = [] }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [canGoLeft, setCanGoLeft] = useState(false);
+  // ATUALIZADO: Define canGoRight com base nas tags reais no início
   const [canGoRight, setCanGoRight] = useState(true);
 
   const isDownRef = useRef(false);
@@ -33,6 +36,7 @@ const TagCarousel: React.FC<TagCarouselProps> = ({ tags }) => {
     const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
 
     setCanGoLeft(scrollLeft > 0);
+    // Adiciona uma pequena margem de 1px para garantir
     setCanGoRight(scrollLeft < scrollWidth - clientWidth - 1);
   };
 
@@ -46,6 +50,7 @@ const TagCarousel: React.FC<TagCarouselProps> = ({ tags }) => {
     const node = containerRef.current;
     if (!node) return;
 
+    // Atualiza o estado dos botões assim que o componente é montado
     const timer = setTimeout(handleScrollUpdate, 50);
 
     node.addEventListener('scroll', handleScrollUpdate);
@@ -84,6 +89,9 @@ const TagCarousel: React.FC<TagCarouselProps> = ({ tags }) => {
     node.addEventListener('mouseup', onMouseUp as EventListener);
     node.addEventListener('mousemove', onMouseMove as EventListener);
 
+    // Chama a atualização também quando o número de tags mudar
+    handleScrollUpdate();
+
     return () => {
       clearTimeout(timer);
       node.removeEventListener('scroll', handleScrollUpdate);
@@ -103,7 +111,7 @@ const TagCarousel: React.FC<TagCarouselProps> = ({ tags }) => {
     >
       <div
         data-layer="Rectangle 2"
-        className="Rectangle2 w-full h-16 left-0 top-0 absolute bg-neutral-100 rounded-xl"
+        className="Rectangle2 w-full h-16 left-0 top-0 absolute bg-transparent rounded-xl"
       />
 
       <div
@@ -141,7 +149,7 @@ const TagCarousel: React.FC<TagCarouselProps> = ({ tags }) => {
       {canGoLeft && (
         <div
           id="gradient-left"
-          className="pointer-events-none absolute inset-y-0 left-0 w-36 bg-gradient-to-r from-neutral-100 from-50% via-neutral-100/40 to-transparent rounded-l-xl z-10"
+          className="pointer-events-none absolute inset-y-0 left-0 w-36 bg-gradient-to-r from-white from-50% via-white/40 to-transparent dark:from-neutral-900 dark:via-neutral-900/40 rounded-l-xl z-10"
         />
       )}
 
@@ -149,7 +157,7 @@ const TagCarousel: React.FC<TagCarouselProps> = ({ tags }) => {
         <div
           id="gradient-right"
           data-layer="background"
-          className="pointer-events-none Background w-36 h-16 inset-y-0 right-0 top-0 absolute bg-gradient-to-l from-neutral-100 from-50% via-neutral-100/40 to-transparent rounded-r-xl z-10"
+          className="pointer-events-none Background w-36 h-16 inset-y-0 right-0 top-0 absolute bg-gradient-to-l from-white from-50% via-white/40 to-transparent dark:from-neutral-900 dark:via-neutral-900/40 rounded-r-xl z-10"
         />
       )}
 
