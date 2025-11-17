@@ -333,7 +333,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="bg-[var(--bg-primary)]">
-      <div className="mx-auto flex max-w-[1512px] flex-col gap-12 px-6 py-10 lg:px-12 xl:px-[204px]">
+      <div className="mx-auto flex max-w-[1512px] px-6 flex-col gap-12 py-10">
         <TagCarousel tags={TAGS} />
 
         <Highlights
