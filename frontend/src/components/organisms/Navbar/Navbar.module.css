@@ -114,7 +114,7 @@
 
 .searchBar {
   width: auto;
-  min-width: 224px;
+  min-width: auto;
 }
 
 .themeToggle {
@@ -130,10 +130,10 @@
 
 .navBtnLogin,
 .navBtnRegister {
-  padding: 11px 24px;
+  padding: 8px 18px;
   border: 2px solid var(--color-primary);
   border-radius: 28px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
   text-decoration: none;
@@ -142,6 +142,7 @@
   gap: 6px;
   letter-spacing: 0.5px;
   transition: var(--transition-normal);
+  min-height: 36px;
 }
 
 .navBtnLogin {
@@ -303,7 +304,7 @@
   }
 
   .searchBar {
-    min-width: 184px;
+    min-width: 180px;
   }
 }
 
@@ -322,7 +323,7 @@
   }
 
   .searchBar {
-    min-width: 144px;
+    min-width: 140px;
   }
 
   .navLink {
@@ -385,8 +386,9 @@
 
   .navBtnLogin,
   .navBtnRegister {
-    padding: 8px 16px;
+    padding: 6px 14px;
     font-size: 11px;
+    min-height: 32px;
   }
 
   .authButtons {

@@ -1,5 +1,4 @@
 import React, { useState, useCallback, FormEvent, ChangeEvent } from 'react';
-import Button from '@/components/atoms/Button';
 import styles from './SearchBar.module.css';
 
 interface SearchBarProps {
@@ -9,7 +8,7 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
-  placeholder = 'PESQUISAR',
+  placeholder = 'Procure alguma coisa...',
   onSearch,
   className = '',
   ...props
@@ -32,6 +31,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className={`${styles.searchBar} ${className}`}>
+      <div className={styles.iconLeft}>
+        <i className="fas fa-search" />
+      </div>
       <input
         type="text"
         placeholder={placeholder}
@@ -40,9 +42,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
         className={styles.searchInput}
         {...props}
       />
-      <Button type="submit" className={styles.searchButton}>
+      <button type="submit" className={styles.searchButton}>
         <i className="fas fa-search" />
-      </Button>
+      </button>
     </form>
   );
 };

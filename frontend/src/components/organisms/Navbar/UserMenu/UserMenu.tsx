@@ -28,17 +28,36 @@ const UserMenu: React.FC<UserMenuProps> = ({ onItemClick, showName = true }) => 
         const res = await userService.getMyProfile();
         if (!mounted) return;
         const data = res.data || {};
-        setAvatarUrl((data.avatarUrl || data.photoUrl || data.photo || null) as string | null);
+        // Usa o campo correto urlImagemPerfil (mesmo usado na página de gerenciar usuários)
+        const apiAvatarUrl = data.urlImagemPerfil || data.avatarUrl || data.photoUrl || data.photo || null;
+
+        if (apiAvatarUrl && typeof apiAvatarUrl === 'string' && apiAvatarUrl.trim() !== '') {
+          setAvatarUrl(apiAvatarUrl);
+          return;
+        }
+
+        // Se a API não retornou, tenta usar o localStorage como fallback
+        const local = localStorage.getItem('jcpe_avatar');
+        if (local && local.trim() !== '') {
+          setAvatarUrl(local);
+        } else {
+          setAvatarUrl(null);
+        }
       } catch (e) {
-        // ignora
+        // Em caso de erro, tenta usar o localStorage como fallback
+        if (!mounted) return;
+        const local = localStorage.getItem('jcpe_avatar');
+        if (local && local.trim() !== '') {
+          setAvatarUrl(local);
+        } else {
+          setAvatarUrl(null);
+        }
       }
     }
     if (user) {
       load();
-      const local = localStorage.getItem('jcpe_avatar');
-      if (local) {
-        setAvatarUrl(local);
-      }
+    } else {
+      setAvatarUrl(null);
     }
     return () => {
       mounted = false;
