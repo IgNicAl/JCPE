@@ -48,8 +48,8 @@ const SportsScoreboard: React.FC<SportsScoreboardProps> = ({
       <article className="rounded-2xl bg-white p-6 shadow-card">
         <div className="mb-4 text-lg font-medium text-dark">{calendar.monthLabel}</div>
         <div className="grid grid-cols-7 gap-2 text-center text-xs font-medium text-dark-50">
-          {calendar.weekDays.map((day) => (
-            <span key={day}>{day}</span>
+          {calendar.weekDays.map((day, index) => (
+            <span key={`${day}-${index}`}>{day}</span>
           ))}
         </div>
         <div className="mt-2 grid grid-cols-7 gap-2 text-center text-sm">

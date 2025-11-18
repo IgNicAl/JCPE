@@ -7,12 +7,17 @@
   align-items: center;
   background: transparent;
   border: 2px solid var(--color-white);
-  border-radius: 28px;
-  padding: 11px 20px;
+  border-radius: 19px;
+  padding: 7px 13px;
   gap: var(--spacing-sm);
-  min-width: 240px;
+  min-width: 160px;
   box-shadow: inset 0 0 0 0 var(--overlay-white-border);
   transition: var(--transition-normal);
+}
+
+[data-theme='light'] .searchBar,
+:root:not([data-theme='dark']) .searchBar {
+  border: 2px solid var(--color-black);
 }
 
 .searchBar:hover {
@@ -20,11 +25,16 @@
   box-shadow: inset 0 0 0 0 var(--overlay-white-border);
 }
 
+[data-theme='light'] .searchBar:hover,
+:root:not([data-theme='dark']) .searchBar:hover {
+  background: var(--bg-secondary);
+}
+
 .searchInput {
   border: none;
   outline: none;
   background: transparent;
-  font-size: var(--font-size-sm);
+  font-size: 10px;
   flex: 1;
   padding: 0;
   font-weight: 600;
@@ -32,8 +42,18 @@
   font-family: var(--font-family);
 }
 
+[data-theme='light'] .searchInput,
+:root:not([data-theme='dark']) .searchInput {
+  color: var(--text-primary);
+}
+
 .searchInput::placeholder {
   color: var(--overlay-white-text-medium);
+}
+
+[data-theme='light'] .searchInput::placeholder,
+:root:not([data-theme='dark']) .searchInput::placeholder {
+  color: var(--text-tertiary);
 }
 
 .searchInput:focus {
@@ -46,8 +66,13 @@
   border: none;
   padding: 0;
   color: var(--color-white);
-  font-size: var(--font-size-lg);
+  font-size: 11px;
   min-width: auto;
+}
+
+[data-theme='light'] .searchButton,
+:root:not([data-theme='dark']) .searchButton {
+  color: var(--text-primary);
 }
 
 .searchButton:hover {
@@ -55,11 +80,34 @@
   transform: scale(1.1);
 }
 
+[data-theme='light'] .searchButton:hover,
+:root:not([data-theme='dark']) .searchButton:hover {
+  color: var(--color-primary);
+}
+
 /* ================================== */
 /* DARK MODE STYLES                   */
 /* ================================== */
 
-/* Este componente usa variáveis CSS e se adapta automaticamente ao tema */
+[data-theme='dark'] .searchBar {
+  border: 2px solid var(--color-white);
+}
+
+[data-theme='dark'] .searchInput {
+  color: var(--color-white);
+}
+
+[data-theme='dark'] .searchInput::placeholder {
+  color: var(--overlay-white-text-medium);
+}
+
+[data-theme='dark'] .searchButton {
+  color: var(--color-white);
+}
+
+[data-theme='dark'] .searchButton:hover {
+  color: var(--color-secondary);
+}
 
 /* ================================== */
 /* RESPONSIVE STYLES                  */

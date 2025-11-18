@@ -3,8 +3,8 @@
 /* ================================== */
 
 .avatar {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   border-radius: var(--border-radius-md);
   overflow: hidden;
   border: none;
@@ -22,8 +22,8 @@
 }
 
 .avatarMd {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
 }
 
 .avatarLg {
@@ -48,7 +48,7 @@
   justify-content: center;
   color: var(--color-white);
   font-weight: 800;
-  font-size: var(--font-size-md);
+  font-size: 13px;
 }
 
 /* ================================== */

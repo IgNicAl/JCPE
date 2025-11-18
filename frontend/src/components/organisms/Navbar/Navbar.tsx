@@ -55,6 +55,7 @@ const Navbar: React.FC = () => {
 
         {/* Menu de Navegação (Desktop) */}
         <div className={`${styles.navMenu} ${isMenuOpen ? styles.active : ''}`}>
+          <ThemeToggle className={styles.themeToggle} />
           <MegaMenuCategories onItemClick={closeMobileMenu} />
           <DropdownPages onItemClick={closeMobileMenu} />
           <Link to="/contato" className={styles.navLink} onClick={closeMobileMenu}>
@@ -68,7 +69,6 @@ const Navbar: React.FC = () => {
         {/* Seção Direita: Ferramentas e Usuário */}
         <div className={styles.navRightSection}>
           <SearchBar className={styles.searchBar} />
-          <ThemeToggle className={styles.themeToggle} />
           {user && <NextPoint />}
           {user ? (
             <>
@@ -94,6 +94,7 @@ const Navbar: React.FC = () => {
       {/* Menu Mobile Expandido */}
       {isMenuOpen && (
         <div className={styles.mobileMenu}>
+          <ThemeToggle className={styles.themeToggle} />
           <MegaMenuCategories onItemClick={closeMobileMenu} />
           <DropdownPages onItemClick={closeMobileMenu} />
           <Link to="/contato" className={styles.mobileMenuItem} onClick={closeMobileMenu}>

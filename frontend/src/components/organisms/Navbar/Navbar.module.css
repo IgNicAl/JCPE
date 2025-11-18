@@ -4,11 +4,10 @@
 
 .navbar {
   position: sticky;
-  top: 0;
+  top: 16px;
   z-index: 999;
-  background: var(--bg-primary);
-  box-shadow: var(--shadow-md);
   width: 100%;
+  padding: 0 16px;
 }
 
 .navbarContainer {
@@ -20,20 +19,31 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+  position: relative;
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
 }
 
 /* Logo */
 .logoContainer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   text-decoration: none;
   flex-shrink: 0;
   transition: var(--transition-normal);
+  z-index: 1;
 }
 
 .logoImg {
-  width: 48px;
-  height: 48px;
+  width: 72px;
+  height: 72px;
   object-fit: contain;
   transition: var(--transition-normal);
 }
@@ -42,12 +52,17 @@
   transform: scale(1.05);
 }
 
+.logoContainer:hover {
+  transform: translateX(-50%) scale(1.05);
+}
+
 /* Menu de Navegação */
 .navMenu {
   display: flex;
   align-items: center;
   gap: 68px;
   flex: 1;
+  margin-right: auto;
 }
 
 .navLink {
@@ -99,7 +114,7 @@
 
 .searchBar {
   width: auto;
-  min-width: 343px;
+  min-width: 224px;
 }
 
 .themeToggle {
@@ -185,8 +200,14 @@
   flex-direction: column;
   gap: 16px;
   padding: 24px;
+  margin: 16px;
+  margin-top: 8px;
   background: var(--bg-primary);
-  border-top: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
 }
 
 .mobileMenuItem {
@@ -219,9 +240,9 @@
 /* DARK MODE STYLES                   */
 /* ================================== */
 
-[data-theme='dark'] .navbar {
+[data-theme='dark'] .navbarContainer {
   background: var(--bg-primary);
-  box-shadow: var(--shadow-md);
+  border-color: var(--border-color);
 }
 
 [data-theme='dark'] .navLink {
@@ -246,7 +267,7 @@
 
 [data-theme='dark'] .mobileMenu {
   background: var(--bg-primary);
-  border-top-color: var(--border-color);
+  border-color: var(--border-color);
 }
 
 [data-theme='dark'] .mobileMenuItem {
@@ -282,7 +303,7 @@
   }
 
   .searchBar {
-    min-width: 280px;
+    min-width: 184px;
   }
 }
 
@@ -301,7 +322,7 @@
   }
 
   .searchBar {
-    min-width: 220px;
+    min-width: 144px;
   }
 
   .navLink {
@@ -310,14 +331,19 @@
 }
 
 @media (max-width: 768px) {
+  .navbar {
+    padding: 0 8px;
+    top: 8px;
+  }
+
   .navbarContainer {
     padding: 0 20px;
     height: 64px;
   }
 
   .logoImg {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
   }
 
   /* Ocultar menu desktop */
@@ -338,6 +364,8 @@
   /* Mostrar menu mobile quando ativo */
   .mobileMenu {
     display: flex;
+    margin: 8px;
+    margin-top: 8px;
   }
 
   .navRightSection {
@@ -346,6 +374,11 @@
 }
 
 @media (max-width: 480px) {
+  .navbar {
+    padding: 0 8px;
+    top: 8px;
+  }
+
   .navbarContainer {
     padding: 0 16px;
   }

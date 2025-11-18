@@ -40,8 +40,8 @@ const SingleContent: React.FC<SingleContentProps> = ({
   className = '',
 }) => {
   return (
-    // Largura atualizada para 384px (w-96 no HTML)
-    <Link to={`/noticia/${slug}`} className={`w-[384px] lg:w-full lg:max-w-[384px] md:w-full md:max-w-full sm:w-full h-[452px] md:h-[400px] sm:h-[400px] relative overflow-hidden rounded-md block no-underline transition-transform duration-normal hover:-translate-y-1 ${className}`}>
+    // Largura de 1/4 (25%) da largura total
+    <Link to={`/noticia/${slug}`} className={`w-full h-[452px] md:h-[400px] sm:h-[400px] relative overflow-hidden rounded-md block no-underline transition-transform duration-normal hover:-translate-y-1 ${className}`}>
       <div
         className="w-full h-full absolute left-0 top-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${imageUrl})` } as React.CSSProperties}
@@ -181,7 +181,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({
             </div>
 
             {/* Fallback responsivo para os pontos (original do TSX) */}
-            <div className="absolute right-[10px] bottom-[10px] flex justify-end items-center gap-[5px] hidden md:flex sm:flex">
+            <div className="absolute right-[10px] bottom-[10px] hidden md:flex sm:flex justify-end items-center gap-[5px]">
               {slides.map((_, index) => (
                 <button
                   key={index}
@@ -217,9 +217,8 @@ const Highlights: React.FC<HighlightsProps> = ({
   const secondContent = singleContentItems[1];
 
   return (
-    // Layout de grid e largura máxima atualizados para corresponder ao HTML
-    // w-[1560px], gap-[24px], e grid-cols-[384px_384px_744px]
-    <div className={`w-full max-w-[1560px] md:max-w-full h-[452px] md:h-auto sm:h-auto relative rounded-md grid grid-cols-[384px_384px_744px] xl:grid-cols-[minmax(300px,384px)_minmax(300px,384px)_1fr] lg:grid-cols-2 md:grid-cols-1 gap-[24px] mb-xl ${className}`}>
+    // Layout de grid: cada SingleContent ocupa 1/4 (25%), HeroSlider ocupa 1/2 (50%)
+    <div className={`w-full max-w-[1560px] md:max-w-full h-[452px] md:h-auto sm:h-auto relative rounded-md grid grid-cols-[1fr_1fr_2fr] xl:grid-cols-[1fr_1fr_2fr] lg:grid-cols-2 md:grid-cols-1 gap-[24px] mb-xl ${className}`}>
       {firstContent && (
         <SingleContent
           id={firstContent.id}
@@ -227,8 +226,8 @@ const Highlights: React.FC<HighlightsProps> = ({
           summary={firstContent.summary}
           imageUrl={firstContent.imageUrl}
           slug={firstContent.slug}
-          // Largura atualizada para 384px
-          className="w-[384px] xl:w-full xl:max-w-[384px] lg:max-w-full md:w-full h-[452px] md:h-[400px] sm:h-[400px] flex-shrink-0"
+          // Largura de 1/4 (25%) controlada pelo grid
+          className="w-full h-[452px] md:h-[400px] sm:h-[400px]"
         />
       )}
 
@@ -239,8 +238,8 @@ const Highlights: React.FC<HighlightsProps> = ({
           summary={secondContent.summary}
           imageUrl={secondContent.imageUrl}
           slug={secondContent.slug}
-          // Largura atualizada para 384px
-          className="w-[384px] xl:w-full xl:max-w-[384px] lg:max-w-full md:w-full h-[452px] md:h-[400px] sm:h-[400px] flex-shrink-0"
+          // Largura de 1/4 (25%) controlada pelo grid
+          className="w-full h-[452px] md:h-[400px] sm:h-[400px]"
         />
       )}
 

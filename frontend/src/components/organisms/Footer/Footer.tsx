@@ -1,4 +1,5 @@
 import React from 'react';
+import logoImg from '@/assets/logo.svg';
 
 // NOTA: Os imports originais foram substituídos por mocks (dados e componentes
 // fictícios) abaixo para permitir a compilação e visualização.
@@ -14,9 +15,6 @@ const NEWS_CATEGORIES = [
   { id: 'healthy-living', label: 'Healthy Living' },
   { id: 'technology', label: 'Technology' },
 ];
-
-// Mock asset for logoImg (substituindo '@/assets/logo.svg')
-const logoImg = "https://placehold.co/160x40/eeeeee/333333?text=JCPE+Logo";
 
 // Mock component for NewsletterSection (substituindo '@/components/molecules/NewsletterSection')
 const NewsletterSection = () => (
@@ -68,16 +66,16 @@ const Footer: React.FC = () => {
 
           {/* Seção "Mega News" (Logo e Título) */}
           <div className="flex flex-col gap-4">
-            <div className="inline-flex justify-start items-center gap-1.5">
+            {/* <div className="inline-flex justify-start items-center gap-1.5">
               <div className="w-1 h-2.5 bg-rose-600 rounded-xl" />
               <h4 className="text-stone-700 text-xl font-medium font-['Roboto'] capitalize">JCPE</h4>
-            </div>
+            </div> */}
             <img src={logoImg} alt="JCPE Logo" className="h-10 w-auto self-start" />
           </div>
 
           {/* Descrição */}
           <p className="w-full md:w-80 text-justify text-stone-700/75 text-sm font-normal font-['Roboto'] capitalize leading-5 tracking-tight">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Egestas purus viverra accumsan in nisl nisi. Arcu cursus vitae congue mauris rhoncus aenean vel elit scelerisque. In egestas erat imperdiet sed euismod nisi porta lorem mollis. Morbi tristique senectus et netus. Mattis pellentesque id nibh tortor id aliquet lectus proin
+          O Portal JC PE é o novo ecossistema digital do Sistema Jornal do Commercio de Comunicação (SJCC), integrando conteúdos do Jornal do Commercio, Rádio Jornal, TV Jornal e marcas como Blog do Torcedor, Social1 e Receita da Boa. Com mais de 60 milhões de visitas mensais, oferece notícias credíveis de Pernambuco e do mundo, em texto, vídeo, áudio e foto, com foco em jornalismo de qualidade, entretenimento, esportes e opinião. Curadoria especializada, personalização por dados e tecnologia interna. É o reflexo de marcas históricas líderes em relevância, confiança e inovação.
           </p>
 
           {/* Seção Newsletter */}
@@ -122,7 +120,10 @@ const Footer: React.FC = () => {
                 <span>instagram</span>
               </button>
               {/* Botão Twitter (do design de destino) */}
-              <button className="size-10 bg-gradient-to-r from-sky-500 to-sky-300 rounded-xl flex items-center justify-center hover:opacity-90 transition-opacity">
+              <button
+                className="size-10 bg-gradient-to-r from-sky-500 to-sky-300 rounded-xl flex items-center justify-center hover:opacity-90 transition-opacity"
+                aria-label="Twitter"
+              >
                 <i className="fab fa-twitter size-4 text-center text-white" />
               </button>
             </div>

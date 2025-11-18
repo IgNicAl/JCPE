@@ -38,7 +38,7 @@ const DropdownPages: React.FC<DropdownPagesProps> = ({ className = '', onItemCli
     { path: '/jogos', label: 'Jogos', requiresAuth: false },
     { path: '/clima', label: 'Clima', requiresAuth: false },
     { path: '/empreendedorismo', label: 'Empreendedorismo', requiresAuth: false },
-    { path: '/chat-ai', label: 'Assistente IA', requiresAuth: true, icon: 'fas fa-robot' },
+    { path: '/chat', label: 'Assistente IA', requiresAuth: true, icon: 'fas fa-robot' },
   ];
 
   const visiblePages = pages.filter((page) => !page.requiresAuth || user);

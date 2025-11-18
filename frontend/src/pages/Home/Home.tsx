@@ -255,11 +255,18 @@ const Home: React.FC = () => {
   const { user, isAdmin, isJournalist } = useAuth();
   const { news, loading, error } = useNews({ autoFetch: true, initialData: MOCK_NEWS });
 
-  const newsWithAuthors = (news as MockNews[]).map((item, index) => ({
-    ...item,
-    authorName: ['James', 'Robert', 'Mary', 'Jon Kantner', 'Louis Hoebregts', 'Patricia'][index % 6] || 'Autor',
-    authorAvatar: `https://placehold.co/44x44?text=${encodeURIComponent((['James', 'Robert', 'Mary', 'Jon Kantner', 'Louis Hoebregts', 'Patricia'][index % 6] || 'Autor')[0])}`,
-  }));
+  const newsWithAuthors = (news as MockNews[]).map((item) => {
+    const authorName = typeof item.author === 'string'
+      ? item.author
+      : (item.author as any)?.name || 'Autor';
+    const authorInitial = authorName[0] || 'A';
+
+    return {
+      ...item,
+      authorName,
+      authorAvatar: `https://placehold.co/44x44?text=${encodeURIComponent(authorInitial)}`,
+    };
+  });
 
   const singleContentItems = newsWithAuthors.slice(0, 2).map(news => ({
     id: news.id || '',
@@ -333,7 +340,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="bg-[var(--bg-primary)]">
-      <div className="mx-auto flex max-w-[1512px] px-6 flex-col gap-12 py-10">
+      <div className="mx-auto flex max-w-[1512px] px-12 flex-col gap-12 py-10">
         <TagCarousel tags={TAGS} />
 
         <Highlights
@@ -341,13 +348,15 @@ const Home: React.FC = () => {
           sliderSlides={sliderSlides}
         />
 
-        {topPosts.length > 0 && (
-          <PostGridSection title="top posts" posts={topPosts} disableLeftArrow />
-        )}
-
         {popularPosts.length > 0 && (
           <PostGridSection title="popular posts" posts={popularPosts} />
         )}
+
+        <SportsScoreboard
+          calendar={SCOREBOARD_CALENDAR}
+          standings={SCOREBOARD_STANDINGS}
+          highlight={MATCH_HIGHLIGHT}
+        />
 
         {newPosts.length > 0 && (
           <NewPostsSection posts={newPosts} onShowAll={() => navigate('/noticias')} />
@@ -364,13 +373,11 @@ const Home: React.FC = () => {
           hourly={WEATHER_HOURLY}
           weekly={WEATHER_WEEKLY}
           cities={WEATHER_CITIES}
-        />
+          />
 
-        <SportsScoreboard
-          calendar={SCOREBOARD_CALENDAR}
-          standings={SCOREBOARD_STANDINGS}
-          highlight={MATCH_HIGHLIGHT}
-        />
+         {topPosts.length > 0 && (
+          <PostGridSection title="top posts" posts={topPosts} disableLeftArrow />
+        )}
 
         {user && (isAdmin() || isJournalist()) && (
           <div className="flex flex-wrap gap-4">
