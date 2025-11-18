@@ -48,12 +48,13 @@
   transition: var(--transition-normal);
 }
 
+/* Efeitos de hover removidos para manter o tamanho constante */
 .logoContainer:hover .logoImg {
-  transform: scale(1.05);
+  transform: none;
 }
 
 .logoContainer:hover {
-  transform: translateX(-50%) scale(1.05);
+  transform: translateX(-50%);
 }
 
 /* Menu de Navegação */
@@ -279,6 +280,78 @@
   background: var(--bg-secondary);
   color: var(--color-primary-light);
 }
+
+/* ISLAND NAVBAR STYLES               */
+/* ================================== */
+
+.navbarContainer {
+  will-change: max-width, height, border-radius;
+  transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-radius 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.3s ease;
+}
+
+.logoContainer {
+  /* Para centrar o logo de 72px numa barra de 48px, o topo fica a (48-72)/2 = -12px */
+  top: -12px;
+  /* Transição focada no transform para melhor performance */
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navContentWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 769px) {
+  .navbarContainer.scrolled {
+    max-width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--bg-primary-translucent);
+    padding: 0;
+  }
+
+  /* Para centrar na ilha de 64px, o topo seria (64-72)/2 = -4px. */
+  /* Como o topo inicial é -12px, adicionamos 8px de translação vertical. */
+  .scrolled .logoContainer {
+    transform: translate(-50%, 8px);
+  }
+
+  .scrolled .logoContainer:hover {
+    transform: translate(-50%, 8px); /* Mantém a posição e o tamanho no hover */
+  }
+
+  .scrolled .navContentWrapper {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .navbarContainer.scrolled:hover {
+    max-width: 1512px;
+    height: 48px;
+    border-radius: var(--border-radius-md);
+  }
+
+  /* No hover, o logo volta à sua translação original */
+  .scrolled:hover .logoContainer {
+    transform: translateX(-50%);
+  }
+  .scrolled:hover .logoContainer:hover {
+    transform: translateX(-50%);
+  }
+
+  .scrolled:hover .navContentWrapper {
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: 0.2s; /* Atraso para o conteúdo aparecer */
+  }
+}
+
 
 /* ================================== */
 /* RESPONSIVE STYLES                  */

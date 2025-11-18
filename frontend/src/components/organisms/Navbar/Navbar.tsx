@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { ROUTES } from '@/utils/constants';
@@ -13,14 +13,36 @@ import MegaMenuCategories from '@/components/molecules/MegaMenuCategories';
 import DropdownPages from '@/components/molecules/DropdownPages';
 import styles from './Navbar.module.css';
 
+const SCROLL_THRESHOLD = 50;
+
 /**
  * Navbar redesenhado seguindo o design do Figma
  * Layout horizontal com mega menu de categorias, páginas, busca e ferramentas
+ * Transforma-se numa "Island Navbar" ao fazer scroll.
  */
 const Navbar: React.FC = () => {
   const { user } = useAuth();
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
+  const [isScrolled, setScrolled] = useState<boolean>(false);
   const [notificationCount] = useState<number>(3); // TODO: integrar com sistema real de notificações
+  const ticking = useRef(false);
+
+  const handleScroll = useCallback(() => {
+    if (!ticking.current) {
+      window.requestAnimationFrame(() => {
+        setScrolled(window.scrollY > SCROLL_THRESHOLD);
+        ticking.current = false;
+      });
+      ticking.current = true;
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [handleScroll]);
 
   const toggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
   const closeMobileMenu = useCallback(() => setMenuOpen(false), []);
@@ -45,39 +67,44 @@ const Navbar: React.FC = () => {
     </div>
   );
 
+  const navbarContainerClasses = `${styles.navbarContainer} ${isScrolled ? styles.scrolled : ''}`;
+
   return (
     <nav className={styles.navbar}>
-      <div className={styles.navbarContainer}>
+      <div className={navbarContainerClasses}>
         {/* Logo */}
         <Link to={ROUTES.HOME} className={styles.logoContainer} onClick={closeMobileMenu}>
           <img src={logo} alt="JCPE Logo" className={styles.logoImg} />
         </Link>
 
-        {/* Menu de Navegação (Desktop) */}
-        <div className={`${styles.navMenu} ${isMenuOpen ? styles.active : ''}`}>
-          <ThemeToggle className={styles.themeToggle} />
-          <MegaMenuCategories onItemClick={closeMobileMenu} />
-          <DropdownPages onItemClick={closeMobileMenu} />
-          <Link to="/contato" className={styles.navLink} onClick={closeMobileMenu}>
-            Contato
-          </Link>
-          <Link to="/sobre" className={styles.navLink} onClick={closeMobileMenu}>
-            Sobre
-          </Link>
-        </div>
+        {/* Wrapper para o conteúdo da navegação */}
+        <div className={styles.navContentWrapper}>
+          {/* Menu de Navegação (Desktop) */}
+          <div className={`${styles.navMenu} ${isMenuOpen ? styles.active : ''}`}>
+            <ThemeToggle className={styles.themeToggle} />
+            <MegaMenuCategories onItemClick={closeMobileMenu} />
+            <DropdownPages onItemClick={closeMobileMenu} />
+            <Link to="/contato" className={styles.navLink} onClick={closeMobileMenu}>
+              Contato
+            </Link>
+            <Link to="/sobre" className={styles.navLink} onClick={closeMobileMenu}>
+              Sobre
+            </Link>
+          </div>
 
-        {/* Seção Direita: Ferramentas e Usuário */}
-        <div className={styles.navRightSection}>
-          <SearchBar className={styles.searchBar} />
-          {user && <NextPoint />}
-          {user ? (
-            <>
-              <UserMenu onItemClick={closeMobileMenu} />
-              <NotificationIcon count={notificationCount} onClick={handleNotificationClick} />
-            </>
-          ) : (
-            renderVisitorActions()
-          )}
+          {/* Seção Direita: Ferramentas e Usuário */}
+          <div className={styles.navRightSection}>
+            <SearchBar className={styles.searchBar} />
+            {user && <NextPoint />}
+            {user ? (
+              <>
+                <UserMenu onItemClick={closeMobileMenu} />
+                <NotificationIcon count={notificationCount} onClick={handleNotificationClick} />
+              </>
+            ) : (
+              renderVisitorActions()
+            )}
+          </div>
         </div>
 
         {/* Menu Hamburguer (Mobile) */}
