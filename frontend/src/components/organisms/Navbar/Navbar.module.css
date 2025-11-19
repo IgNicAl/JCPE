@@ -8,8 +8,7 @@
   z-index: 999;
   width: 100%;
   padding: 0 16px;
-  overflow-x: hidden; /* Previne overflow horizontal */
-  overflow-y: visible; /* Permite que a logo ultrapasse verticalmente */
+  overflow: visible; /* Permite que dropdowns apareçam */
 }
 
 .navbarContainer {
@@ -28,6 +27,7 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--border-color);
+  overflow: visible; /* Permite que dropdowns apareçam */
 }
 
 /* Logo */
@@ -68,6 +68,8 @@
   gap: 68px;
   flex: 1;
   margin-right: auto;
+  position: relative; /* Permite que dropdowns sejam posicionados corretamente */
+  z-index: 10; /* Garante que dropdowns apareçam acima */
 }
 
 .navLink {
@@ -289,18 +291,19 @@
 /* ================================== */
 
 .navbarContainer {
-  will-change: max-width, height, border-radius;
-  transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    border-radius 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    background 0.3s ease;
+  will-change: max-width, width, height, border-radius;
+  transition: max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    border-radius 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.2s ease;
 }
 
 .logoContainer {
   /* Para centrar o logo de 72px numa barra de 48px, o topo fica a (48-72)/2 = -12px */
   top: -12px;
   /* Transição focada no transform para melhor performance */
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), top 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navContentWrapper {
@@ -308,18 +311,25 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: auto; /* Garante que eventos de mouse funcionem por padrão */
 }
 
 @media (min-width: 769px) {
   .navbarContainer.scrolled {
-    max-width: 64px;
-    height: 64px;
-    border-radius: var(--border-radius-md); /* Mantém formato arredondado, não redondo */
+    max-width: 80px; /* Aumentado para caber a logo de 72px com padding */
+    width: 80px;
+    height: 80px; /* Aumentado para caber a logo de 72px com padding */
+    border-radius: 50%; /* Container perfeitamente circular */
     background: var(--bg-primary-translucent);
     padding: 0;
     margin: 0 auto; /* Centraliza o container */
-    overflow: visible; /* Permite que a logo ultrapasse os limites do container */
+    overflow: visible; /* Permite que dropdowns apareçam quando hover */
+  }
+
+  /* Quando scrolled e sem hover, esconde o conteúdo mas permite dropdowns */
+  .navbarContainer.scrolled:not(:hover) {
+    overflow: hidden; /* Só esconde quando não está em hover */
   }
 
   /* Mantém o tamanho da logo em 72px mesmo quando scrolled */
@@ -331,14 +341,14 @@
     max-width: 72px;
     max-height: 72px;
     flex-shrink: 0;
-    object-fit: none !important; /* Previne que object-fit: contain reduza a logo */
+    object-fit: contain !important; /* Mantém proporção da logo dentro do container */
     transform: none !important; /* Garante que não há transformação reduzindo o tamanho */
     scale: 1 !important; /* Força escala 1:1 */
   }
 
-  /* Para centrar a logo de 72px na ilha de 64px, o topo fica a (64-72)/2 = -4px */
+  /* Centraliza a logo de 72px no container circular de 80px */
   .scrolled .logoContainer {
-    top: -4px; /* Ajusta para logo de 72px em container de 64px */
+    top: 4px; /* (80-72)/2 = 4px para centralizar verticalmente */
     transform: translate(-50%, 0);
   }
 
@@ -348,11 +358,18 @@
 
   .scrolled .navContentWrapper {
     opacity: 0;
-    pointer-events: none;
+    pointer-events: none; /* Bloqueia cliques quando invisível */
+  }
+
+  /* Quando scrolled e em hover, mostra o conteúdo e habilita cliques */
+  .navbarContainer.scrolled:hover .navContentWrapper {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .navbarContainer.scrolled:hover {
     max-width: 1512px;
+    width: auto; /* Volta ao comportamento automático quando expandido */
     height: 48px;
     border-radius: var(--border-radius-md);
   }
@@ -382,7 +399,7 @@
   .scrolled:hover .navContentWrapper {
     opacity: 1;
     pointer-events: auto;
-    transition-delay: 0.2s; /* Atraso para o conteúdo aparecer */
+    transition-delay: 0.05s; /* Atraso mínimo para o conteúdo aparecer */
   }
 }
 
