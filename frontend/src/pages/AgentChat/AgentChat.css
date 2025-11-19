@@ -1,0 +1,152 @@
+/* Container principal da página de chat */
+.chat-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  background-color: #f5f5f5;
+  /* Altura da viewport menos navbar e footer (valores aproximados) */
+  min-height: calc(100vh - 154px);
+}
+
+/* A caixa de chat em si */
+.chat-box-container {
+  width: 100%;
+  max-width: 800px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 70vh; /* Altura fixa para permitir rolagem interna */
+}
+
+/* Cabeçalho do chat */
+.chat-header {
+  background: linear-gradient(135deg, #c41e3a 0%, #8b1428 100%);
+  color: #fff;
+  padding: 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.chat-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+.chat-header span {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* Área das mensagens */
+.chat-messages {
+  flex: 1; /* Ocupa todo o espaço vertical disponível */
+  padding: 20px;
+  overflow-y: auto; /* Permite rolagem */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Container de uma única mensagem */
+.message {
+  display: flex;
+  max-width: 80%; /* Mensagens não ocupam a tela inteira */
+}
+
+/* Balão da mensagem */
+.message-bubble {
+  padding: 12px 18px;
+  border-radius: 20px;
+  line-height: 1.5;
+  font-size: 15px;
+}
+
+/* Estilos para mensagens do Agente (esquerda) */
+.message.agent {
+  justify-content: flex-start;
+}
+.message.agent .message-bubble {
+  background: #f1f3f5;
+  color: #333;
+  border-bottom-left-radius: 4px; /* Estilo "balão" */
+}
+
+/* Estilos para mensagens do Usuário (direita) */
+.message.user {
+  justify-content: flex-end;
+  align-self: flex-end; /* Alinha o container da mensagem à direita */
+}
+.message.user .message-bubble {
+  background: #c41e3a;
+  color: #fff;
+  border-bottom-right-radius: 4px; /* Estilo "balão" */
+}
+
+/* Animação de "digitando..." (bolinhas) */
+.loading-bubble {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.loading-bubble span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #999;
+  animation: bounce 1.3s infinite;
+}
+.loading-bubble span:nth-child(2) { animation-delay: 0.2s; }
+.loading-bubble span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-6px); }
+}
+
+/* Balão de erro */
+.error-bubble {
+  background: #fff0f0;
+  color: #c0392b;
+  border: 1px solid #f5c6cb;
+}
+
+/* Formulário de entrada de texto */
+.chat-input-form {
+  display: flex;
+  border-top: 1px solid #e9ecef;
+  padding: 16px;
+  background: #fff;
+}
+.chat-input-form input {
+  flex: 1;
+  border: 2px solid #e9ecef;
+  border-radius: 25px;
+  padding: 12px 20px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.chat-input-form input:focus {
+  border-color: #c41e3a;
+}
+.chat-input-form button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: #c41e3a;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  margin-left: 12px;
+  transition: background-color 0.2s;
+}
+.chat-input-form button:hover {
+  background: #a01830;
+}
+.chat-input-form button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

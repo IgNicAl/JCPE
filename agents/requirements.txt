@@ -1,0 +1,15 @@
+crewai[google-genai]
+crewai-tools
+langchain
+langchain-google-genai
+google-generativeai
+langgraph-prebuilt
+fastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+requests
+pytest
+SQLAlchemy
+pymysql
+newsapi-python
