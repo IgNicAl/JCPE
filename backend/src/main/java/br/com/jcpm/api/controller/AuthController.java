@@ -1,12 +1,12 @@
-package br.com.jcpe.api.controller;
+package br.com.jcpm.api.controller;
 
-import br.com.jcpe.api.domain.entity.User;
-import br.com.jcpe.api.dto.JwtResponse;
-import br.com.jcpe.api.dto.LoginRequest;
-import br.com.jcpe.api.dto.RegisterRequest;
-import br.com.jcpe.api.dto.UserResponse;
-import br.com.jcpe.api.security.JwtTokenProvider;
-import br.com.jcpe.api.service.UserService;
+import br.com.jcpm.api.domain.entity.User;
+import br.com.jcpm.api.dto.JwtResponse;
+import br.com.jcpm.api.dto.LoginRequest;
+import br.com.jcpm.api.dto.RegisterRequest;
+import br.com.jcpm.api.dto.UserResponse;
+import br.com.jcpm.api.security.JwtTokenProvider;
+import br.com.jcpm.api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

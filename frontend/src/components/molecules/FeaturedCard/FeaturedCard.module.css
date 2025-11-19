@@ -82,6 +82,14 @@
   opacity: 0.95;
 }
 
+.featuredFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-lg);
+  gap: var(--spacing-md);
+}
+
 .featuredMeta {
   display: flex;
   gap: var(--spacing-md);
@@ -120,6 +128,17 @@
 
   .featuredTitle {
     font-size: 26px;
+  }
+
+  .featuredFooter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+
+  .featuredActions {
+    width: 100%;
+    justify-content: flex-start;
   }
 }
 

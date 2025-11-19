@@ -19,7 +19,8 @@ interface FormState {
   priority: number;
   category: string;
   page: string;
-  isFeatured: boolean;
+  isFeaturedHome: boolean;
+  isFeaturedPage: boolean;
 }
 
 const INITIAL_FORM_STATE: FormState = {
@@ -29,7 +30,8 @@ const INITIAL_FORM_STATE: FormState = {
   priority: 1,
   category: 'noticias',
   page: 'noticias',
-  isFeatured: false,
+  isFeaturedHome: false,
+  isFeaturedPage: false,
 };
 
 interface MessageState {
@@ -307,13 +309,37 @@ const CreateNews: React.FC = () => {
             </div>
 
             <div className="form-group checkbox-group">
-              <label htmlFor="isFeatured">
-                <input type="checkbox" id="isFeatured" name="isFeatured" checked={formData.isFeatured} onChange={handleCheckboxChange} />
+              <label htmlFor="isFeaturedHome">
+                <input 
+                  type="checkbox" 
+                  id="isFeaturedHome" 
+                  name="isFeaturedHome" 
+                  checked={formData.isFeaturedHome} 
+                  onChange={handleCheckboxChange} 
+                />
                 <span>
-                  <i className="fas fa-certificate" /> Notícia Principal
+                  <i className="fas fa-star" /> Destaque na Home
                 </span>
               </label>
-              <small>Marca esta notícia como destaque principal na página</small>
+              <small>Exibe esta notícia no card de destaque da página inicial</small>
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group checkbox-group">
+              <label htmlFor="isFeaturedPage">
+                <input 
+                  type="checkbox" 
+                  id="isFeaturedPage" 
+                  name="isFeaturedPage" 
+                  checked={formData.isFeaturedPage} 
+                  onChange={handleCheckboxChange} 
+                />
+                <span>
+                  <i className="fas fa-certificate" /> Destaque na Página
+                </span>
+              </label>
+              <small>Exibe esta notícia no card de destaque da página "{PAGES.find(p => p.value === formData.page)?.label}"</small>
             </div>
           </div>
 

@@ -1,4 +1,4 @@
-package br.com.jcpe.api;
+package br.com.jcpm.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * Ponto de entrada principal para a aplicação Spring Boot jcpe API.
  */
 @SpringBootApplication
-@EnableJpaRepositories("br.com.jcpe.api.repository")
-@EntityScan("br.com.jcpe.api.domain.entity")
+@EnableJpaRepositories("br.com.jcpm.api.repository")
+@EntityScan("br.com.jcpm.api.domain.entity")
 public class jcpeApplication {
 
   /**

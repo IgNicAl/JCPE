@@ -253,7 +253,7 @@ const MATCH_HIGHLIGHT: MatchHighlight = {
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAdmin, isJournalist } = useAuth();
-  const { news, loading, error } = useNews({ autoFetch: true, initialData: MOCK_NEWS });
+  const { news, loading, error } = useNews({ autoFetch: true, initialData: MOCK_NEWS, featuredHome: true });
 
   const newsWithAuthors = (news as MockNews[]).map((item) => {
     const authorName = typeof item.author === 'string'

@@ -155,6 +155,71 @@ const Points: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Seção de Listas Pontuadas */}
+      {!loading && !error && (
+        <div className="points-content-section">
+          <h3 className="section-title">Troque Seus Pontos</h3>
+          <p className="section-subtitle">Resgate benefícios com os pontos acumulados</p>
+          
+          <div className="points-cards-grid">
+            <div className="points-small-card">
+              <div className="small-card-image" style={{ backgroundImage: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}>
+                <i className="fas fa-parking"></i>
+              </div>
+              <div className="small-card-content">
+                <h4 className="small-card-title">Estacionamentos</h4>
+                <p className="small-card-points">100 pontos</p>
+                <button className="redeem-btn">Resgatar</button>
+              </div>
+            </div>
+
+            <div className="points-small-card">
+              <div className="small-card-image" style={{ backgroundImage: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)" }}>
+                <i className="fas fa-utensils"></i>
+              </div>
+              <div className="small-card-content">
+                <h4 className="small-card-title">Restaurantes</h4>
+                <p className="small-card-points">250 pontos</p>
+                <button className="redeem-btn">Resgatar</button>
+              </div>
+            </div>
+
+            <div className="points-small-card">
+              <div className="small-card-image" style={{ backgroundImage: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)" }}>
+                <i className="fas fa-film"></i>
+              </div>
+              <div className="small-card-content">
+                <h4 className="small-card-title">Cinema</h4>
+                <p className="small-card-points">200 pontos</p>
+                <button className="redeem-btn">Resgatar</button>
+              </div>
+            </div>
+
+            <div className="points-small-card">
+              <div className="small-card-image" style={{ backgroundImage: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)" }}>
+                <i className="fas fa-theater-masks"></i>
+              </div>
+              <div className="small-card-content">
+                <h4 className="small-card-title">Teatro</h4>
+                <p className="small-card-points">300 pontos</p>
+                <button className="redeem-btn">Resgatar</button>
+              </div>
+            </div>
+
+            <div className="points-small-card">
+              <div className="small-card-image" style={{ backgroundImage: "linear-gradient(135deg, #30cfd0 0%, #330867 100%)" }}>
+                <i className="fas fa-shopping-bag"></i>
+              </div>
+              <div className="small-card-content">
+                <h4 className="small-card-title">Produtos JCPM</h4>
+                <p className="small-card-points">150 pontos</p>
+                <button className="redeem-btn">Resgatar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

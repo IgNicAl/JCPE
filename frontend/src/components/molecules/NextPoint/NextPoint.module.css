@@ -14,6 +14,7 @@
   font-size: var(--font-size-sm);
   margin-right: 10px;
   cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
 .nextPointWidget:hover {
@@ -24,8 +25,14 @@
   opacity: 0.95;
 }
 
+/* Ajuste do ícone do relógio para se adaptar ao tema */
+.clockIcon circle,
+.clockIcon path {
+  stroke: var(--color-primary);
+}
+
 .nextText {
-  color: var(--color-white);
+  color: var(--text-primary);
 }
 
 @keyframes jcpe-pulse-small {

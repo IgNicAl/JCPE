@@ -98,10 +98,9 @@ const NextPoint: React.FC = () => {
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden
       >
-        <circle cx="12" cy="12" r="9" stroke="#fff" strokeWidth="1.6" opacity="0.9" />
+        <circle cx="12" cy="12" r="9" strokeWidth="1.6" opacity="0.9" />
         <path
           d="M12 7v6l4 2"
-          stroke="#fff"
           strokeWidth="1.6"
           strokeLinecap="round"
           strokeLinejoin="round"
