@@ -166,7 +166,6 @@
   background: var(--secondary-overlay-medium);
 }
 
-/* Logout Button */
 .logout {
   color: var(--color-error);
   font-weight: 600;

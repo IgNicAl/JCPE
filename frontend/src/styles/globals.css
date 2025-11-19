@@ -40,7 +40,6 @@ body {
 /* LIGHT MODE STYLES                  */
 /* ================================== */
 
-/* Estilos para mensagens */
 .message {
   padding: 12px 16px;
   border-radius: 8px;
@@ -63,7 +62,6 @@ body {
   border: 1px solid var(--color-error-border);
 }
 
-/* Botões */
 .btn-primary, .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -98,7 +96,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* Loading */
 .loading {
   display: flex;
   flex-direction: column;

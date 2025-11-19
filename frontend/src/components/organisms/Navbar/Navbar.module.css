@@ -8,7 +8,7 @@
   z-index: 999;
   width: 100%;
   padding: 0 16px;
-  overflow: visible; /* Permite que dropdowns apareçam */
+  overflow: visible;
 }
 
 .navbarContainer {
@@ -27,10 +27,9 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--border-color);
-  overflow: visible; /* Permite que dropdowns apareçam */
+  overflow: visible;
 }
 
-/* Logo */
 .logoContainer {
   position: absolute;
   left: 50%;
@@ -41,7 +40,7 @@
   flex-shrink: 0;
   transition: var(--transition-normal);
   z-index: 1;
-  overflow: visible; /* Garante que a logo não seja cortada */
+  overflow: visible;
 }
 
 .logoImg {
@@ -49,10 +48,9 @@
   height: 72px;
   object-fit: contain;
   transition: var(--transition-normal);
-  flex-shrink: 0; /* Previne que a logo encolha */
+  flex-shrink: 0;
 }
 
-/* Efeitos de hover removidos para manter o tamanho constante */
 .logoContainer:hover .logoImg {
   transform: none;
 }
@@ -61,15 +59,14 @@
   transform: translateX(-50%);
 }
 
-/* Menu de Navegação */
 .navMenu {
   display: flex;
   align-items: center;
   gap: 68px;
   flex: 1;
   margin-right: auto;
-  position: relative; /* Permite que dropdowns sejam posicionados corretamente */
-  z-index: 10; /* Garante que dropdowns apareçam acima */
+  position: relative;
+  z-index: 10;
 }
 
 .navLink {
@@ -111,7 +108,6 @@
   border-radius: 4px;
 }
 
-/* Seção Direita */
 .navRightSection {
   display: flex;
   align-items: center;
@@ -128,7 +124,6 @@
   flex-shrink: 0;
 }
 
-/* Botões de Autenticação */
 .authButtons {
   display: flex;
   align-items: center;
@@ -174,7 +169,6 @@
   box-shadow: var(--primary-overlay-shadow-heavy);
 }
 
-/* Menu Hamburguer (Mobile) */
 .menuIcon {
   display: none;
   background: var(--bg-secondary);
@@ -202,7 +196,6 @@
   outline-offset: 2px;
 }
 
-/* Menu Mobile */
 .mobileMenu {
   display: none;
   flex-direction: column;
@@ -300,9 +293,7 @@
 }
 
 .logoContainer {
-  /* Para centrar o logo de 72px numa barra de 48px, o topo fica a (48-72)/2 = -12px */
   top: -12px;
-  /* Transição focada no transform para melhor performance */
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), top 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -311,28 +302,26 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  pointer-events: auto; /* Garante que eventos de mouse funcionem por padrão */
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: auto;
 }
 
 @media (min-width: 769px) {
   .navbarContainer.scrolled {
-    max-width: 80px; /* Aumentado para caber a logo de 72px com padding */
+    max-width: 80px;
     width: 80px;
-    height: 80px; /* Aumentado para caber a logo de 72px com padding */
-    border-radius: 50%; /* Container perfeitamente circular */
+    height: 80px;
+    border-radius: 50%;
     background: var(--bg-primary-translucent);
     padding: 0;
-    margin: 0 auto; /* Centraliza o container */
-    overflow: visible; /* Permite que dropdowns apareçam quando hover */
+    margin: 0 auto;
+    overflow: visible;
   }
 
-  /* Quando scrolled e sem hover, esconde o conteúdo mas permite dropdowns */
   .navbarContainer.scrolled:not(:hover) {
-    overflow: hidden; /* Só esconde quando não está em hover */
+    overflow: hidden;
   }
 
-  /* Mantém o tamanho da logo em 72px mesmo quando scrolled */
   .scrolled .logoImg {
     width: 72px !important;
     height: 72px !important;
@@ -341,27 +330,25 @@
     max-width: 72px;
     max-height: 72px;
     flex-shrink: 0;
-    object-fit: contain !important; /* Mantém proporção da logo dentro do container */
-    transform: none !important; /* Garante que não há transformação reduzindo o tamanho */
-    scale: 1 !important; /* Força escala 1:1 */
+    object-fit: contain !important;
+    transform: none !important;
+    scale: 1 !important;
   }
 
-  /* Centraliza a logo de 72px no container circular de 80px */
   .scrolled .logoContainer {
-    top: 4px; /* (80-72)/2 = 4px para centralizar verticalmente */
+    top: 4px;
     transform: translate(-50%, 0);
   }
 
   .scrolled .logoContainer:hover {
-    transform: translate(-50%, 0); /* Mantém a posição e o tamanho no hover */
+    transform: translate(-50%, 0);
   }
 
   .scrolled .navContentWrapper {
     opacity: 0;
-    pointer-events: none; /* Bloqueia cliques quando invisível */
+    pointer-events: none;
   }
 
-  /* Quando scrolled e em hover, mostra o conteúdo e habilita cliques */
   .navbarContainer.scrolled:hover .navContentWrapper {
     opacity: 1;
     pointer-events: auto;
@@ -369,12 +356,11 @@
 
   .navbarContainer.scrolled:hover {
     max-width: 1512px;
-    width: auto; /* Volta ao comportamento automático quando expandido */
+    width: auto;
     height: 48px;
     border-radius: var(--border-radius-md);
   }
 
-  /* No hover, mantém o tamanho da logo */
   .scrolled:hover .logoImg {
     width: 72px !important;
     height: 72px !important;
@@ -387,9 +373,8 @@
     scale: 1 !important;
   }
 
-  /* No hover, o logo volta à sua translação original */
   .scrolled:hover .logoContainer {
-    top: -12px; /* Volta para logo de 72px em container de 48px */
+    top: -12px;
     transform: translateX(-50%);
   }
   .scrolled:hover .logoContainer:hover {
@@ -399,7 +384,7 @@
   .scrolled:hover .navContentWrapper {
     opacity: 1;
     pointer-events: auto;
-    transition-delay: 0.05s; /* Atraso mínimo para o conteúdo aparecer */
+    transition-delay: 0.01s;
   }
 }
 
@@ -471,22 +456,18 @@
     height: 60px;
   }
 
-  /* Ocultar menu desktop */
   .navMenu {
     display: none;
   }
 
-  /* Ocultar alguns elementos no mobile */
   .searchBar {
     display: none;
   }
 
-  /* Mostrar menu hamburguer */
   .menuIcon {
     display: flex;
   }
 
-  /* Mostrar menu mobile quando ativo */
   .mobileMenu {
     display: flex;
     margin: 8px;

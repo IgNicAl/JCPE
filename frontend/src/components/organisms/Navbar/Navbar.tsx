@@ -72,14 +72,11 @@ const Navbar: React.FC = () => {
   return (
     <nav className={styles.navbar}>
       <div className={navbarContainerClasses}>
-        {/* Logo */}
         <Link to={ROUTES.HOME} className={styles.logoContainer} onClick={closeMobileMenu}>
           <img src={logo} alt="JCPE Logo" className={styles.logoImg} />
         </Link>
 
-        {/* Wrapper para o conteúdo da navegação */}
         <div className={styles.navContentWrapper}>
-          {/* Menu de Navegação (Desktop) */}
           <div className={`${styles.navMenu} ${isMenuOpen ? styles.active : ''}`}>
             <ThemeToggle className={styles.themeToggle} />
             <MegaMenuCategories onItemClick={closeMobileMenu} />
@@ -92,7 +89,6 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
 
-          {/* Seção Direita: Ferramentas e Usuário */}
           <div className={styles.navRightSection}>
             <SearchBar className={styles.searchBar} />
             {user && <NextPoint />}
@@ -107,7 +103,6 @@ const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Menu Hamburguer (Mobile) */}
         <button
           className={styles.menuIcon}
           onClick={toggleMenu}
@@ -118,7 +113,6 @@ const Navbar: React.FC = () => {
         </button>
       </div>
 
-      {/* Menu Mobile Expandido */}
       {isMenuOpen && (
         <div className={styles.mobileMenu}>
           <ThemeToggle className={styles.themeToggle} />

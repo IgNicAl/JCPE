@@ -22,7 +22,6 @@
   box-shadow: inset 0 -1px 0 var(--overlay-white-border);
 }
 
-/* LOGO */
 .navbar-logo {
   font-size: 56px;
   font-weight: 900;
@@ -365,7 +364,6 @@
   transform: scale(1.1);
 }
 
-/* MOBILE MENU ICON */
 .menu-icon {
   display: none;
   color: var(--color-white);
