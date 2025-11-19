@@ -138,14 +138,16 @@ const UserMenu: React.FC<UserMenuProps> = ({ onItemClick, showName = true }) => 
           <span>Área do Usuário</span>
         </Link>
 
-        <Link
-          to={ROUTES.POINTS}
-          className={styles.dropdownItem}
-          onClick={handleItemClick}
-        >
-          <i className="fas fa-gift" />
-          <span>Meus Benefícios</span>
-        </Link>
+        {user.userType === 'USER' && (
+          <Link
+            to={ROUTES.POINTS}
+            className={styles.dropdownItem}
+            onClick={handleItemClick}
+          >
+            <i className="fas fa-gift" />
+            <span>Meus Benefícios</span>
+          </Link>
+        )}
 
         {canManageNews && (
           <>

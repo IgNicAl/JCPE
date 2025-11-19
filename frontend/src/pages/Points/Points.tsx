@@ -161,7 +161,7 @@ const Points: React.FC = () => {
         <div className="points-content-section">
           <h3 className="section-title">Troque Seus Pontos</h3>
           <p className="section-subtitle">Resgate benefícios com os pontos acumulados</p>
-          
+
           <div className="points-cards-grid">
             <div className="points-small-card">
               <div className="small-card-image" style={{ backgroundImage: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}>
