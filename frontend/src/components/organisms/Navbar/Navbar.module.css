@@ -14,7 +14,7 @@
 .navbarContainer {
   max-width: 1512px;
   margin: 0 auto;
-  padding: 0 204px;
+  padding: 0 120px;
   height: 48px;
   display: flex;
   align-items: center;
@@ -62,8 +62,8 @@
 .navMenu {
   display: flex;
   align-items: center;
-  gap: 68px;
-  flex: 1;
+  gap: 40px;
+  max-width: calc(50% - 60px);
   margin-right: auto;
   position: relative;
   z-index: 10;
@@ -306,7 +306,7 @@
   pointer-events: auto;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 1025px) {
   .navbarContainer.scrolled {
     max-width: 80px;
     width: 80px;
@@ -359,6 +359,7 @@
     width: auto;
     height: 48px;
     border-radius: var(--border-radius-md);
+    padding: 0 120px;
   }
 
   .scrolled:hover .logoImg {
@@ -377,6 +378,7 @@
     top: -12px;
     transform: translateX(-50%);
   }
+
   .scrolled:hover .logoContainer:hover {
     transform: translateX(-50%);
   }
@@ -417,10 +419,14 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1280px) {
   .navbarContainer {
     padding: 0 30px;
     height: 56px;
+  }
+
+  .navbarContainer.scrolled:hover {
+    padding: 0 30px;
   }
 
   .navMenu {
@@ -440,7 +446,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .navbar {
     padding: 0 8px;
     top: 8px;
@@ -449,6 +455,12 @@
   .navbarContainer {
     padding: 0 20px;
     height: 64px;
+  }
+
+  .logoContainer {
+    position: static;
+    transform: none;
+    left: auto;
   }
 
   .logoImg {
@@ -460,7 +472,16 @@
     display: none;
   }
 
+  .navContentWrapper {
+    width: auto;
+    margin-left: auto;
+  }
+
   .searchBar {
+    display: none;
+  }
+
+  .authButtons {
     display: none;
   }
 
@@ -510,6 +531,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -525,6 +547,7 @@
 /* ================================== */
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

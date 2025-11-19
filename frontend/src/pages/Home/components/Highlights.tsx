@@ -218,7 +218,7 @@ const Highlights: React.FC<HighlightsProps> = ({
 
   return (
     // Layout de grid: cada SingleContent ocupa 1/4 (25%), HeroSlider ocupa 1/2 (50%)
-    <div className={`w-full max-w-[1560px] md:max-w-full h-[452px] md:h-auto sm:h-auto relative rounded-md grid grid-cols-[1fr_1fr_2fr] xl:grid-cols-[1fr_1fr_2fr] lg:grid-cols-2 md:grid-cols-1 gap-[24px] mb-xl ${className}`}>
+    <div className={`w-full max-w-[1560px] md:max-w-full h-auto relative rounded-md grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[1fr_1fr_2fr] gap-[24px] mb-xl ${className}`}>
       {firstContent && (
         <SingleContent
           id={firstContent.id}
@@ -246,7 +246,7 @@ const Highlights: React.FC<HighlightsProps> = ({
       {sliderSlides.length > 0 && (
         <HeroSlider
           slides={sliderSlides}
-          className="w-full h-[452px] md:h-[400px] sm:h-[400px] flex-1 min-w-0"
+          className="w-full h-[452px] md:h-[400px] sm:h-[400px] flex-1 min-w-0 md:col-span-2 xl:col-span-1"
         />
       )}
     </div>
