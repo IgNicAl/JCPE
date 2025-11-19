@@ -1,27 +1,30 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
-import { newsService } from '@/services/api';
-import { NEWS_CATEGORIES } from '@/utils/constants';
+import { useNews } from '@/hooks/useNews';
+import { ROUTES } from '@/utils/constants';
+import Button from '@/components/atoms/Button';
+import TagScroller from '@/components/organisms/TagScroller';
+import HeroSlider from '@/components/organisms/HeroSlider';
+import PostSection from '@/components/organisms/PostSection';
 import { News } from '@/types';
 import './Recife.css';
 
-interface NewsItem extends News {
+interface MockNews extends News {
   summary: string;
   slug: string;
   category: string;
   featuredImageUrl: string;
   publicationDate: string;
   priority: number;
-  isFeatured?: boolean;
 }
 
-const MOCK_NEWS: NewsItem[] = [
+const MOCK_NEWS: MockNews[] = [
   {
     id: '1',
     title: 'Recife avança em projetos de infraestrutura urbana',
     summary: 'Novos projetos de modernização são anunciados para a capital pernambucana com investimento de R$ 50 milhões.',
-    category: 'noticias',
+    category: 'recife',
     featuredImageUrl: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&h=400&fit=crop',
     slug: 'recife-infraestrutura',
     publicationDate: new Date().toISOString(),
@@ -31,7 +34,7 @@ const MOCK_NEWS: NewsItem[] = [
     id: '2',
     title: 'Turismo em Recife cresce 25% em 2025',
     summary: 'Dados mostram aumento expressivo de visitantes na região, impulsionando economia local.',
-    category: 'economia',
+    category: 'recife',
     featuredImageUrl: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&h=400&fit=crop',
     slug: 'turismo-recife',
     publicationDate: new Date().toISOString(),
@@ -41,7 +44,7 @@ const MOCK_NEWS: NewsItem[] = [
     id: '3',
     title: 'Políticas de sustentabilidade ganham força em PE',
     summary: 'Governo estadual implementa novo plano de preservação ambiental focado em energia renovável.',
-    category: 'politica',
+    category: 'recife',
     featuredImageUrl: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop',
     slug: 'sustentabilidade-pe',
     publicationDate: new Date().toISOString(),
@@ -51,7 +54,7 @@ const MOCK_NEWS: NewsItem[] = [
     id: '4',
     title: 'Startups de Recife recebem investimentos internacionais',
     summary: 'Empresas de tecnologia locais conquistam aportes de fundos de venture capital estrangeiros.',
-    category: 'economia',
+    category: 'recife',
     featuredImageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
     slug: 'startups-recife',
     publicationDate: new Date().toISOString(),
@@ -61,7 +64,7 @@ const MOCK_NEWS: NewsItem[] = [
     id: '5',
     title: 'Eventos culturais animam o calendário de Recife',
     summary: 'Confira a programação de shows, festivais e apresentações para os próximos meses.',
-    category: 'noticias',
+    category: 'recife',
     featuredImageUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=400&fit=crop',
     slug: 'eventos-culturais',
     publicationDate: new Date().toISOString(),
@@ -71,7 +74,7 @@ const MOCK_NEWS: NewsItem[] = [
     id: '6',
     title: 'Dicas para aproveitar melhor Recife em 5 minutos',
     summary: 'Guia rápido com os principais pontos de interesse e restaurantes imprescindíveis na cidade.',
-    category: 'noticias',
+    category: 'recife',
     featuredImageUrl: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=600&h=400&fit=crop',
     slug: 'dicas-recife',
     publicationDate: new Date().toISOString(),
@@ -80,144 +83,110 @@ const MOCK_NEWS: NewsItem[] = [
 ];
 
 const Recife: React.FC = () => {
-  const [news, setNews] = useState<NewsItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
   const navigate = useNavigate();
   const { user, isAdmin, isJournalist } = useAuth();
+  const { news, loading, error } = useNews({ autoFetch: true, page: 'recife', featuredPage: true, initialData: MOCK_NEWS });
 
-  useEffect(() => {
-    async function loadNews() {
-      try {
-        setLoading(true);
-        setError('');
-        const response = await newsService.getAll('recife');
-        const receivedNews = Array.isArray(response?.data) ? (response.data as NewsItem[]) : [];
-        receivedNews.sort((a, b) => (b.priority || 0) - (a.priority || 0) || new Date(b.publicationDate).getTime() - new Date(a.publicationDate).getTime());
-        setNews(receivedNews.length > 0 ? receivedNews : MOCK_NEWS);
-      } catch (err) {
-        console.log('Usando dados de teste (backend indisponível)');
-        setNews(MOCK_NEWS);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadNews();
-  }, []);
+  // Adicionar dados de autor mock para as notícias
+  const newsWithAuthors = news.map((item, index) => ({
+    ...item,
+    authorName: ['James', 'Robert', 'Mary', 'Jon Kantner', 'Louis Hoebregts', 'Patricia'][index % 6] || 'Autor',
+    authorAvatar: `https://placehold.co/44x44?text=${encodeURIComponent((['James', 'Robert', 'Mary', 'Jon Kantner', 'Louis Hoebregts', 'Patricia'][index % 6] || 'Autor')[0])}`,
+  }));
 
-  const featured = useMemo(() => news.find((n) => n.isFeatured) || (news.length > 0 ? news[0] : null), [news]);
-  const remaining = useMemo(() => news.filter((n) => n.id !== featured?.id), [news, featured]);
+  // Dividir notícias em seções conforme o design
+  const popularNews = newsWithAuthors.slice(0, 4);
+  const trendyNews = newsWithAuthors.slice(4, 8);
+  const newNews = newsWithAuthors.slice(8, 12);
 
-  if (loading) {
-    return (
-      <div className="recife-container">
-        <div className="recife-loading">
-          <i className="fas fa-spinner fa-spin" />
-          <p>Carregando notícias...</p>
-        </div>
-      </div>
-    );
-  }
+  // Dados para o HeroSlider
+  const heroSlides = news.length > 0
+    ? [
+        {
+          id: news[0].id,
+          title: news[0].title,
+          summary: (news[0] as MockNews).summary,
+          imageUrl: (news[0] as MockNews).featuredImageUrl || 'https://placehold.co/744x452',
+          slug: (news[0] as MockNews).slug,
+        },
+      ]
+    : [];
 
   return (
     <div className="recife-page">
-      <div className="recife-header">
-        <h1>Recife em 5 Minutos</h1>
-      </div>
       <div className="recife-content">
-        <div className="main-column full-width">
-          {user && (isAdmin() || isJournalist()) && (
-            <div className="action-buttons-section">
-              {isJournalist() && (
-                <>
-                  <button className="action-btn journalist-btn" onClick={() => navigate('/noticias/criar')}>
-                    <i className="fas fa-plus"></i> Criar Notícia
-                  </button>
-                  <button className="action-btn journalist-btn" onClick={() => navigate('/noticias/gerenciar')}>
-                    <i className="fas fa-edit"></i> Gerenciar
-                  </button>
-                </>
-              )}
-              {isAdmin() && (
-                <>
-                  <button className="action-btn admin-btn" onClick={() => navigate('/admin/usuarios')}>
-                    <i className="fas fa-users"></i> Usuários
-                  </button>
-                  <button className="action-btn admin-btn" onClick={() => navigate('/cadastro-admin')}>
-                    <i className="fas fa-user-plus"></i> Novo Admin
-                  </button>
-                  <button className="action-btn admin-btn" onClick={() => navigate('/noticias/criar')}>
-                    <i className="fas fa-plus"></i> Criar
-                  </button>
-                  <button className="action-btn admin-btn" onClick={() => navigate('/noticias/gerenciar')}>
-                    <i className="fas fa-cogs"></i> Gerenciar
-                  </button>
-                </>
-              )}
-            </div>
-          )}
+        {/* Tags Scroller */}
+        <TagScroller className="recife-tag-scroller" />
 
-          {!loading && !error && news.length > 0 ? (
-            <>
-              {featured && (
-                <Link to={`/noticia/${featured.slug}`} className="featured-link">
-                  <div className="featured-news">
-                    <div className="featured-image" style={{ backgroundImage: `url(${featured.featuredImageUrl})` }}></div>
-                    <div className="featured-content">
-                      <div className="featured-badge">
-                        <i className="fas fa-star" /> DESTAQUE
-                      </div>
-                      <h2 className="featured-title">{featured.title}</h2>
-                      <p className="featured-summary">{featured.summary}</p>
-                      <div className="featured-meta">
-                        <span>
-                          <i className="far fa-calendar"></i> {new Date(featured.publicationDate).toLocaleDateString('pt-BR')}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              )}
-
-              {remaining.length > 0 ? (
-                <div className="all-news-grid">
-                  {remaining.map((n) => {
-                    const category = NEWS_CATEGORIES.find((c) => c.id === (n.category || 'noticias')) || NEWS_CATEGORIES[0];
-                    return (
-                      <Link key={n.id} to={`/noticia/${n.slug}`} className="category-card">
-                        <div className="card-image" style={{ backgroundImage: `url(${n.featuredImageUrl})` }}>
-                          <span className="card-badge" style={{ backgroundColor: category.color }}>
-                            {category.label}
-                          </span>
-                          <h3 className="card-title">{n.title}</h3>
-                        </div>
-                        <div className="card-content">
-                          <p className="card-summary">{n.summary}</p>
-                          <div className="card-footer">
-                            <span className="card-date">
-                              <i className="far fa-calendar"></i>
-                              {new Date(n.publicationDate).toLocaleDateString('pt-BR')}
-                            </span>
-                          </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              ) : (
-                !featured && (
-                  <div className="no-news">
-                    <p>Nenhuma notícia disponível</p>
-                  </div>
-                )
-              )}
-            </>
-          ) : (
-            <div className="no-news">
-              <p>Nenhuma notícia disponível</p>
-            </div>
-          )}
+        {/* Hero Slider */}
+        <div className="hero-section">
+          <HeroSlider slides={heroSlides} className="hero-slider-main" />
         </div>
+
+        {/* Seção de Posts Populares */}
+        {popularNews.length > 0 && (
+          <PostSection
+            title="popular posts"
+            news={popularNews as MockNews[]}
+            showArrows={true}
+            leftArrowDisabled={true}
+            rightArrowDisabled={false}
+          />
+        )}
+
+        {/* Seção de Novos Posts */}
+        {newNews.length > 0 && (
+          <PostSection
+            title="new posts"
+            news={newNews as MockNews[]}
+            showButton={true}
+            buttonText="Show all"
+            onButtonClick={() => navigate('/noticias')}
+          />
+        )}
+
+        {/* Seção de Posts em Tendência */}
+        {trendyNews.length > 0 && (
+          <PostSection
+            title="trendy posts"
+            news={trendyNews as MockNews[]}
+            showArrows={true}
+            leftArrowDisabled={true}
+            rightArrowDisabled={false}
+          />
+        )}
+
+        {/* Botões de Ação para Admin/Journalist */}
+        {user && (isAdmin() || isJournalist()) && (
+          <div className="action-buttons-section">
+            {isJournalist() && (
+              <>
+                <Button variant="primary" onClick={() => navigate(ROUTES.CREATE_NEWS)}>
+                  <i className="fas fa-plus" /> Criar Notícia
+                </Button>
+                <Button variant="secondary" onClick={() => navigate(ROUTES.MANAGE_NEWS)}>
+                  <i className="fas fa-edit" /> Gerenciar
+                </Button>
+              </>
+            )}
+            {isAdmin() && (
+              <>
+                <Button variant="primary" onClick={() => navigate(ROUTES.MANAGE_USERS)}>
+                  <i className="fas fa-users" /> Usuários
+                </Button>
+                <Button variant="primary" onClick={() => navigate(ROUTES.ADMIN_REGISTER)}>
+                  <i className="fas fa-user-plus" /> Novo Admin
+                </Button>
+                <Button variant="primary" onClick={() => navigate(ROUTES.CREATE_NEWS)}>
+                  <i className="fas fa-plus" /> Criar
+                </Button>
+                <Button variant="secondary" onClick={() => navigate(ROUTES.MANAGE_NEWS)}>
+                  <i className="fas fa-cogs" /> Gerenciar
+                </Button>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

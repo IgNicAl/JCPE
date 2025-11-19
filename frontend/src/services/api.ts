@@ -88,7 +88,14 @@ export const userService = {
  * Serviços de Notícias (CRUD)
  */
 export const newsService = {
-  getAll: (page?: string) => api.get('/api/noticias' + (page ? `?page=${encodeURIComponent(page)}` : '')),
+  getAll: (page?: string, featuredHome?: boolean, featuredPage?: boolean) => {
+    const params = new URLSearchParams();
+    if (page) params.append('page', page);
+    if (featuredHome !== undefined) params.append('featuredHome', String(featuredHome));
+    if (featuredPage !== undefined) params.append('featuredPage', String(featuredPage));
+    const queryString = params.toString();
+    return api.get('/api/noticias' + (queryString ? `?${queryString}` : ''));
+  },
   getBySlug: (slug: string) => api.get(`/api/noticias/slug/${slug}`),
   getAllForManagement: () => api.get('/api/noticias/manage'),
   getById: (id: string) => api.get(`/api/noticias/${id}`),

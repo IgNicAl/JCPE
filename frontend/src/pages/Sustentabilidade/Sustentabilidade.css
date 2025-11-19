@@ -1,9 +1,10 @@
 /* SUSTENTABILIDADE PAGE */
 
 .sustentabilidade-page {
-  background: #fff;
+  background: var(--bg-primary);
   min-height: 100vh;
   padding: 40px 20px;
+  transition: background-color var(--transition-normal);
 }
 
 .sustentabilidade-container {
@@ -22,19 +23,19 @@
 
 .sustentabilidade-header i {
   font-size: 48px;
-  color: #00aa44;
+  color: var(--color-green);
 }
 
 .sustentabilidade-header h1 {
   font-size: 42px;
   font-weight: 900;
-  color: #333;
+  color: var(--text-primary);
   margin: 0;
 }
 
 .sustentabilidade-header p {
   font-size: 16px;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -45,18 +46,18 @@
 }
 
 .content-card {
-  background: #fff;
+  background: var(--bg-card);
   border-radius: 16px;
   padding: 28px;
-  border-left: 5px solid #00aa44;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border-left: 5px solid var(--color-green);
+  box-shadow: var(--shadow-card);
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .content-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
 }
 
 .card-icon-wrapper {
@@ -67,20 +68,20 @@
   align-items: center;
   justify-content: center;
   font-size: 28px;
-  color: #fff;
+  color: var(--color-white);
   margin-bottom: 16px;
 }
 
 .card-title {
   font-size: 20px;
   font-weight: 700;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin: 0 0 12px 0;
 }
 
 .card-description {
   font-size: 14px;
-  color: #666;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin: 0;
 }

@@ -1,4 +1,4 @@
-package br.com.jcpe.api.dto;
+package br.com.jcpm.api.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,7 +32,9 @@ public class NewsRequest {
 
   private String page; // página onde a notícia será publicada
 
-  private Boolean isFeatured; // se é notícia principal/destaque
+  private Boolean isFeaturedHome; // se é destaque na página principal (Home)
+
+  private Boolean isFeaturedPage; // se é destaque na página específica
 
   // Getters e Setters Explícitos (gerados por Lombok @Getter/@Setter, mas
   // adicionados para suporte IDE)
@@ -100,11 +102,19 @@ public class NewsRequest {
     this.page = page;
   }
 
-  public Boolean getIsFeatured() {
-    return isFeatured;
+  public Boolean getIsFeaturedHome() {
+    return isFeaturedHome;
   }
 
-  public void setIsFeatured(Boolean isFeatured) {
-    this.isFeatured = isFeatured;
+  public void setIsFeaturedHome(Boolean isFeaturedHome) {
+    this.isFeaturedHome = isFeaturedHome;
+  }
+
+  public Boolean getIsFeaturedPage() {
+    return isFeaturedPage;
+  }
+
+  public void setIsFeaturedPage(Boolean isFeaturedPage) {
+    this.isFeaturedPage = isFeaturedPage;
   }
 }
