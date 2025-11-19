@@ -1,4 +1,4 @@
-package br.com.jcpe.api.controller;
+package br.com.jcpm.api.controller;
 
 import java.text.Normalizer;
 import java.time.LocalDateTime;
@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.jcpe.api.domain.entity.News;
-import br.com.jcpe.api.domain.entity.User;
-import br.com.jcpe.api.dto.NewsRequest;
-import br.com.jcpe.api.repository.NewsRepository;
+import br.com.jcpm.api.domain.entity.News;
+import br.com.jcpm.api.domain.entity.User;
+import br.com.jcpm.api.dto.NewsRequest;
+import br.com.jcpm.api.repository.NewsRepository;
 import jakarta.validation.Valid;
 
 @RestController
@@ -53,12 +53,30 @@ public class NewsController {
   }
 
   @GetMapping
-  public ResponseEntity<List<News>> getAllPublicNews(@RequestParam(required = false) String page) {
+  public ResponseEntity<List<News>> getAllPublicNews(
+      @RequestParam(required = false) String page,
+      @RequestParam(required = false) Boolean featuredHome,
+      @RequestParam(required = false) Boolean featuredPage) {
+    
+    // Se solicitar notícias em destaque na HOME
+    if (featuredHome != null && featuredHome) {
+      return ResponseEntity.ok(
+          newsRepository.findAllByIsFeaturedHomeAndStatusOrderByPriorityDescPublicationDateDesc(true, "PUBLICADO"));
+    }
+    
+    // Se solicitar notícias em destaque de uma página específica
+    if (featuredPage != null && featuredPage && page != null && !page.isBlank()) {
+      return ResponseEntity.ok(
+          newsRepository.findAllByPageAndIsFeaturedPageAndStatusOrderByPriorityDescPublicationDateDesc(page, true, "PUBLICADO"));
+    }
+    
+    // Busca normal por página
     if (page != null && !page.isBlank()) {
-      // retornar apenas notícias daquela página, ordenadas por prioridade e data
       return ResponseEntity.ok(
           newsRepository.findAllByPageAndStatusOrderByPriorityDescPublicationDateDesc(page, "PUBLICADO"));
     }
+    
+    // Todas as notícias publicadas
     return ResponseEntity.ok(newsRepository.findAllByStatusOrderByPublicationDateDesc("PUBLICADO"));
   }
 
@@ -108,7 +126,8 @@ public class NewsController {
     news.setFeaturedImageUrl(newsRequest.getFeaturedImageUrl());
     news.setPriority(newsRequest.getPriority());
     news.setPage(newsRequest.getPage() != null ? newsRequest.getPage() : "noticias");
-    news.setIsFeatured(newsRequest.getIsFeatured() != null ? newsRequest.getIsFeatured() : false);
+    news.setIsFeaturedHome(newsRequest.getIsFeaturedHome() != null ? newsRequest.getIsFeaturedHome() : false);
+    news.setIsFeaturedPage(newsRequest.getIsFeaturedPage() != null ? newsRequest.getIsFeaturedPage() : false);
     news.setAuthor(currentUser);
     news.setPublicationDate(LocalDateTime.now());
     news.setStatus(newsRequest.getStatus() != null ? newsRequest.getStatus() : "PUBLICADO");
@@ -144,8 +163,10 @@ public class NewsController {
               news.setFeaturedImageUrl(newsRequest.getFeaturedImageUrl());
               news.setPriority(newsRequest.getPriority());
               news.setPage(newsRequest.getPage() != null ? newsRequest.getPage() : news.getPage());
-              news.setIsFeatured(
-                  newsRequest.getIsFeatured() != null ? newsRequest.getIsFeatured() : news.getIsFeatured());
+              news.setIsFeaturedHome(
+                  newsRequest.getIsFeaturedHome() != null ? newsRequest.getIsFeaturedHome() : news.getIsFeaturedHome());
+              news.setIsFeaturedPage(
+                  newsRequest.getIsFeaturedPage() != null ? newsRequest.getIsFeaturedPage() : news.getIsFeaturedPage());
               news.setUpdateDate(LocalDateTime.now());
               news.setStatus(newsRequest.getStatus() != null ? newsRequest.getStatus() : news.getStatus());
 

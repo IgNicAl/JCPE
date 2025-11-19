@@ -76,15 +76,11 @@ const MOCK_NEWS: MockNews[] = [
 const Jogos: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAdmin, isJournalist } = useAuth();
-  const { news: apiNews, loading: apiLoading } = useNews();
+  const { news, loading } = useNews({ autoFetch: true, page: 'jogos', featuredPage: true, initialData: MOCK_NEWS });
 
   const [matches, setMatches] = useState<Match[]>([]);
   const [standings, setStandings] = useState<Standing[]>([]);
   const [loadingSports, setLoadingSports] = useState(true);
-
-  // Use API news if available, otherwise use mock data
-  const news = apiNews.length > 0 ? apiNews : MOCK_NEWS;
-  const loading = apiLoading && apiNews.length === 0;
 
   useEffect(() => {
     loadSportsData();

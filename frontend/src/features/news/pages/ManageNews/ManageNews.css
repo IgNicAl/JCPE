@@ -3,7 +3,7 @@
   max-width: 1200px;
   margin: 40px auto;
   padding: 20px;
-  background-color: #f9fafb;
+  background-color: var(--bg-primary);
 }
 
 .manage-news-header {
@@ -12,19 +12,19 @@
   align-items: center;
   margin-bottom: 30px;
   padding-bottom: 20px;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .manage-news-header h1 {
   font-size: 28px;
-  color: #1f2937;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
 .btn-create {
-  background: #10b981;
+  background: var(--color-success);
   color: white;
   padding: 12px 20px;
   border: none;
@@ -45,14 +45,14 @@
   text-align: center;
   padding: 50px;
   font-size: 18px;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .news-table-wrapper {
   overflow-x: auto;
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-card);
 }
 
 .news-table {
@@ -64,24 +64,24 @@
 .news-table td {
   padding: 16px 20px;
   text-align: left;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .news-table th {
-  background-color: #f9fafb;
+  background-color: var(--bg-secondary);
   font-size: 14px;
   font-weight: 600;
-  color: #4b5563;
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .news-table tbody tr:hover {
-  background-color: #f3f4f6;
+  background-color: var(--bg-hover);
 }
 
 .news-table td {
-  color: #374151;
+  color: var(--text-primary);
   font-size: 15px;
 }
 
@@ -111,7 +111,7 @@
 }
 
 .btn-delete {
-  background-color: #ef4444;
+  background-color: var(--color-error);
   color: white;
 }
 .btn-delete:hover {
@@ -121,7 +121,7 @@
 .no-news {
   text-align: center;
   padding: 40px;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .priority-tag {
@@ -145,14 +145,14 @@
   }
   .news-table tr {
     margin-bottom: 15px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
   }
   .news-table td {
     text-align: right;
     padding-left: 50%;
     position: relative;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid var(--bg-hover);
   }
   .news-table td:before {
     content: attr(data-label);
@@ -163,6 +163,6 @@
     white-space: nowrap;
     text-align: left;
     font-weight: 600;
-    color: #4b5563;
+    color: var(--text-secondary);
   }
 }

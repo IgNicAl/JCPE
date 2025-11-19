@@ -24,7 +24,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '1',
     title: 'Recife avança em projetos de infraestrutura urbana',
     summary: 'Novos projetos de modernização são anunciados para a capital pernambucana com investimento de R$ 50 milhões.',
-    category: 'noticias',
+    category: 'recife',
     featuredImageUrl: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&h=400&fit=crop',
     slug: 'recife-infraestrutura',
     publicationDate: new Date().toISOString(),
@@ -34,7 +34,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '2',
     title: 'Turismo em Recife cresce 25% em 2025',
     summary: 'Dados mostram aumento expressivo de visitantes na região, impulsionando economia local.',
-    category: 'economia',
+    category: 'recife',
     featuredImageUrl: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&h=400&fit=crop',
     slug: 'turismo-recife',
     publicationDate: new Date().toISOString(),
@@ -44,7 +44,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '3',
     title: 'Políticas de sustentabilidade ganham força em PE',
     summary: 'Governo estadual implementa novo plano de preservação ambiental focado em energia renovável.',
-    category: 'politica',
+    category: 'recife',
     featuredImageUrl: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop',
     slug: 'sustentabilidade-pe',
     publicationDate: new Date().toISOString(),
@@ -54,7 +54,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '4',
     title: 'Startups de Recife recebem investimentos internacionais',
     summary: 'Empresas de tecnologia locais conquistam aportes de fundos de venture capital estrangeiros.',
-    category: 'economia',
+    category: 'recife',
     featuredImageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
     slug: 'startups-recife',
     publicationDate: new Date().toISOString(),
@@ -64,7 +64,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '5',
     title: 'Eventos culturais animam o calendário de Recife',
     summary: 'Confira a programação de shows, festivais e apresentações para os próximos meses.',
-    category: 'noticias',
+    category: 'recife',
     featuredImageUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=400&fit=crop',
     slug: 'eventos-culturais',
     publicationDate: new Date().toISOString(),
@@ -74,7 +74,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '6',
     title: 'Dicas para aproveitar melhor Recife em 5 minutos',
     summary: 'Guia rápido com os principais pontos de interesse e restaurantes imprescindíveis na cidade.',
-    category: 'noticias',
+    category: 'recife',
     featuredImageUrl: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=600&h=400&fit=crop',
     slug: 'dicas-recife',
     publicationDate: new Date().toISOString(),
@@ -85,7 +85,7 @@ const MOCK_NEWS: MockNews[] = [
 const Recife: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAdmin, isJournalist } = useAuth();
-  const { news, loading, error } = useNews({ autoFetch: true, page: 'recife', initialData: MOCK_NEWS });
+  const { news, loading, error } = useNews({ autoFetch: true, page: 'recife', featuredPage: true, initialData: MOCK_NEWS });
 
   // Adicionar dados de autor mock para as notícias
   const newsWithAuthors = news.map((item, index) => ({

@@ -24,7 +24,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '1',
     title: 'Ecossistema de startups de Recife atrai investidores internacionais',
     summary: 'Capitalistas de risco estrangeiros apostam em inovações desenvolvidas no Polo Tecnológico de Recife.',
-    category: 'economia',
+    category: 'empreendedorismo',
     featuredImageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
     slug: 'startups-recife-investimento',
     publicationDate: new Date().toISOString(),
@@ -34,7 +34,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '2',
     title: 'Programa de microcrédito beneficia 5 mil empreendedores em PE',
     summary: 'Iniciativa governamental amplia acesso a capital para pequenos negócios no estado.',
-    category: 'economia',
+    category: 'empreendedorismo',
     featuredImageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop',
     slug: 'microCredito-pe',
     publicationDate: new Date().toISOString(),
@@ -44,7 +44,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '3',
     title: 'Incubadora de empresas abre inscrições para novo programa',
     summary: 'Oportunidade para empreendedores apresentarem ideias inovadoras e receber mentoria.',
-    category: 'noticias',
+    category: 'empreendedorismo',
     featuredImageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
     slug: 'incubadora-programa',
     publicationDate: new Date().toISOString(),
@@ -54,7 +54,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '4',
     title: 'Mulheres empreendedoras lideram crescimento econômico de Recife',
     summary: 'Dados mostram que empresárias geram mais de 40% dos novos empregos na região.',
-    category: 'economia',
+    category: 'empreendedorismo',
     featuredImageUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=400&fit=crop',
     slug: 'mulheres-empreendedoras',
     publicationDate: new Date().toISOString(),
@@ -64,7 +64,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '5',
     title: 'Reforma tributária favorece micro e pequenas empresas',
     summary: 'Governo implementa medidas para reduzir carga fiscal de pequenos negócios.',
-    category: 'politica',
+    category: 'empreendedorismo',
     featuredImageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop',
     slug: 'reforma-tributaria',
     publicationDate: new Date().toISOString(),
@@ -74,7 +74,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '6',
     title: 'Universidade lança programa de empreendedorismo para estudantes',
     summary: 'Capacitação prática em gestão de negócios para formar nova geração de empresários.',
-    category: 'noticias',
+    category: 'empreendedorismo',
     featuredImageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
     slug: 'universidade-empreendedorismo',
     publicationDate: new Date().toISOString(),
@@ -85,7 +85,7 @@ const MOCK_NEWS: MockNews[] = [
 const Empreendedorismo: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAdmin, isJournalist } = useAuth();
-  const { news, loading, error } = useNews({ autoFetch: true, page: 'empreendedorismo', initialData: MOCK_NEWS });
+  const { news, loading, error } = useNews({ autoFetch: true, page: 'empreendedorismo', featuredPage: true, initialData: MOCK_NEWS });
 
   // Adicionar dados de autor mock para as notícias
   const newsWithAuthors = news.map((item, index) => ({

@@ -74,13 +74,14 @@
 
 .cardFooter {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 13px var(--spacing-md);
   background: var(--bg-secondary);
   border-radius: var(--border-radius-md);
   margin-top: var(--spacing-md);
   height: 72px;
+  gap: var(--spacing-sm);
 }
 
 .footerContent {
@@ -89,6 +90,7 @@
   justify-content: flex-start;
   align-items: center;
   gap: 10px;
+  min-width: 0;
 }
 
 .authorAvatar {
@@ -106,6 +108,8 @@
   justify-content: flex-start;
   align-items: flex-start;
   gap: 4px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .authorName {
@@ -115,6 +119,9 @@
   font-weight: var(--font-weight-medium);
   line-height: 22px;
   letter-spacing: 0.10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cardDate {
@@ -122,7 +129,44 @@
   color: var(--text-secondary);
   line-height: 18px;
   letter-spacing: 0.25px;
-  width: 210px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.cardActions {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition-normal);
+  color: var(--text-tertiary);
+  font-size: 18px;
+}
+
+.actionButton:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.actionButton.liked {
+  color: var(--color-primary);
+}
+
+.actionButton span {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
 }
 
 .cardIcon {

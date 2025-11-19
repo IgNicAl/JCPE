@@ -85,7 +85,7 @@ const MOCK_NEWS: MockNews[] = [
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAdmin, isJournalist } = useAuth();
-  const { news, loading, error } = useNews({ autoFetch: true, initialData: MOCK_NEWS });
+  const { news, loading, error } = useNews({ autoFetch: true, initialData: MOCK_NEWS, featuredHome: true });
 
   const featuredNews = news.length > 0 ? news[0] : null;
   const otherNews = news.length > 1 ? news.slice(1) : [];

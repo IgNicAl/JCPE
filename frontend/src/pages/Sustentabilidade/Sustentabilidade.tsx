@@ -24,7 +24,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '1',
     title: 'Energia Renovável em Pernambuco cresce 40%',
     summary: 'Conheça os projetos de energia solar e eólica desenvolvidos no estado que impulsionam economia verde.',
-    category: 'noticias',
+    category: 'sustentabilidade',
     featuredImageUrl: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&h=400&fit=crop',
     slug: 'energia-renovavel-pe',
     publicationDate: new Date().toISOString(),
@@ -34,7 +34,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '2',
     title: 'Preservação das Águas: Nova legislação em vigor',
     summary: 'Iniciativas para proteção dos recursos hídricos locais ganham força com novas regulamentações.',
-    category: 'politica',
+    category: 'sustentabilidade',
     featuredImageUrl: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop',
     slug: 'preservacao-aguas',
     publicationDate: new Date().toISOString(),
@@ -44,7 +44,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '3',
     title: 'Reflorestamento: 10 mil árvores plantadas em 2025',
     summary: 'Programas de plantio e restauração de áreas verdes transformam paisagem urbana de Recife.',
-    category: 'noticias',
+    category: 'sustentabilidade',
     featuredImageUrl: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&h=400&fit=crop',
     slug: 'reflorestamento-recife',
     publicationDate: new Date().toISOString(),
@@ -54,7 +54,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '4',
     title: 'Reciclagem: Recife alcança meta de redução de resíduos',
     summary: 'Projetos de gestão sustentável de resíduos sólidos mostram resultados positivos na cidade.',
-    category: 'noticias',
+    category: 'sustentabilidade',
     featuredImageUrl: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=600&h=400&fit=crop',
     slug: 'reciclagem-recife',
     publicationDate: new Date().toISOString(),
@@ -64,7 +64,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '5',
     title: 'Empresas locais adotam práticas sustentáveis',
     summary: 'Desenvolvimento sustentável: Empresas e comunidades comprometidas com práticas ecológicas.',
-    category: 'economia',
+    category: 'sustentabilidade',
     featuredImageUrl: 'https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?w=600&h=400&fit=crop',
     slug: 'empresas-sustentaveis',
     publicationDate: new Date().toISOString(),
@@ -74,7 +74,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '6',
     title: 'Mobilidade Urbana Verde: Ciclovias expandidas',
     summary: 'Soluções de transporte sustentável transformam o deslocamento nas cidades de Pernambuco.',
-    category: 'noticias',
+    category: 'sustentabilidade',
     featuredImageUrl: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600&h=400&fit=crop',
     slug: 'mobilidade-verde',
     publicationDate: new Date().toISOString(),
@@ -85,7 +85,7 @@ const MOCK_NEWS: MockNews[] = [
 const Sustentabilidade: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAdmin, isJournalist } = useAuth();
-  const { news, loading, error } = useNews({ autoFetch: true, page: 'sustentabilidade', initialData: MOCK_NEWS });
+  const { news, loading, error } = useNews({ autoFetch: true, page: 'sustentabilidade', featuredPage: true, initialData: MOCK_NEWS });
 
   // Adicionar dados de autor mock para as notícias
   const newsWithAuthors = news.map((item, index) => ({

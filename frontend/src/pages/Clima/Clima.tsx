@@ -24,7 +24,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '1',
     title: 'Previsão indica semana de bom tempo em Pernambuco',
     summary: 'Temperaturas estáveis e baixa possibilidade de chuvas marcam o clima nos próximos dias.',
-    category: 'noticias',
+    category: 'clima',
     featuredImageUrl: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=600&h=400&fit=crop',
     slug: 'clima-pernambuco',
     publicationDate: new Date().toISOString(),
@@ -34,7 +34,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '2',
     title: 'Mudanças climáticas afetam padrão de chuvas no Nordeste',
     summary: 'Especialistas alertam para alterações nos períodos tradicionais de precipitação.',
-    category: 'politica',
+    category: 'clima',
     featuredImageUrl: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=600&h=400&fit=crop',
     slug: 'clima-mudancas',
     publicationDate: new Date().toISOString(),
@@ -44,7 +44,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '3',
     title: 'Umidade do ar em níveis críticos em Recife',
     summary: 'Meteorologia recomenda hidratação e cuidados com a saúde durante período crítico.',
-    category: 'noticias',
+    category: 'clima',
     featuredImageUrl: 'https://images.unsplash.com/photo-1534274988757-a28bf1a4c817?w=600&h=400&fit=crop',
     slug: 'umidade-recife',
     publicationDate: new Date().toISOString(),
@@ -54,7 +54,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '4',
     title: 'Projeto de energia solar aproveita clima de Pernambuco',
     summary: 'Iniciativas de energia renovável crescem com investimentos em energia solar no estado.',
-    category: 'economia',
+    category: 'clima',
     featuredImageUrl: 'https://images.unsplash.com/photo-1497440871519-89d128cb4d8d?w=600&h=400&fit=crop',
     slug: 'energia-solar-pe',
     publicationDate: new Date().toISOString(),
@@ -64,7 +64,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '5',
     title: 'Agropecuária adapta-se a novo padrão climático',
     summary: 'Produtores rurais buscam novas técnicas para lidar com variações de temperatura.',
-    category: 'economia',
+    category: 'clima',
     featuredImageUrl: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600&h=400&fit=crop',
     slug: 'agropecuaria-clima',
     publicationDate: new Date().toISOString(),
@@ -74,7 +74,7 @@ const MOCK_NEWS: MockNews[] = [
     id: '6',
     title: 'Turismo de Recife se beneficia de clima tropical',
     summary: 'Destino atrai visitantes durante todo o ano graças às condições climáticas favoráveis.',
-    category: 'noticias',
+    category: 'clima',
     featuredImageUrl: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&h=400&fit=crop',
     slug: 'turismo-clima',
     publicationDate: new Date().toISOString(),
@@ -85,7 +85,7 @@ const MOCK_NEWS: MockNews[] = [
 const Clima: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAdmin, isJournalist } = useAuth();
-  const { news, loading, error } = useNews({ autoFetch: true, page: 'clima', initialData: MOCK_NEWS });
+  const { news, loading, error } = useNews({ autoFetch: true, page: 'clima', featuredPage: true, initialData: MOCK_NEWS });
 
   // Adicionar dados de autor mock para as notícias
   const newsWithAuthors = news.map((item, index) => ({

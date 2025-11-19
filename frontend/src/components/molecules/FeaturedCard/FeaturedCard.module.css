@@ -78,12 +78,93 @@
   opacity: 0.95;
 }
 
+.featuredFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-lg);
+  gap: var(--spacing-md);
+}
+
 .featuredMeta {
   display: flex;
   gap: var(--spacing-md);
   font-size: var(--font-size-sm);
   color: rgba(255, 255, 255, 0.9);
-  margin-top: var(--spacing-md);
+  align-items: center;
+  flex: 1;
+}
+
+.authorSection {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.authorAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--border-radius-md);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.authorDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.authorName {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-white);
+}
+
+.dateText {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.featuredActions {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: var(--border-radius-md);
+  transition: var(--transition-normal);
+  color: var(--color-white);
+  font-size: 18px;
+  backdrop-filter: blur(10px);
+}
+
+.actionButton:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.actionButton.liked {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: var(--color-secondary);
+}
+
+.actionButton span {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
 }
 
 .featuredMeta span {
@@ -109,6 +190,17 @@
   .featuredTitle {
     font-size: 26px;
   }
+
+  .featuredFooter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+
+  .featuredActions {
+    width: 100%;
+    justify-content: flex-start;
+  }
 }
 
 @media (max-width: 768px) {
@@ -126,6 +218,24 @@
 
   .featuredSummary {
     font-size: var(--font-size-md);
+  }
+
+  .authorAvatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .authorName {
+    font-size: var(--font-size-sm);
+  }
+
+  .dateText {
+    font-size: 12px;
+  }
+
+  .actionButton {
+    padding: 8px 12px;
+    font-size: 16px;
   }
 }
 
