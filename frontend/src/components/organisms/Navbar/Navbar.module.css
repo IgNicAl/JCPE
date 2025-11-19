@@ -8,6 +8,8 @@
   z-index: 999;
   width: 100%;
   padding: 0 16px;
+  overflow-x: hidden; /* Previne overflow horizontal */
+  overflow-y: visible; /* Permite que a logo ultrapasse verticalmente */
 }
 
 .navbarContainer {
@@ -39,6 +41,7 @@
   flex-shrink: 0;
   transition: var(--transition-normal);
   z-index: 1;
+  overflow: visible; /* Garante que a logo não seja cortada */
 }
 
 .logoImg {
@@ -46,6 +49,7 @@
   height: 72px;
   object-fit: contain;
   transition: var(--transition-normal);
+  flex-shrink: 0; /* Previne que a logo encolha */
 }
 
 /* Efeitos de hover removidos para manter o tamanho constante */
@@ -311,19 +315,35 @@
   .navbarContainer.scrolled {
     max-width: 64px;
     height: 64px;
-    border-radius: 50%;
+    border-radius: var(--border-radius-md); /* Mantém formato arredondado, não redondo */
     background: var(--bg-primary-translucent);
     padding: 0;
+    margin: 0 auto; /* Centraliza o container */
+    overflow: visible; /* Permite que a logo ultrapasse os limites do container */
   }
 
-  /* Para centrar na ilha de 64px, o topo seria (64-72)/2 = -4px. */
-  /* Como o topo inicial é -12px, adicionamos 8px de translação vertical. */
+  /* Mantém o tamanho da logo em 72px mesmo quando scrolled */
+  .scrolled .logoImg {
+    width: 72px !important;
+    height: 72px !important;
+    min-width: 72px;
+    min-height: 72px;
+    max-width: 72px;
+    max-height: 72px;
+    flex-shrink: 0;
+    object-fit: none !important; /* Previne que object-fit: contain reduza a logo */
+    transform: none !important; /* Garante que não há transformação reduzindo o tamanho */
+    scale: 1 !important; /* Força escala 1:1 */
+  }
+
+  /* Para centrar a logo de 72px na ilha de 64px, o topo fica a (64-72)/2 = -4px */
   .scrolled .logoContainer {
-    transform: translate(-50%, 8px);
+    top: -4px; /* Ajusta para logo de 72px em container de 64px */
+    transform: translate(-50%, 0);
   }
 
   .scrolled .logoContainer:hover {
-    transform: translate(-50%, 8px); /* Mantém a posição e o tamanho no hover */
+    transform: translate(-50%, 0); /* Mantém a posição e o tamanho no hover */
   }
 
   .scrolled .navContentWrapper {
@@ -337,8 +357,22 @@
     border-radius: var(--border-radius-md);
   }
 
+  /* No hover, mantém o tamanho da logo */
+  .scrolled:hover .logoImg {
+    width: 72px !important;
+    height: 72px !important;
+    min-width: 72px;
+    min-height: 72px;
+    max-width: 72px;
+    max-height: 72px;
+    object-fit: none !important;
+    transform: none !important;
+    scale: 1 !important;
+  }
+
   /* No hover, o logo volta à sua translação original */
   .scrolled:hover .logoContainer {
+    top: -12px; /* Volta para logo de 72px em container de 48px */
     transform: translateX(-50%);
   }
   .scrolled:hover .logoContainer:hover {
