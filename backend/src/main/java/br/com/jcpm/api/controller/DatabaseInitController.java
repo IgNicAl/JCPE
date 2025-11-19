@@ -1,8 +1,8 @@
-package br.com.jcpe.api.controller;
+package br.com.jcpm.api.controller;
 
-import br.com.jcpe.api.domain.entity.User;
-import br.com.jcpe.api.domain.enums.UserType;
-import br.com.jcpe.api.service.UserService;
+import br.com.jcpm.api.domain.entity.User;
+import br.com.jcpm.api.domain.enums.UserType;
+import br.com.jcpm.api.service.UserService;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

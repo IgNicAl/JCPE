@@ -23,6 +23,8 @@ import Recife from './pages/Recife/Recife';
 import Empreendedorismo from './pages/Empreendedorismo/Empreendedorismo';
 import Points from './pages/Points/Points';
 import AgentChat from './pages/AgentChat/AgentChat';
+import Sobre from './pages/Sobre/Sobre';
+import Contato from './pages/Contato/Contato';
 
 /**
  * Componente que ouve o evento global 'unauthorized' (disparado pela api.js)
@@ -61,6 +63,8 @@ export function App() {
               <Route path="/recife" element={<Recife />} />
               <Route path="/empreendedorismo" element={<Empreendedorismo />} />
               <Route path="/noticias" element={<Home />} />
+              <Route path="/sobre" element={<Sobre />} />
+              <Route path="/contato" element={<Contato />} />
 
               <Route
                 path="/chat"

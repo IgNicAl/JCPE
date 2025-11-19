@@ -1,4 +1,4 @@
-package br.com.jcpe.api.domain.entity;
+package br.com.jcpm.api.domain.entity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -81,7 +81,10 @@ public class News {
   private String page = "noticias"; // página onde a notícia será publicada
 
   @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
-  private Boolean isFeatured = false; // se é notícia principal/destaque
+  private Boolean isFeaturedHome = false; // se é destaque na página principal (Home)
+
+  @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
+  private Boolean isFeaturedPage = false; // se é destaque na página específica
 
   @CreationTimestamp
   @Column(nullable = false, updatable = false)
@@ -180,12 +183,20 @@ public class News {
     this.page = page;
   }
 
-  public Boolean getIsFeatured() {
-    return isFeatured;
+  public Boolean getIsFeaturedHome() {
+    return isFeaturedHome;
   }
 
-  public void setIsFeatured(Boolean isFeatured) {
-    this.isFeatured = isFeatured;
+  public void setIsFeaturedHome(Boolean isFeaturedHome) {
+    this.isFeaturedHome = isFeaturedHome;
+  }
+
+  public Boolean getIsFeaturedPage() {
+    return isFeaturedPage;
+  }
+
+  public void setIsFeaturedPage(Boolean isFeaturedPage) {
+    this.isFeaturedPage = isFeaturedPage;
   }
 
   public LocalDateTime getPublicationDate() {

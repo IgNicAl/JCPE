@@ -1,4 +1,4 @@
-package br.com.jcpe.api.security;
+package br.com.jcpm.api.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

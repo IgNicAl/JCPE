@@ -5,6 +5,9 @@ import { News } from '@/types';
 interface UseNewsOptions {
   autoFetch?: boolean;
   initialData?: News[];
+  page?: string;
+  featuredHome?: boolean;
+  featuredPage?: boolean;
 }
 
 interface UseNewsReturn {
@@ -23,7 +26,7 @@ interface UseNewsReturn {
  * Hook para gerenciamento de notícias
  */
 export const useNews = (options: UseNewsOptions = {}): UseNewsReturn => {
-  const { autoFetch = true, initialData = [] } = options;
+  const { autoFetch = true, initialData = [], page, featuredHome, featuredPage } = options;
 
   const [news, setNews] = useState<News[]>(initialData);
   const [loading, setLoading] = useState<boolean>(false);
@@ -34,7 +37,7 @@ export const useNews = (options: UseNewsOptions = {}): UseNewsReturn => {
     setError(null);
 
     try {
-      const response = await newsService.getAll();
+      const response = await newsService.getAll(page, featuredHome, featuredPage);
       const receivedNews = Array.isArray(response?.data) ? response.data : [];
 
       // Ordenar por prioridade e data
@@ -64,7 +67,7 @@ export const useNews = (options: UseNewsOptions = {}): UseNewsReturn => {
     } finally {
       setLoading(false);
     }
-  }, [initialData]);
+  }, [initialData, page, featuredHome, featuredPage]);
 
   const fetchNewsBySlug = useCallback(async (slug: string): Promise<News | null> => {
     setLoading(true);
@@ -135,7 +138,7 @@ export const useNews = (options: UseNewsOptions = {}): UseNewsReturn => {
     if (autoFetch) {
       fetchNews();
     }
-  }, [autoFetch, fetchNews]);
+  }, [autoFetch, fetchNews, page, featuredHome, featuredPage]);
 
   return {
     news,

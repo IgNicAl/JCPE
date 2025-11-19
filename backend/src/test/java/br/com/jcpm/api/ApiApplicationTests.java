@@ -1,4 +1,4 @@
-package br.com.jcpe.api;
+package br.com.jcpm.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

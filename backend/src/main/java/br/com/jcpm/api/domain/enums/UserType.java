@@ -1,4 +1,4 @@
-package br.com.jcpe.api.domain.enums;
+package br.com.jcpm.api.domain.enums;
 
 /**
  * Enum que define os tipos (perfis) de usuários no sistema.

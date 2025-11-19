@@ -1,4 +1,4 @@
-package br.com.jcpe.api.dto;
+package br.com.jcpm.api.dto;
 
 public class PointsResponse {
     private long totalSeconds;
