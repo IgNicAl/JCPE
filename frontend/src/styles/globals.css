@@ -1,7 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;900&display=swap');
 @import './variables.css';
 
-/* Reset e configurações globais */
+/* ================================== */
+/* RESET E CONFIGURAÇÕES GLOBAIS      */
+/* ================================== */
+
 * {
   margin: 0;
   padding: 0;
@@ -33,7 +36,10 @@ body {
   transition: background-color var(--transition-normal);
 }
 
-/* Estilos para mensagens */
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .message {
   padding: 12px 16px;
   border-radius: 8px;
@@ -56,7 +62,6 @@ body {
   border: 1px solid var(--color-error-border);
 }
 
-/* Botões */
 .btn-primary, .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -72,13 +77,13 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-primary-dark) 0%, #a01830 100%);
+  background: var(--gradient-primary-red-light);
   color: var(--color-white);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.4);
+  box-shadow: var(--primary-overlay-shadow-heavy);
 }
 
 .btn-secondary {
@@ -91,14 +96,13 @@ body {
   transform: translateY(-2px);
 }
 
-/* Loading */
 .loading {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 40px;
-  color: var(--text-secondary);
+  color: var(--text-gray-light);
 }
 
 .loading i {
@@ -113,7 +117,30 @@ body {
   min-height: calc(100vh - 90px);
 }
 
-/* Responsividade */
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+[data-theme='dark'] .message.success {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+  border: 1px solid var(--color-success-border);
+}
+
+[data-theme='dark'] .message.error {
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+  border: 1px solid var(--color-error-border);
+}
+
+[data-theme='dark'] .loading {
+  color: var(--text-gray-light);
+}
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
+
 @media (max-width: 768px) {
   .main-content {
     padding: 0;

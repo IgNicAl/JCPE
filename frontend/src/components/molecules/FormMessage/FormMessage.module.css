@@ -1,3 +1,7 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .message {
   padding: var(--spacing-md);
   border-radius: var(--border-radius-sm);
@@ -21,14 +25,17 @@
 }
 
 .messageInfo {
-  background-color: rgba(0, 123, 255, 0.1);
-  color: #004085;
-  border: 1px solid rgba(0, 123, 255, 0.2);
+  background-color: var(--info-overlay-light);
+  color: var(--info-text);
+  border: 1px solid var(--info-overlay-border);
 }
 
 .messageWarning {
-  background-color: rgba(255, 193, 7, 0.1);
-  color: #856404;
-  border: 1px solid rgba(255, 193, 7, 0.2);
+  background-color: var(--warning-overlay-light);
+  color: var(--warning-text);
+  border: 1px solid var(--warning-overlay-border);
 }
 
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */

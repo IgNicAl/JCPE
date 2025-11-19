@@ -1,15 +1,56 @@
-.next-point-widget{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:20px;background:var(--bg-secondary);border:1px solid var(--border-color);color:var(--text-primary);font-weight:700;font-size:13px;margin-right:10px;cursor:pointer;transition:all var(--transition-fast)}
-.next-point-widget:hover{background:var(--bg-hover);border-color:var(--color-primary);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
-.next-point-widget .clock-icon{opacity:0.95}
-.next-point-widget .next-text{color:var(--text-primary)}
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
+.next-point-widget {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: var(--overlay-white-light);
+  color: var(--color-white);
+  font-weight: 700;
+  font-size: 13px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.next-point-widget:hover {
+  background: var(--overlay-white-medium);
+}
+
+.next-point-widget .clock-icon {
+  opacity: 0.95;
+}
+
+.next-point-widget .next-text {
+  color: var(--color-white);
+}
 
 @keyframes jcpe-pulse-small {
   0% { transform: scale(1); }
   50% { transform: scale(1.08); }
   100% { transform: scale(1); }
 }
-.next-point-widget.pulse{ animation: jcpe-pulse-small 0.9s ease-in-out 1; box-shadow: 0 0 0 4px rgba(248, 21, 57, 0.15); border-color: var(--color-primary); }
 
-@media (max-width: 768px){
-  .next-point-widget{padding:6px 8px;font-size:12px;margin-right:6px}
+.next-point-widget.pulse {
+  animation: jcpe-pulse-small 0.9s ease-in-out 1;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
+
+@media (max-width: 768px) {
+  .next-point-widget {
+    padding: 6px 8px;
+    font-size: 12px;
+    margin-right: 6px;
+  }
 }

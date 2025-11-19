@@ -1,3 +1,7 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .instagramGrid {
   display: flex;
   flex-direction: column;
@@ -14,12 +18,12 @@
 .titleIndicator {
   width: 4px;
   height: 10px;
-  background: #f81539;
+  background: var(--color-primary);
   border-radius: 12px;
 }
 
 .sectionTitle {
-  color: #ffffff;
+  color: var(--color-white);
   font-size: 20px;
   font-family: 'Roboto', Arial, sans-serif;
   font-weight: 500;
@@ -50,7 +54,7 @@
 }
 
 .gridItem:focus {
-  outline: 2px solid #f81539;
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
@@ -67,7 +71,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--overlay-dark);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,7 +85,7 @@
 }
 
 .overlay i {
-  color: #ffffff;
+  color: var(--color-white);
   font-size: 24px;
 }
 
@@ -91,8 +95,8 @@
   justify-content: center;
   gap: 8px;
   padding: 12px 24px;
-  background: linear-gradient(223deg, #f45c9f 0%, #ff7563 100%);
-  color: #ffffff;
+  background: var(--gradient-primary);
+  color: var(--color-white);
   border-radius: 12px;
   text-decoration: none;
   font-size: 14px;
@@ -115,6 +119,14 @@
 .followButton i {
   font-size: 12px;
 }
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
 
 @media (max-width: 768px) {
   .instagramGrid {
@@ -140,4 +152,3 @@
     gap: 4px;
   }
 }
-

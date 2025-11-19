@@ -1,3 +1,7 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -29,7 +33,7 @@
   gap: 14px;
   margin-bottom: 24px;
   padding-bottom: 14px;
-  border-bottom: 2px solid rgba(196, 30, 58, 0.15);
+  border-bottom: 2px solid var(--primary-overlay-border);
 }
 
 .widgetHeader i {
@@ -40,7 +44,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(196, 30, 58, 0.1);
+  background: var(--primary-overlay-heavy);
   border-radius: 8px;
 }
 
@@ -63,10 +67,10 @@
 .temperatureDisplay {
   text-align: center;
   padding: 28px 20px;
-  background: linear-gradient(135deg, var(--primary-red) 0%, #8b1428 100%);
+  background: var(--gradient-primary-red);
   border-radius: 12px;
-  color: #fff;
-  box-shadow: 0 8px 24px rgba(196, 30, 58, 0.2);
+  color: var(--color-white);
+  box-shadow: var(--shadow-primary-red);
 }
 
 .temperatureDisplay .temp {
@@ -98,10 +102,10 @@
   gap: 6px;
   font-size: 13px;
   padding: 14px;
-  background: rgba(196, 30, 58, 0.08);
+  background: var(--primary-overlay-medium);
   border-radius: 8px;
   font-weight: 700;
-  border: 1px solid rgba(196, 30, 58, 0.1);
+  border: 1px solid var(--primary-overlay-border);
 }
 
 .weatherMeta .metaItem i {
@@ -118,16 +122,16 @@
 
 .gameItem {
   padding: 16px;
-  background: rgba(196, 30, 58, 0.08);
+  background: var(--primary-overlay-medium);
   border-radius: 10px;
-  border-left: 4px solid var(--secondary-yellow);
+  border-left: 4px solid var(--color-secondary);
   transition: all 0.3s ease;
-  border: 1px solid rgba(196, 30, 58, 0.1);
-  border-left: 4px solid var(--secondary-yellow);
+  border: 1px solid var(--primary-overlay-border);
+  border-left: 4px solid var(--color-secondary);
 }
 
 .gameItem:hover {
-  background: rgba(196, 30, 58, 0.12);
+  background: var(--primary-overlay-heavy);
   transform: translateX(4px);
 }
 
@@ -163,7 +167,7 @@
   display: inline-block;
   font-size: 11px;
   background: var(--primary-red);
-  color: #fff;
+  color: var(--color-white);
   padding: 5px 10px;
   border-radius: 4px;
   font-weight: 800;
@@ -181,15 +185,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  background: rgba(196, 30, 58, 0.08);
+  background: var(--primary-overlay-medium);
   border-radius: 10px;
   font-size: 13px;
   transition: all 0.3s ease;
-  border: 1px solid rgba(196, 30, 58, 0.1);
+  border: 1px solid var(--primary-overlay-border);
 }
 
 .stockItem:hover {
-  background: rgba(196, 30, 58, 0.12);
+  background: var(--primary-overlay-heavy);
   transform: translateX(4px);
 }
 
@@ -216,3 +220,11 @@
   background: var(--color-error-bg);
   color: var(--color-error);
 }
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */

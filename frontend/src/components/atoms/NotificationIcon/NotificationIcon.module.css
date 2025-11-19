@@ -1,3 +1,7 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .notificationIcon {
   position: relative;
   cursor: pointer;
@@ -5,9 +9,9 @@
 }
 
 .iconWrapper {
-  width: 48px;
-  height: 48px;
-  background: var(--color-surface, #f5f5f5);
+  width: 40px;
+  height: 40px;
+  background: var(--bg-secondary);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -17,22 +21,22 @@
 }
 
 .iconWrapper i {
-  font-size: 20px;
-  color: var(--color-text-primary, #3e3232);
+  font-size: 18px;
+  color: var(--text-primary);
   transition: var(--transition-normal);
 }
 
 .notificationIcon:hover .iconWrapper {
-  background: var(--color-surface-hover, #e8e8e8);
+  background: var(--bg-hover);
   transform: translateY(-2px);
 }
 
 .notificationIcon:hover .iconWrapper i {
-  color: var(--color-primary, #0066cc);
+  color: var(--color-primary);
 }
 
 .notificationIcon:focus {
-  outline: 2px solid var(--color-primary, #0066cc);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
   border-radius: 12px;
 }
@@ -41,53 +45,59 @@
   position: absolute;
   top: -4px;
   right: -4px;
-  background: linear-gradient(223deg, #f45c9f 0%, #ff7563 100%);
-  color: var(--color-white, #ffffff);
-  font-size: 10px;
+  background: var(--gradient-primary);
+  color: var(--color-white);
+  font-size: 9px;
   font-weight: 700;
-  min-width: 18px;
-  height: 18px;
-  border-radius: 9px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 4px;
-  border: 2px solid var(--color-background, #ffffff);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 0 3px;
+  border: 2px solid var(--bg-primary);
+  box-shadow: var(--shadow-primary);
 }
 
-/* Dark mode support */
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
 [data-theme='dark'] .iconWrapper {
-  background: var(--color-surface-dark, #2a2a2a);
+  background: var(--bg-secondary);
 }
 
 [data-theme='dark'] .iconWrapper i {
-  color: var(--color-text-primary-dark, #e0e0e0);
+  color: var(--text-primary);
 }
 
 [data-theme='dark'] .notificationIcon:hover .iconWrapper {
-  background: var(--color-surface-hover-dark, #3a3a3a);
+  background: var(--bg-hover);
 }
 
 [data-theme='dark'] .badge {
-  border-color: var(--color-background-dark, #1a1a1a);
+  border-color: var(--bg-primary);
 }
 
-/* Responsive */
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
+
 @media (max-width: 768px) {
   .iconWrapper {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
   }
 
   .iconWrapper i {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .badge {
-    font-size: 9px;
-    min-width: 16px;
-    height: 16px;
+    font-size: 8px;
+    min-width: 14px;
+    height: 14px;
+    padding: 0 2px;
   }
 }
-

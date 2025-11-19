@@ -1,12 +1,15 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .nextPointWidget {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
   padding: 6px 10px;
   border-radius: 20px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
+  background: var(--overlay-white-light);
+  color: var(--color-white);
   font-weight: 700;
   font-size: var(--font-size-sm);
   margin-right: 10px;
@@ -15,10 +18,7 @@
 }
 
 .nextPointWidget:hover {
-  background: var(--bg-hover);
-  border-color: var(--color-primary);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
+  background: var(--overlay-white-medium);
 }
 
 .clockIcon {
@@ -49,9 +49,16 @@
 
 .pulse {
   animation: jcpe-pulse-small 0.9s ease-in-out 1;
-  box-shadow: 0 0 0 4px rgba(248, 21, 57, 0.15);
-  border-color: var(--color-primary);
+  box-shadow: 0 6px 18px var(--overlay-white-light);
 }
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
 
 @media (max-width: 768px) {
   .nextPointWidget {
@@ -60,4 +67,3 @@
     margin-right: 6px;
   }
 }
-

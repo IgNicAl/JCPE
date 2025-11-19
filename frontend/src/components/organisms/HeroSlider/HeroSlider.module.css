@@ -1,3 +1,7 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .heroSlider {
   width: 100%;
   height: 452px;
@@ -27,14 +31,14 @@
   position: absolute;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.20);
+  background: var(--overlay-dark);
 }
 
 .slideContent {
   position: absolute;
   left: 10px;
   bottom: 10px;
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--bg-white-overlay);
   border-radius: var(--border-radius-md);
   backdrop-filter: blur(5px);
   padding: var(--spacing-md);
@@ -59,7 +63,7 @@
 
 .slideSummary {
   width: 100%;
-  color: rgba(0, 0, 0, 0.75);
+  color: var(--text-secondary);
   font-size: var(--font-size-md);
   font-family: var(--font-family);
   font-weight: var(--font-weight-regular);
@@ -120,7 +124,7 @@
 }
 
 .arrow.disabled .arrowBackground {
-  background: rgba(62, 50, 50, 0.05);
+  background: var(--primary-overlay-light);
 }
 
 .arrow.disabled i {
@@ -128,7 +132,7 @@
 }
 
 .arrow:not(.disabled):hover .arrowBackground {
-  background: rgba(62, 50, 50, 0.05);
+  background: var(--primary-overlay-light);
 }
 
 .dotsContainer {
@@ -146,7 +150,7 @@
   height: 10px;
   border-radius: 50%;
   border: none;
-  background: rgba(255, 255, 255, 0.50);
+  background: var(--overlay-white-text-medium);
   cursor: pointer;
   transition: var(--transition-normal);
   padding: 0;
@@ -160,8 +164,36 @@
 }
 
 .dot:hover {
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--overlay-white-text-heavy);
 }
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+[data-theme='dark'] .slideContent {
+  background: var(--bg-white-overlay);
+}
+
+[data-theme='dark'] .slideTitle {
+  color: var(--color-black);
+}
+
+[data-theme='dark'] .slideSummary {
+  color: var(--text-secondary);
+}
+
+[data-theme='dark'] .arrow.disabled .arrowBackground {
+  background: var(--primary-overlay-light);
+}
+
+[data-theme='dark'] .arrow:not(.disabled):hover .arrowBackground {
+  background: var(--primary-overlay-light);
+}
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
 
 @media (max-width: 1024px) {
   .heroSlider {
@@ -206,4 +238,3 @@
     height: 36px;
   }
 }
-

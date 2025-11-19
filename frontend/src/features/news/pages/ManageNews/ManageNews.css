@@ -1,9 +1,13 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .manage-news-container {
   width: 100%;
   max-width: 1200px;
   margin: 40px auto;
   padding: 20px;
-  background-color: var(--bg-primary);
+  background-color: var(--bg-gray-light);
 }
 
 .manage-news-header {
@@ -24,8 +28,8 @@
 }
 
 .btn-create {
-  background: var(--color-success);
-  color: white;
+  background: var(--color-green);
+  color: var(--color-white);
   padding: 12px 20px;
   border: none;
   border-radius: 8px;
@@ -38,21 +42,21 @@
 }
 
 .btn-create:hover {
-  background: #059669;
+  background: #008533;
 }
 
 .loading-state {
   text-align: center;
   padding: 50px;
   font-size: 18px;
-  color: var(--text-secondary);
+  color: var(--text-gray-medium);
 }
 
 .news-table-wrapper {
   overflow-x: auto;
   background: var(--bg-card);
   border-radius: 12px;
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-sm);
 }
 
 .news-table {
@@ -68,10 +72,10 @@
 }
 
 .news-table th {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-gray-light);
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-gray-dark);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -103,17 +107,19 @@
 }
 
 .btn-edit {
-  background-color: #3b82f6;
-  color: white;
+  background-color: var(--color-blue);
+  color: var(--color-white);
 }
+
 .btn-edit:hover {
-  background-color: #2563eb;
+  background-color: #002d5c;
 }
 
 .btn-delete {
   background-color: var(--color-error);
-  color: white;
+  color: var(--color-white);
 }
+
 .btn-delete:hover {
   background-color: #dc2626;
 }
@@ -121,7 +127,7 @@
 .no-news {
   text-align: center;
   padding: 40px;
-  color: var(--text-secondary);
+  color: var(--text-gray-medium);
 }
 
 .priority-tag {
@@ -129,31 +135,94 @@
   border-radius: 12px;
   font-size: 12px;
   font-weight: 600;
-  color: white;
+  color: var(--color-white);
 }
-.priority-2 { background-color: #ef4444; } /* Principal */
-.priority-1 { background-color: #f97316; } /* Secundário */
-.priority-0 { background-color: #6b7280; } /* Comum */
+
+.priority-2 {
+  background-color: var(--color-error);
+}
+
+.priority-1 {
+  background-color: #f97316;
+}
+
+.priority-0 {
+  background-color: var(--text-gray-medium);
+}
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+[data-theme='dark'] .manage-news-container {
+  background-color: var(--bg-gray-light);
+}
+
+[data-theme='dark'] .manage-news-header {
+  border-bottom-color: var(--border-color);
+}
+
+[data-theme='dark'] .manage-news-header h1 {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .loading-state {
+  color: var(--text-gray-medium);
+}
+
+[data-theme='dark'] .news-table-wrapper {
+  background: var(--bg-card);
+}
+
+[data-theme='dark'] .news-table th {
+  background-color: var(--bg-gray-light);
+  color: var(--text-gray-dark);
+}
+
+[data-theme='dark'] .news-table tbody tr:hover {
+  background-color: var(--bg-hover);
+}
+
+[data-theme='dark'] .news-table td {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .news-table th,
+[data-theme='dark'] .news-table td {
+  border-bottom-color: var(--border-color);
+}
+
+[data-theme='dark'] .no-news {
+  color: var(--text-gray-medium);
+}
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
 
 @media (max-width: 768px) {
   .news-table thead {
     display: none;
   }
+
   .news-table, .news-table tbody, .news-table tr, .news-table td {
     display: block;
     width: 100%;
   }
+
   .news-table tr {
     margin-bottom: 15px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
   }
+
   .news-table td {
     text-align: right;
     padding-left: 50%;
     position: relative;
     border-bottom: 1px solid var(--bg-hover);
   }
+
   .news-table td:before {
     content: attr(data-label);
     position: absolute;
@@ -163,6 +232,6 @@
     white-space: nowrap;
     text-align: left;
     font-weight: 600;
-    color: var(--text-secondary);
+    color: var(--text-gray-dark);
   }
 }

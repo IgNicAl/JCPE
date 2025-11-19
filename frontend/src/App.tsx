@@ -7,7 +7,6 @@ import ProtectedRoute from './features/auth/routes/ProtectedRoute';
 import Navbar from './components/organisms/Navbar';
 import Footer from './components/organisms/Footer';
 
-// Importações das Páginas
 import Home from './pages/Home/Home';
 import Login from './features/auth/pages/Login/Login';
 import UserRegistration from './features/auth/pages/UserRegistration/UserRegistration';
@@ -55,7 +54,6 @@ export function App() {
             <Navbar />
             <main className="main-content">
               <Routes>
-              {/* Rotas Públicas */}
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/cadastro" element={<UserRegistration />} />
@@ -68,9 +66,6 @@ export function App() {
               <Route path="/sobre" element={<Sobre />} />
               <Route path="/contato" element={<Contato />} />
 
-              {/* NOVA ROTA: /chat
-                Protegida por 'ProtectedRoute' (requer login básico).
-              */}
               <Route
                 path="/chat"
                 element={
@@ -80,7 +75,6 @@ export function App() {
                 }
               />
 
-              {/* Rotas Protegidas (Exigem login) */}
               <Route
                 path="/cadastro-interno"
                 element={
@@ -159,7 +153,6 @@ export function App() {
                 }
               />
 
-              {/* Rota Padrão (Fallback) */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>

@@ -1,3 +1,7 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .headerSection {
   width: 100%;
   display: flex;
@@ -116,6 +120,14 @@
   font-weight: var(--font-weight-black);
 }
 
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
+
 @media (max-width: 768px) {
   .headerSection {
     flex-wrap: wrap;
@@ -136,4 +148,3 @@
     height: 36px;
   }
 }
-

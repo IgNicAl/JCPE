@@ -1,3 +1,7 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .jogos-page {
   background: var(--bg-primary);
   min-height: 100vh;
@@ -66,46 +70,55 @@
   color: var(--color-primary);
 }
 
-.widget-loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px;
-  color: var(--color-primary);
-  font-size: 24px;
+.jogos-header i {
+  font-size: 48px;
+  color: var(--color-green);
 }
 
-/* ================================
-   WIDGET DE PLACARES (COMPACTO)
-   ================================ */
-.scores-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+.jogos-header h1 {
+  font-size: 42px;
+  font-weight: 900;
+  color: var(--text-gray-dark);
+  margin: 0;
 }
 
-.score-item {
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius-sm);
-  background: var(--bg-secondary);
-  border-left: 3px solid transparent;
-  transition: all var(--transition-fast);
+.jogos-header p {
+  font-size: 16px;
+  color: var(--text-gray-light);
+  margin: 0;
 }
 
 .score-item:hover {
   background: var(--bg-hover);
 }
 
-.score-item.live {
-  border-left-color: var(--color-primary);
+.game-card {
+  background: var(--gradient-green);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow-success);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
 }
 
-.score-item.finished {
-  border-left-color: var(--color-green);
+.game-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-success-heavy);
 }
 
-.score-item.scheduled {
-  border-left-color: var(--color-gray-200);
+.game-status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--overlay-white-light);
+  color: var(--color-white);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  backdrop-filter: blur(8px);
 }
 
 .score-header {
@@ -134,28 +147,10 @@
   margin-bottom: var(--spacing-xs);
 }
 
-.score-team {
-  flex: 1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-
-.score-team .team-name {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.score-team .team-score {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-black);
-  color: var(--color-primary);
-  min-width: 24px;
+.team-name {
+  color: var(--color-white);
+  font-size: 16px;
+  font-weight: 700;
   text-align: center;
 }
 
@@ -282,45 +277,39 @@
   border-radius: var(--border-radius-sm);
 }
 
-.standings-legend-compact .legend-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: var(--font-size-xs);
-  color: var(--text-secondary);
-  font-weight: var(--font-weight-medium);
+.score {
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--color-white);
+  min-width: 60px;
+  text-align: center;
 }
 
-.legend-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+.separator {
+  color: var(--overlay-white-text-light);
+  font-size: 24px;
+  font-weight: 300;
 }
 
-.legend-dot.libertadores {
-  background-color: var(--color-blue);
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+[data-theme='dark'] .jogos-page {
+  background: var(--bg-primary);
 }
 
-.legend-dot.sulamericana {
-  background-color: var(--color-secondary);
+[data-theme='dark'] .jogos-header h1 {
+  color: var(--text-gray-dark);
 }
 
-.legend-dot.rebaixamento {
-  background-color: var(--color-primary);
+[data-theme='dark'] .jogos-header p {
+  color: var(--text-gray-light);
 }
 
-/* ================================
-   SEÇÕES ANTIGAS (REMOVIDAS MAS MANTIDAS PARA COMPATIBILIDADE)
-   ================================ */
-
-/* ================================
-   RESPONSIVE
-   ================================ */
-@media (max-width: 1440px) {
-  .jogos-content {
-    padding: var(--spacing-lg) var(--spacing-xl);
-  }
-}
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
 
 @media (max-width: 1024px) {
   .jogos-content {

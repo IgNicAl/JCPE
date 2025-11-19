@@ -1,4 +1,6 @@
-/* SUSTENTABILIDADE PAGE */
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
 
 .sustentabilidade-page {
   background: var(--bg-primary);
@@ -85,6 +87,38 @@
   line-height: 1.6;
   margin: 0;
 }
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+[data-theme='dark'] .sustentabilidade-page {
+  background: var(--bg-primary);
+}
+
+[data-theme='dark'] .sustentabilidade-header h1 {
+  color: var(--text-gray-dark);
+}
+
+[data-theme='dark'] .sustentabilidade-header p {
+  color: var(--text-gray-light);
+}
+
+[data-theme='dark'] .content-card {
+  background: var(--bg-card);
+}
+
+[data-theme='dark'] .card-title {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .card-description {
+  color: var(--text-gray-light);
+}
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
 
 @media (max-width: 1024px) {
   .content-grid {

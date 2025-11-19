@@ -1,10 +1,14 @@
+/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
 .dropdown {
   position: absolute;
   top: 52px;
-  background: var(--color-white);
-  color: #111;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   border-radius: var(--border-radius-sm);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-lg);
   min-width: 180px;
   z-index: 50;
   padding: var(--spacing-sm) 0;
@@ -23,3 +27,15 @@
   transform: translateX(-50%);
 }
 
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+[data-theme='dark'] .dropdown {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */

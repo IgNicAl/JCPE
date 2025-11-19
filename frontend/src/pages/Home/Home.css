@@ -1,4 +1,8 @@
-﻿.home-page {
+﻿/* ================================== */
+/* LIGHT MODE STYLES                  */
+/* ================================== */
+
+.home-page {
   background: var(--bg-primary);
   min-height: 100vh;
   padding-bottom: var(--spacing-xl);
@@ -34,6 +38,14 @@
   margin-top: var(--spacing-xl);
   margin-bottom: var(--spacing-lg);
 }
+
+/* ================================== */
+/* DARK MODE STYLES                   */
+/* ================================== */
+
+/* ================================== */
+/* RESPONSIVE STYLES                  */
+/* ================================== */
 
 @media (max-width: 1440px) {
   .home-content {
