@@ -22,11 +22,11 @@
   opacity: 0.85;
 }
 
-.userButton:focus {
+/* .userButton:focus {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
   border-radius: 12px;
-}
+} */
 
 .userName {
   color: var(--text-primary);
@@ -58,7 +58,7 @@
   padding: 16px;
   background: var(--bg-secondary);
   border-radius: 12px 12px 0 0;
-  margin: -8px -8px 0 -8px;
+  margin: 0px 0px 0px 0px;
 }
 
 .userInfo {
@@ -148,10 +148,10 @@
   color: var(--color-primary);
 }
 
-.dropdownItem:focus {
+/* .dropdownItem:focus {
   outline: 2px solid var(--color-primary);
   outline-offset: -2px;
-}
+} */
 
 /* Management Items */
 .managementItem {

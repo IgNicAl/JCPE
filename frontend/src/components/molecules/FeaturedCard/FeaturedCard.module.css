@@ -158,22 +158,4 @@
   .featuredSummary {
     font-size: var(--font-size-md);
   }
-
-  .authorAvatar {
-    width: 40px;
-    height: 40px;
-  }
-
-  .authorName {
-    font-size: var(--font-size-sm);
-  }
-
-  .dateText {
-    font-size: 12px;
-  }
-
-  .actionButton {
-    padding: 8px 12px;
-    font-size: 16px;
-  }
 }
