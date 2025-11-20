@@ -127,13 +127,25 @@ public class UserController {
         .findById(id)
         .map(
             user -> {
-              // Mapeamento manual e seguro
-              user.setName(userDetails.getName());
-              user.setEmail(userDetails.getEmail());
-              user.setBiography(userDetails.getBiografia());
-              user.setProfileImageUrl(userDetails.getUrlImagemPerfil());
-              user.setUserType(userDetails.getUserType());
-              user.setActive(userDetails.getAtivo());
+              // Only update fields that are not null
+              if (userDetails.getName() != null) {
+                user.setName(userDetails.getName());
+              }
+              if (userDetails.getEmail() != null) {
+                user.setEmail(userDetails.getEmail());
+              }
+              if (userDetails.getBiografia() != null) {
+                user.setBiography(userDetails.getBiografia());
+              }
+              if (userDetails.getUrlImagemPerfil() != null) {
+                user.setProfileImageUrl(userDetails.getUrlImagemPerfil());
+              }
+              if (userDetails.getUserType() != null) {
+                user.setUserType(userDetails.getUserType());
+              }
+              if (userDetails.getAtivo() != null) {
+                user.setActive(userDetails.getAtivo());
+              }
 
               User updatedUser = userService.update(user);
               return ResponseEntity.ok(new UserResponse(updatedUser));
