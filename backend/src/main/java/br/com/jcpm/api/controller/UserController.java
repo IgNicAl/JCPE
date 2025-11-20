@@ -86,10 +86,19 @@ public class UserController {
     User currentUser = userService.findByUsername(authentication.getName())
         .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
-    currentUser.setName(userDetails.getName());
-    currentUser.setEmail(userDetails.getEmail());
-    currentUser.setBiography(userDetails.getBiografia());
-    currentUser.setProfileImageUrl(userDetails.getUrlImagemPerfil());
+    // Only update fields that are not null
+    if (userDetails.getName() != null) {
+      currentUser.setName(userDetails.getName());
+    }
+    if (userDetails.getEmail() != null) {
+      currentUser.setEmail(userDetails.getEmail());
+    }
+    if (userDetails.getBiografia() != null) {
+      currentUser.setBiography(userDetails.getBiografia());
+    }
+    if (userDetails.getUrlImagemPerfil() != null) {
+      currentUser.setProfileImageUrl(userDetails.getUrlImagemPerfil());
+    }
 
     User updatedUser = userService.update(currentUser);
     return ResponseEntity.ok(new UserResponse(updatedUser));

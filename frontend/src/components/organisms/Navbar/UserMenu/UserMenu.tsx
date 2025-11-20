@@ -120,7 +120,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onItemClick, showName = true }) => 
         <div className="h-px bg-border-color dark:bg-border-color my-2" />
 
         <Link
-          to={ROUTES.USER_AREA}
+          to={ROUTES.PROFILE}
           className="flex items-center gap-3 px-[14px] py-2.5 no-underline text-text-primary dark:text-text-primary text-sm font-roboto font-medium border-none bg-transparent w-full text-left cursor-pointer transition-all duration-normal rounded-md hover:bg-bg-secondary dark:hover:bg-bg-secondary hover:text-primary dark:hover:text-primary-light [&>i]:w-4 [&>i]:text-sm [&>i]:text-center [&>i]:text-text-tertiary dark:[&>i]:text-text-tertiary [&>i]:transition-all [&>i]:duration-normal hover:[&>i]:text-primary dark:hover:[&>i]:text-primary [&>span]:flex-1 focus:outline-2 focus:outline-primary focus:outline-offset-[-2px]"
           onClick={handleItemClick}
         >
@@ -129,7 +129,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onItemClick, showName = true }) => 
         </Link>
 
         <Link
-          to={ROUTES.USER_AREA}
+          to={ROUTES.PROFILE}
           className="flex items-center gap-3 px-[14px] py-2.5 no-underline text-text-primary dark:text-text-primary text-sm font-roboto font-medium border-none bg-transparent w-full text-left cursor-pointer transition-all duration-normal rounded-md hover:bg-bg-secondary dark:hover:bg-bg-secondary hover:text-primary dark:hover:text-primary-light [&>i]:w-4 [&>i]:text-sm [&>i]:text-center [&>i]:text-text-tertiary dark:[&>i]:text-text-tertiary [&>i]:transition-all [&>i]:duration-normal hover:[&>i]:text-primary dark:hover:[&>i]:text-primary [&>span]:flex-1 focus:outline-2 focus:outline-primary focus:outline-offset-[-2px]"
           onClick={handleItemClick}
         >

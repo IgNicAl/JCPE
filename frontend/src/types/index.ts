@@ -6,6 +6,10 @@ export interface User {
   email: string;
   userType: UserType;
   token?: string;
+  username?: string;
+  biografia?: string;
+  urlImagemPerfil?: string;
+  bannerUrl?: string;
   [key: string]: unknown;
 }
 

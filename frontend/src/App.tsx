@@ -25,6 +25,8 @@ import Points from './pages/Points/Points';
 import AgentChat from './pages/AgentChat/AgentChat';
 import Sobre from './pages/Sobre/Sobre';
 import Contato from './pages/Contato/Contato';
+import Profile from './pages/Profile/Profile';
+import EditProfile from './pages/Profile/EditProfile';
 
 /**
  * Componente que ouve o evento global 'unauthorized' (disparado pela api.js)
@@ -132,6 +134,24 @@ export function App() {
                 element={
                   <ProtectedRoute roles={['USER']}>
                     <Points />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/perfil"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/perfil/editar"
+                element={
+                  <ProtectedRoute>
+                    <EditProfile />
                   </ProtectedRoute>
                 }
               />

@@ -78,6 +78,7 @@ export const userService = {
   getAllUsers: () => api.get('/api/users'),
   getUserById: (id: string) => api.get(`/api/users/${id}`),
   updateUser: (id: string, user: Partial<User>) => api.put(`/api/users/${id}`, user),
+  updateMyProfile: (user: Partial<User>) => api.put('/api/users/me', user),
   deleteUser: (id: string) => api.delete(`/api/users/${id}`),
   sendScreenTime: (seconds: number) => api.post('/api/users/me/screentime', { seconds }),
   getMyPoints: () => api.get('/api/users/me/points'),
