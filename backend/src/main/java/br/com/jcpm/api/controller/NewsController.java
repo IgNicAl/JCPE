@@ -420,7 +420,7 @@ public class NewsController {
       return ResponseEntity.notFound().build();
     }
 
-    List<NewsComment> comments = newsCommentRepository.findAllByNewsIdOrderByCreatedAtDesc(newsId);
+    List<NewsComment> comments = newsCommentRepository.findAllByNewsIdAndParentIsNullOrderByCreatedAtDesc(newsId);
     List<NewsCommentResponse> response = comments.stream()
         .map(NewsCommentResponse::new)
         .collect(java.util.stream.Collectors.toList());
@@ -447,6 +447,15 @@ public class NewsController {
     comment.setNewsId(newsId);
     comment.setUserId(currentUser.getId());
     comment.setContent(request.getContent());
+
+    if (request.getParentId() != null && !request.getParentId().isEmpty()) {
+      try {
+        java.util.UUID parentUuid = java.util.UUID.fromString(request.getParentId());
+        newsCommentRepository.findById(parentUuid).ifPresent(comment::setParent);
+      } catch (IllegalArgumentException e) {
+        // Ignore invalid UUID
+      }
+    }
 
     NewsComment savedComment = newsCommentRepository.save(comment);
 
@@ -553,6 +562,23 @@ public class NewsController {
     );
 
     return ResponseEntity.ok(stats);
+  }
+
+  /**
+   * Contar notícias por autor
+   */
+  @GetMapping("/author/{authorId}/count")
+  public ResponseEntity<?> getAuthorPostCount(@PathVariable UUID authorId) {
+    long count = newsRepository.countByAuthorId(authorId);
+    return ResponseEntity.ok(Collections.singletonMap("count", count));
+  }
+
+  /**
+   * Obter Top 3 Notícias (Recentes)
+   */
+  @GetMapping("/top")
+  public ResponseEntity<List<News>> getTopNews() {
+    return ResponseEntity.ok(newsRepository.findTop3ByStatusOrderByPublicationDateDesc("PUBLICADO"));
   }
 }
 

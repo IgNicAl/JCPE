@@ -116,7 +116,7 @@ export const newsService = {
 
   // Métodos de comentários
   getNewsComments: (newsId: string) => api.get(`/api/noticias/${newsId}/comments`),
-  addComment: (newsId: string, content: string) => api.post(`/api/noticias/${newsId}/comments`, { content }),
+  addComment: (newsId: string, content: string, parentId?: string) => api.post(`/api/noticias/${newsId}/comments`, { content, parentId }),
   deleteComment: (commentId: string) => api.delete(`/api/noticias/comments/${commentId}`),
 
   // Métodos de compartilhamento
@@ -124,6 +124,8 @@ export const newsService = {
 
   // Estatísticas gerais
   getNewsStats: (newsId: string) => api.get(`/api/noticias/${newsId}/stats`),
+  getAuthorPostCount: (authorId: string) => api.get(`/api/noticias/author/${authorId}/count`),
+  getTopNews: () => api.get('/api/noticias/top'),
 };
 
 /**

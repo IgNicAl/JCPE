@@ -48,10 +48,14 @@ public class NewsComment {
 
   @ManyToOne
   @JoinColumn(name = "news_id", insertable = false, updatable = false)
+  @lombok.ToString.Exclude
+  @lombok.EqualsAndHashCode.Exclude
   private News news;
 
   @ManyToOne
   @JoinColumn(name = "user_id", insertable = false, updatable = false)
+  @lombok.ToString.Exclude
+  @lombok.EqualsAndHashCode.Exclude
   private User user;
 
   @NotBlank(message = "O conteúdo do comentário não pode estar vazio")
@@ -66,4 +70,15 @@ public class NewsComment {
   @UpdateTimestamp
   @Column(nullable = false)
   private LocalDateTime updatedAt;
+
+  @ManyToOne
+  @JoinColumn(name = "parent_id")
+  @lombok.ToString.Exclude
+  @lombok.EqualsAndHashCode.Exclude
+  private NewsComment parent;
+
+  @jakarta.persistence.OneToMany(mappedBy = "parent", cascade = jakarta.persistence.CascadeType.ALL, fetch = jakarta.persistence.FetchType.EAGER)
+  @lombok.ToString.Exclude
+  @lombok.EqualsAndHashCode.Exclude
+  private java.util.List<NewsComment> replies = new java.util.ArrayList<>();
 }

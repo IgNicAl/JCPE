@@ -1,25 +1,62 @@
-/* ================================== */
-/* LIGHT MODE STYLES                  */
-/* ================================== */
+/* =========================================== */
+/* GOOGLE FONTS IMPORT                         */
+/* =========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* =========================================== */
+/* VARIÁVEIS E CORES (Baseadas no Logo)       */
+/* =========================================== */
+
+:root {
+  /* Cores principais do logo */
+  --register-gradient: linear-gradient(135deg, hsl(142, 100%, 34%), hsl(217, 59%, 41%)); /* Verde -> Azul */
+  --register-gradient-light: linear-gradient(135deg, hsla(142, 100%, 34%, 0.1), hsla(217, 59%, 41%, 0.1));
+  --register-success: hsl(142, 100%, 34%); /* Verde #00af49 */
+  --register-error: hsl(358, 77%, 50%); /* Vermelho #df1e26 */
+}
+
+
+/* =========================================== */
+/* CONTAINER PRINCIPAL                         */
+/* =========================================== */
 
 .admin-registration-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 40px 20px;
+  background: var(--register-gradient); /* Verde -> Azul */
+  position: relative;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
+
+.admin-registration-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, hsla(142, 100%, 34%, 0.2), transparent 50%),
+    radial-gradient(circle at 80% 70%, hsla(217, 59%, 41%, 0.2), transparent 50%);
+  pointer-events: none;
+}
+
+/* =========================================== */
+/* CARD DO FORMULÁRIO                          */
+/* =========================================== */
 
 .admin-registration-card {
   background: var(--bg-card);
-  border-radius: 20px;
-  box-shadow: var(--shadow-lg);
-  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  padding: 48px;
   width: 100%;
-  max-width: 800px;
+  max-width: 700px;
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .admin-registration-card::before {
@@ -28,200 +65,88 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 5px;
-  background: linear-gradient(90deg, var(--color-primary-light), var(--color-secondary), var(--color-primary-light));
-  background-size: 200% 100%;
-  animation: gradient 3s ease infinite;
+  height: 4px;
+  background: var(--register-gradient);
+  animation: shimmer 3s ease-in-out infinite;
 }
 
-@keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
+
+/* =========================================== */
+/* HEADER                                      */
+/* =========================================== */
 
 .admin-registration-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+}
+
+.header-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  background: var(--register-gradient);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px hsla(280, 87%, 65%, 0.4);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.header-icon i {
+  font-size: 36px;
+  color: white;
 }
 
 .admin-registration-header h1 {
-  color: var(--text-primary);
-  font-size: 28px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-
-.admin-registration-header h1 i {
-  color: var(--color-primary-light);
   font-size: 32px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+  letter-spacing: -0.02em;
 }
 
 .admin-registration-header p {
-  color: var(--text-gray-medium);
   font-size: 16px;
+  color: var(--text-gray-medium);
   margin: 0;
+  font-weight: 500;
 }
 
-.admin-registration-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-group label {
-  color: var(--text-primary);
-  font-weight: 600;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.form-group label i {
-  color: var(--color-primary-light);
-  width: 16px;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-  padding: 12px 16px;
-  border: 2px solid var(--input-border);
-  border-radius: 10px;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  background: var(--input-bg);
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: var(--color-primary-light);
-  background: var(--input-bg);
-  box-shadow: 0 0 0 3px var(--primary-overlay-heavy);
-}
-
-.form-group textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
-.form-group small {
-  color: var(--text-gray-medium);
-  font-size: 12px;
-  margin-top: 4px;
-}
-
-.admin-password {
-  background: linear-gradient(135deg, var(--error-overlay-light) 0%, rgba(248, 215, 218, 0.5) 100%);
-  padding: 20px;
-  border-radius: 12px;
-  border: 2px solid var(--color-error-border);
-  position: relative;
-}
-
-.admin-password::before {
-  content: '🔒';
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  font-size: 20px;
-}
-
-.admin-password label {
-  color: var(--color-error);
-  font-weight: 700;
-}
-
-.admin-password input {
-  background: var(--input-bg);
-  border-color: var(--color-error-border);
-}
-
-.admin-password input:focus {
-  border-color: var(--color-error);
-  box-shadow: 0 0 0 3px var(--error-overlay-light);
-}
-
-.submit-btn {
-  background: var(--gradient-primary-red-light);
-  color: var(--color-white);
-  border: none;
-  padding: 16px 32px;
-  border-radius: 12px;
-  font-size: 18px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
-  position: relative;
-  overflow: hidden;
-}
-
-.submit-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.submit-btn:hover::before {
-  left: 100%;
-}
-
-.submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--primary-overlay-shadow-heavy);
-}
-
-.submit-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.submit-btn:disabled:hover {
-  transform: none;
-  box-shadow: none;
-}
+/* =========================================== */
+/* MENSAGENS                                   */
+/* =========================================== */
 
 .message {
   padding: 16px 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
   display: flex;
   align-items: center;
   gap: 12px;
-  font-weight: 500;
-  animation: slideIn 0.3s ease;
+  font-weight: 600;
+  font-size: 14px;
+  animation: slideDown 0.3s ease;
 }
 
-@keyframes slideIn {
+@keyframes slideDown {
   from {
     opacity: 0;
     transform: translateY(-10px);
@@ -232,133 +157,434 @@
   }
 }
 
+.message i {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.message span {
+  flex: 1;
+}
+
 .message.success {
-  background: linear-gradient(135deg, var(--color-success-bg) 0%, var(--color-success-border) 100%);
-  color: var(--color-success);
-  border: 1px solid var(--color-success-border);
+  background: linear-gradient(135deg, hsla(142, 71%, 45%, 0.15), hsla(142, 71%, 45%, 0.05));
+  color: var(--register-success);
+  border: 2px solid hsla(142, 71%, 45%, 0.3);
 }
 
 .message.error {
-  background: linear-gradient(135deg, var(--color-error-bg) 0%, var(--color-error-border) 100%);
-  color: var(--color-error);
-  border: 1px solid var(--color-error-border);
+  background: linear-gradient(135deg, hsla(0, 84%, 60%, 0.15), hsla(0, 84%, 60%, 0.05));
+  color: var(--register-error);
+  border: 2px solid hsla(0, 84%, 60%, 0.3);
 }
 
-.message i {
-  font-size: 18px;
+/* =========================================== */
+/* FORMULÁRIO                                  */
+/* =========================================== */
+
+.admin-registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.admin-registration-footer {
-  margin-top: 30px;
-  padding: 20px;
-  background: linear-gradient(135deg, rgba(227, 242, 253, 0.8) 0%, rgba(187, 222, 251, 0.8) 100%);
-  border-radius: 12px;
-  border-left: 4px solid var(--color-blue);
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 
-.admin-registration-footer p {
-  color: var(--color-blue);
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group label {
+  color: var(--text-primary);
+  font-weight: 600;
   font-size: 14px;
-  margin: 0;
   display: flex;
   align-items: center;
   gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
-.admin-registration-footer i {
-  color: var(--color-blue);
+.form-group label i {
+  background: var(--register-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 16px;
+  width: 18px;
 }
 
-/* ================================== */
-/* DARK MODE STYLES                   */
-/* ================================== */
+.form-group input,
+.form-group select {
+  padding: 14px 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.form-group input::placeholder {
+  color: var(--text-gray-medium);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: hsl(280, 87%, 65%);
+  box-shadow: 0 0 0 4px hsla(280, 87%, 65%, 0.1);
+}
+
+.form-group input.filled {
+  border-color: var(--text-gray-medium);
+}
+
+.form-group input.valid {
+  border-color: var(--register-success);
+  background: linear-gradient(to right, var(--bg-card) 0%, hsla(142, 71%, 45%, 0.03) 100%);
+}
+
+.form-group input.invalid {
+  border-color: var(--register-error);
+  background: linear-gradient(to right, var(--bg-card) 0%, hsla(0, 84%, 60%, 0.03) 100%);
+}
+
+.form-group select.filled {
+  border-color: var(--text-gray-medium);
+}
+
+.error-hint {
+  font-size: 12px;
+  color: var(--register-error);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: -4px;
+}
+
+.success-hint {
+  font-size: 12px;
+  color: var(--register-success);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: -4px;
+}
+
+.success-hint i {
+  font-size: 14px;
+}
+
+/* =========================================== */
+/* SEÇÃO DE SENHA                              */
+/* =========================================== */
+
+.password-section {
+  background: linear-gradient(135deg, hsla(280, 87%, 65%, 0.05), hsla(240, 65%, 67%, 0.05));
+  border: 2px dashed hsla(280, 87%, 65%, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 8px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid hsla(280, 87%, 65%, 0.1);
+}
+
+.section-header i {
+  font-size: 20px;
+  background: var(--register-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-header span {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* =========================================== */
+/* BOTÃO DE SUBMIT                             */
+/* =========================================== */
+
+.submit-btn {
+  background: var(--register-gradient);
+  color: white;
+  border: none;
+  padding: 18px 32px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px hsla(280, 87%, 65%, 0.4);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, hsla(240, 65%, 77%, 0.3), hsla(280, 87%, 75%, 0.3));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px hsla(280, 87%, 65%, 0.5);
+}
+
+.submit-btn:hover::before {
+  opacity: 1;
+}
+
+.submit-btn:active {
+  transform: translateY(0px);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.submit-btn:disabled:hover {
+  transform: none;
+  box-shadow: 0 4px 16px hsla(280, 87%, 65%, 0.4);
+}
+
+.submit-btn:disabled::before {
+  opacity: 0;
+}
+
+.submit-btn i {
+  font-size: 18px;
+}
+
+/* =========================================== */
+/* FOOTER                                      */
+/* =========================================== */
+
+.admin-registration-footer {
+  margin-top: 32px;
+  padding: 20px;
+  background: linear-gradient(135deg, hsla(280, 87%, 65%, 0.08), hsla(240, 65%, 67%, 0.08));
+  border-radius: 12px;
+  border-left: 4px solid hsl(280, 87%, 65%);
+  text-align: center;
+}
+
+.admin-registration-footer p {
+  color: var(--text-gray-medium);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-registration-footer a {
+  color: hsl(280, 87%, 65%);
+  text-decoration: none;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.admin-registration-footer a:hover {
+  background: hsla(280, 87%, 65%, 0.1);
+  transform: translateX(4px);
+}
+
+.admin-registration-footer a i {
+  font-size: 14px;
+}
+
+/* =========================================== */
+/* DARK MODE                                   */
+/* =========================================== */
 
 [data-theme='dark'] .admin-registration-card {
   background: var(--bg-card);
-}
-
-[data-theme='dark'] .admin-registration-header h1 {
-  color: var(--text-primary);
-}
-
-[data-theme='dark'] .admin-registration-header p {
-  color: var(--text-gray-medium);
-}
-
-[data-theme='dark'] .form-group label {
-  color: var(--text-primary);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
 [data-theme='dark'] .form-group input,
-[data-theme='dark'] .form-group select,
-[data-theme='dark'] .form-group textarea {
-  border-color: var(--input-border);
-  background: var(--input-bg);
+[data-theme='dark'] .form-group select {
+  background: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--text-primary);
 }
 
 [data-theme='dark'] .form-group input:focus,
-[data-theme='dark'] .form-group select:focus,
-[data-theme='dark'] .form-group textarea:focus {
-  border-color: var(--color-primary-light);
-  background: var(--input-bg);
+[data-theme='dark'] .form-group select:focus {
+  background: var(--bg-card);
 }
 
-[data-theme='dark'] .form-group small {
-  color: var(--text-gray-medium);
+[data-theme='dark'] .form-group input.valid {
+  background: linear-gradient(to right, var(--bg-card) 0%, hsla(142, 71%, 45%, 0.05) 100%);
 }
 
-[data-theme='dark'] .admin-password {
-  background: linear-gradient(135deg, var(--error-overlay-light) 0%, rgba(248, 215, 218, 0.3) 100%);
-  border-color: var(--color-error-border);
+[data-theme='dark'] .form-group input.invalid {
+  background: linear-gradient(to right, var(--bg-card) 0%, hsla(0, 84%, 60%, 0.05) 100%);
 }
 
-[data-theme='dark'] .admin-password label {
-  color: var(--color-error);
-}
-
-[data-theme='dark'] .admin-password input {
-  background: var(--input-bg);
-  border-color: var(--color-error-border);
-}
-
-[data-theme='dark'] .admin-password input:focus {
-  border-color: var(--color-error);
-}
-
-[data-theme='dark'] .admin-registration-footer {
-  background: linear-gradient(135deg, rgba(42, 42, 42, 0.8) 0%, rgba(60, 60, 60, 0.8) 100%);
-}
-
-[data-theme='dark'] .admin-registration-footer p {
-  color: var(--color-blue);
-}
-
-/* ================================== */
-/* RESPONSIVE STYLES                  */
-/* ================================== */
+/* =========================================== */
+/* RESPONSIVIDADE                              */
+/* =========================================== */
 
 @media (max-width: 768px) {
   .admin-registration-container {
-    padding: 10px;
+    padding: 20px 16px;
   }
 
   .admin-registration-card {
-    padding: 30px 20px;
+    padding: 32px 24px;
+  }
+
+  .header-icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .header-icon i {
+    font-size: 28px;
   }
 
   .admin-registration-header h1 {
-    font-size: 24px;
-    flex-direction: column;
-    gap: 8px;
+    font-size: 26px;
   }
 
-  .form-row {
+  .admin-registration-header p {
+    font-size: 14px;
+  }
+
+  .form-grid {
     grid-template-columns: 1fr;
-    gap: 15px;
+    gap: 16px;
+  }
+
+  .submit-btn {
+    padding: 16px 28px;
+    font-size: 15px;
+  }
+
+  .password-section {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-registration-card {
+    padding: 28px 20px;
+  }
+
+  .admin-registration-header {
+    margin-bottom: 28px;
+  }
+
+  .header-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .header-icon i {
+    font-size: 24px;
+  }
+
+  .admin-registration-header h1 {
+    font-size: 22px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 12px 14px;
+    font-size: 14px;
   }
 
   .submit-btn {
     padding: 14px 24px;
-    font-size: 16px;
+    font-size: 14px;
+  }
+
+  .message {
+    padding: 14px 16px;
+    font-size: 13px;
+  }
+
+  .admin-registration-footer {
+    padding: 16px;
+  }
+
+  .admin-registration-footer p {
+    font-size: 13px;
+    flex-direction: column;
+    gap: 12px;
   }
 }
+
+/* =========================================== */
+/* ANIMAÇÕES                                   */
+/* =========================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.admin-registration-card {
+  animation: fadeIn 0.5s ease;
+}
+
+.form-group {
+  animation: fadeIn 0.6s ease backwards;
+}
+
+.form-group:nth-child(1) { animation-delay: 0.05s; }
+.form-group:nth-child(2) { animation-delay: 0.1s; }
+.form-group:nth-child(3) { animation-delay: 0.15s; }
+.form-group:nth-child(4) { animation-delay: 0.2s; }

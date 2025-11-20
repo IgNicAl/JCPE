@@ -32,6 +32,8 @@ public class NewsCommentResponse {
     private String urlImagemPerfil;
   }
 
+  private java.util.List<NewsCommentResponse> replies;
+
   public NewsCommentResponse(NewsComment comment) {
     this.id = comment.getId();
     this.newsId = comment.getNewsId();
@@ -46,6 +48,12 @@ public class NewsCommentResponse {
         comment.getUser().getUsername(),
         comment.getUser().getProfileImageUrl()
       );
+    }
+
+    if (comment.getReplies() != null) {
+      this.replies = comment.getReplies().stream()
+          .map(NewsCommentResponse::new)
+          .collect(java.util.stream.Collectors.toList());
     }
   }
 }

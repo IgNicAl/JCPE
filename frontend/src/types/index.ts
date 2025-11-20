@@ -32,6 +32,7 @@ export interface News {
   excerpt?: string;
   featuredImageUrl?: string;
   author?: {
+    id?: string;
     name: string;
     username?: string;
     profileImageUrl?: string;
@@ -84,6 +85,8 @@ export interface NewsComment {
   content: string;
   createdAt: string;
   updatedAt?: string;
+  replies?: NewsComment[];
+  parentId?: string;
 }
 
 export interface NewsShare {

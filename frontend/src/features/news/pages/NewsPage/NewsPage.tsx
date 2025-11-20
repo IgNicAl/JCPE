@@ -23,12 +23,11 @@ const NewsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [submittingComment, setSubmittingComment] = useState(false);
-
-  useEffect(() => {
-    if (slug) {
-      loadNewsData();
-    }
-  }, [slug]);
+  const [authorPostCount, setAuthorPostCount] = useState<number>(0);
+  const [topNews, setTopNews] = useState<News[]>([]);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [replyContent, setReplyContent] = useState('');
 
   const loadNewsData = async () => {
     if (!slug) return;
@@ -51,6 +50,10 @@ const NewsPage: React.FC = () => {
         }
 
         loadStats(newsData.id);
+
+        if (typeof newsData.author === 'object' && newsData.author.id) {
+             loadAuthorStats(newsData.author.id);
+        }
       }
     } catch (err) {
       setError('Notícia não encontrada.');
@@ -68,6 +71,31 @@ const NewsPage: React.FC = () => {
       console.error('Erro ao carregar estatísticas:', error);
     }
   };
+
+  const loadAuthorStats = async (authorId: string) => {
+    try {
+      const response = await newsService.getAuthorPostCount(authorId);
+      setAuthorPostCount(response.data.count);
+    } catch (error) {
+      console.error('Erro ao carregar posts do autor:', error);
+    }
+  };
+
+  const loadTopNews = async () => {
+    try {
+      const response = await newsService.getTopNews();
+      setTopNews(response.data);
+    } catch (error) {
+      console.error('Erro ao carregar top news:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (slug) {
+      loadNewsData();
+    }
+    loadTopNews();
+  }, [slug]);
 
   const handleLike = async () => {
     if (!news?.id || !isAuthenticated()) return;
@@ -128,7 +156,7 @@ const NewsPage: React.FC = () => {
   };
 
   const handleDeleteComment = async (commentId: string) => {
-    if (!confirm('Deseja deletar este comentário?')) return;
+    if (!window.confirm('Tem certeza que deseja deletar este comentário?')) return;
     try {
       await newsService.deleteComment(commentId);
       setComments(comments.filter(c => c.id !== commentId));
@@ -137,8 +165,41 @@ const NewsPage: React.FC = () => {
       }
     } catch (error) {
       console.error('Erro ao deletar comentário:', error);
-      alert('Erro ao deletar comentário');
+      alert('Erro ao deletar comentário. Verifique se você tem permissão.');
     }
+  };
+
+  const handleReplyClick = (commentId: string) => {
+     if (replyingTo === commentId) {
+       setReplyingTo(null);
+     } else {
+       setReplyingTo(commentId);
+       setReplyContent('');
+     }
+  };
+
+  const handleSubmitReply = async (parentId: string) => {
+    if (!news?.id || !replyContent.trim() || !isAuthenticated()) return;
+
+    try {
+      await newsService.addComment(news.id, replyContent, parentId);
+
+      // Reload comments to show the new reply
+      const commentsResponse = await newsService.getNewsComments(news.id);
+      setComments(commentsResponse.data || []);
+
+      loadStats(news.id);
+      setReplyingTo(null);
+      setReplyContent('');
+    } catch (error) {
+      console.error('Erro ao responder:', error);
+      alert('Erro ao enviar resposta');
+    }
+  };
+
+  const handleFollow = () => {
+    setIsFollowing(!isFollowing);
+    // Here you would call an API to follow the user
   };
 
   const handleRatingChange = () => {
@@ -148,12 +209,12 @@ const NewsPage: React.FC = () => {
   };
 
   // Mock data for sidebar (since we don't have endpoints for these yet)
-  const tags = ['Montenegro', 'Visit Croatia', 'Luxury Travel', 'Travel Log', 'Paradise Island', 'Travel Info'];
-  const topPosts = [
-    { id: '1', title: 'How To Spend The Perfect Day On Croatia\'s Most Magical Island', image: '/placeholder-news-1.jpg', category: 'Travel' },
-    { id: '2', title: 'Getting to Know the Local Culture', image: '/placeholder-news-2.jpg', category: 'Culture' },
-    { id: '3', title: 'Best Places to Visit in Summer', image: '/placeholder-news-3.jpg', category: 'Travel' },
-  ];
+  // const tags = ['Montenegro', 'Visit Croatia', 'Luxury Travel', 'Travel Log', 'Paradise Island', 'Travel Info'];
+  // const topPosts = [
+  //   { id: '1', title: 'How To Spend The Perfect Day On Croatia\'s Most Magical Island', image: '/placeholder-news-1.jpg', category: 'Travel' },
+  //   { id: '2', title: 'Getting to Know the Local Culture', image: '/placeholder-news-2.jpg', category: 'Culture' },
+  //   { id: '3', title: 'Best Places to Visit in Summer', image: '/placeholder-news-3.jpg', category: 'Travel' },
+  // ];
 
   if (loading) return <div className="news-page-loading">Carregando...</div>;
   if (error || !news) return <div className="news-page-error">{error || 'Notícia não encontrada'}</div>;
@@ -173,7 +234,8 @@ const NewsPage: React.FC = () => {
           <div className="news-main-column">
 
             {/* Title */}
-            <h1 className="news-title">{news.title}</h1>
+            {/* Title */}
+            <h1 className="news-title" style={{ wordBreak: 'break-word' }}>{news.title}</h1>
 
             {/* Featured Image */}
             {news.featuredImageUrl && (
@@ -217,7 +279,11 @@ const NewsPage: React.FC = () => {
             {/* Share & Tags Bottom */}
             <div className="news-bottom-actions">
                <div className="news-tags-list">
-                 {tags.slice(0, 3).map(tag => <span key={tag} className="tag-pill">#{tag}</span>)}
+                 {news.tags && news.tags.length > 0 ? (
+                    news.tags.map(tag => <span key={tag.id} className="tag-pill">#{tag.name}</span>)
+                 ) : (
+                    <span className="tag-pill">#News</span>
+                 )}
                </div>
                <div className="news-share-buttons">
                  <button onClick={() => handleShare('facebook')} className="share-icon fb">f</button>
@@ -232,31 +298,84 @@ const NewsPage: React.FC = () => {
 
               <div className="comments-list">
                 {comments.map((comment) => (
-                  <div key={comment.id} className="comment-item">
-                    <img
-                      src={comment.user?.urlImagemPerfil || 'https://via.placeholder.com/40'}
-                      alt={comment.user?.name}
-                      className="comment-avatar"
-                    />
-                    <div className="comment-body">
-                      <div className="comment-header">
-                        <span className="comment-author">{comment.user?.name || 'Usuário'}</span>
-                        <span className="comment-date">{new Date(comment.createdAt).toLocaleDateString('pt-BR')}</span>
-                        <div className="comment-actions">
-                          <button className="reply-btn">Reply</button>
-                          {user && (user.id === comment.user?.id || user.userType === 'ADMIN') && (
-                            <button
-                              className="delete-btn"
-                              onClick={() => handleDeleteComment(comment.id)}
-                              title="Deletar"
-                            >
-                              ✕
+                  <div key={comment.id} className="comment-item-container">
+                    <div className="comment-item">
+                      <img
+                        src={comment.user?.urlImagemPerfil || 'https://via.placeholder.com/40'}
+                        alt={comment.user?.name}
+                        className="comment-avatar"
+                      />
+                      <div className="comment-body">
+                        <div className="comment-header">
+                          <span className="comment-author">{comment.user?.name || 'Usuário'}</span>
+                          <span className="comment-date">{new Date(comment.createdAt).toLocaleDateString('pt-BR')}</span>
+                          <div className="comment-actions">
+                            <button className="reply-btn" onClick={() => handleReplyClick(comment.id)}>
+                              {replyingTo === comment.id ? 'Cancel' : 'Reply'}
                             </button>
-                          )}
+                            {user && (user.id === comment.user?.id || user.userType === 'ADMIN') && (
+                              <button
+                                className="delete-btn"
+                                onClick={() => handleDeleteComment(comment.id)}
+                                title="Deletar"
+                              >
+                                ✕
+                              </button>
+                            )}
+                          </div>
                         </div>
+                        <p className="comment-text">{comment.content}</p>
+
+                        {/* Inline Reply Form */}
+                        {replyingTo === comment.id && (
+                          <div className="inline-reply-form">
+                            <textarea
+                              value={replyContent}
+                              onChange={(e) => setReplyContent(e.target.value)}
+                              placeholder="Write a reply..."
+                              className="reply-textarea"
+                              rows={3}
+                            />
+                            <div className="reply-form-actions">
+                              <button className="submit-reply-btn" onClick={() => handleSubmitReply(comment.id)}>Reply</button>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <p className="comment-text">{comment.content}</p>
                     </div>
+
+                    {/* Nested Replies */}
+                    {comment.replies && comment.replies.length > 0 && (
+                      <div className="replies-list">
+                        {comment.replies.map((reply) => (
+                          <div key={reply.id} className="comment-item reply-item">
+                            <img
+                              src={reply.user?.urlImagemPerfil || 'https://via.placeholder.com/40'}
+                              alt={reply.user?.name}
+                              className="comment-avatar small"
+                            />
+                            <div className="comment-body">
+                              <div className="comment-header">
+                                <span className="comment-author">{reply.user?.name || 'Usuário'}</span>
+                                <span className="comment-date">{new Date(reply.createdAt).toLocaleDateString('pt-BR')}</span>
+                                {user && (user.id === reply.user?.id || user.userType === 'ADMIN') && (
+                                  <div className="comment-actions">
+                                    <button
+                                      className="delete-btn"
+                                      onClick={() => handleDeleteComment(reply.id)}
+                                      title="Deletar"
+                                    >
+                                      ✕
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                              <p className="comment-text">{reply.content}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -270,12 +389,13 @@ const NewsPage: React.FC = () => {
                       <input type="text" placeholder="Name" value={user?.name || ''} disabled className="form-input" />
                       <input type="email" placeholder="Email" value={user?.email || ''} disabled className="form-input" />
                     </div>
-                    <textarea
-                      value={newComment}
-                      onChange={(e) => setNewComment(e.target.value)}
-                      placeholder="Your Comment"
-                      className="form-textarea"
-                      rows={5}
+                      <textarea
+                        id="comment-input"
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        placeholder="Your Comment"
+                        className="form-textarea"
+                        rows={5}
                     />
                     <div className="form-footer">
                       <div className="rating-input-wrapper">
@@ -334,19 +454,25 @@ const NewsPage: React.FC = () => {
                 />
                 <div className="sidebar-author-info">
                   <span className="sidebar-author-name">{typeof news.author === 'object' ? news.author.name : 'Author Name'}</span>
-                  <span className="sidebar-author-role">27 post</span>
+                  <span className="sidebar-author-role">{authorPostCount} post</span>
                 </div>
               </div>
-              <button className="follow-btn">+ Follow</button>
+              <button className="follow-btn" onClick={handleFollow}>
+                {isFollowing ? 'Following' : '+ Follow'}
+              </button>
             </div>
 
             {/* Tags Widget */}
             <div className="sidebar-widget tags-widget">
               <h4 className="widget-title">Tags</h4>
               <div className="tags-cloud">
-                {tags.map(tag => (
-                  <span key={tag} className="tag-item">{tag}</span>
-                ))}
+                {news.tags && news.tags.length > 0 ? (
+                  news.tags.map(tag => (
+                    <span key={tag.id} className="tag-item">{tag.name}</span>
+                  ))
+                ) : (
+                  <span className="tag-item">News</span>
+                )}
               </div>
             </div>
 
@@ -354,15 +480,21 @@ const NewsPage: React.FC = () => {
             <div className="sidebar-widget top-posts-widget">
               <h4 className="widget-title">Top Post</h4>
               <div className="top-posts-list">
-                {topPosts.map(post => (
+                {topNews.length > 0 ? topNews.map(post => (
                   <div key={post.id} className="top-post-item">
-                    <div className="top-post-image"></div>
+                    <div className="top-post-image" style={{
+                        backgroundImage: `url(${post.featuredImageUrl || '/placeholder-news.jpg'})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                    }}></div>
                     <div className="top-post-info">
-                      <span className="top-post-title">{post.title}</span>
+                      <a href={`/noticia/${post.slug}`} className="top-post-title">{post.title}</a>
                       <span className="top-post-read">read</span>
                     </div>
                   </div>
-                ))}
+                )) : (
+                    <div className="top-post-item">No top posts yet.</div>
+                )}
               </div>
             </div>
 

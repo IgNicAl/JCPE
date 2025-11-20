@@ -28,4 +28,8 @@ public interface NewsRepository extends JpaRepository<News, UUID> {
 
   // Busca notícias em destaque na página específica
   List<News> findAllByPageAndIsFeaturedPageAndStatusOrderByPriorityDescPublicationDateDesc(String page, Boolean isFeaturedPage, String status);
+
+  long countByAuthorId(UUID authorId);
+
+  List<News> findTop3ByStatusOrderByPublicationDateDesc(String status);
 }

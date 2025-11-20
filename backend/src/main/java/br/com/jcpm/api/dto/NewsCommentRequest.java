@@ -17,4 +17,6 @@ public class NewsCommentRequest {
   @NotBlank(message = "O conteúdo do comentário não pode estar vazio")
   @Size(max = 1000, message = "O comentário não pode ter mais de 1000 caracteres")
   private String content;
+
+  private String parentId;
 }

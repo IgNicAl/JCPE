@@ -16,6 +16,8 @@ public interface NewsCommentRepository extends JpaRepository<NewsComment, UUID> 
    */
   List<NewsComment> findAllByNewsIdOrderByCreatedAtDesc(UUID newsId);
 
+  List<NewsComment> findAllByNewsIdAndParentIsNullOrderByCreatedAtDesc(UUID newsId);
+
   /**
    * Conta o total de comentários de uma notícia
    */

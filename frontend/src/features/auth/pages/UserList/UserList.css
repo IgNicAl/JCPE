@@ -5,18 +5,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 /* =========================================== */
-/* VARIÁVEIS E CORES                           */
+/* VARIÁVEIS E CORES (Baseadas no Logo)       */
 /* =========================================== */
 
 :root {
-  --user-primary: hsl(280, 87%, 65%);
-  --user-secondary: hsl(210, 100%, 56%);
-  --user-admin: hsl(0, 84%, 60%);
-  --user-journalist: hsl(210, 100%, 50%);
-  --user-regular: hsl(142, 71%, 45%);
-  --user-gradient: linear-gradient(135deg, hsl(280, 87%, 65%), hsl(210, 100%, 56%));
-  --user-gradient-light: linear-gradient(135deg, hsla(280, 87%, 65%, 0.1), hsla(210, 100%, 56%, 0.1));
+  /* Cores principais do logo */
+  --user-primary: hsl(142, 100%, 34%); /* Verde #00af49 */
+  --user-secondary: hsl(217, 59%, 41%); /* Azul #2d54a5 */
+  --user-admin: hsl(358, 77%, 50%); /* Vermelho #df1e26 */
+  --user-journalist: hsl(217, 59%, 41%); /* Azul #2d54a5 */
+  --user-regular: hsl(142, 100%, 34%); /* Verde #00af49 */
+  --user-gradient: linear-gradient(135deg, hsl(142, 100%, 34%), hsl(217, 59%, 41%));
+  --user-gradient-light: linear-gradient(135deg, hsla(142, 100%, 34%, 0.1), hsla(217, 59%, 41%, 0.1));
 }
+
 
 /* =========================================== */
 /* CONTAINER PRINCIPAL                         */
