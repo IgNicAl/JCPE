@@ -23,20 +23,28 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jcpm.api.domain.entity.News;
+import br.com.jcpm.api.domain.entity.NewsLike;
 import br.com.jcpm.api.domain.entity.User;
+import br.com.jcpm.api.dto.NewsLikeResponse;
 import br.com.jcpm.api.dto.NewsRequest;
+import br.com.jcpm.api.repository.NewsLikeRepository;
 import br.com.jcpm.api.repository.NewsRepository;
 import jakarta.validation.Valid;
+
+
 
 @RestController
 @RequestMapping("/api/noticias")
 public class NewsController {
 
   private final NewsRepository newsRepository;
+  private final NewsLikeRepository newsLikeRepository;
 
-  public NewsController(NewsRepository newsRepository) {
+  public NewsController(NewsRepository newsRepository, NewsLikeRepository newsLikeRepository) {
     this.newsRepository = newsRepository;
+    this.newsLikeRepository = newsLikeRepository;
   }
+
 
   private String generateSlug(String title) {
     String normalized = Normalizer.normalize(title, Normalizer.Form.NFD);
@@ -57,25 +65,25 @@ public class NewsController {
       @RequestParam(required = false) String page,
       @RequestParam(required = false) Boolean featuredHome,
       @RequestParam(required = false) Boolean featuredPage) {
-    
+
     // Se solicitar notícias em destaque na HOME
     if (featuredHome != null && featuredHome) {
       return ResponseEntity.ok(
           newsRepository.findAllByIsFeaturedHomeAndStatusOrderByPriorityDescPublicationDateDesc(true, "PUBLICADO"));
     }
-    
+
     // Se solicitar notícias em destaque de uma página específica
     if (featuredPage != null && featuredPage && page != null && !page.isBlank()) {
       return ResponseEntity.ok(
           newsRepository.findAllByPageAndIsFeaturedPageAndStatusOrderByPriorityDescPublicationDateDesc(page, true, "PUBLICADO"));
     }
-    
+
     // Busca normal por página
     if (page != null && !page.isBlank()) {
       return ResponseEntity.ok(
           newsRepository.findAllByPageAndStatusOrderByPriorityDescPublicationDateDesc(page, "PUBLICADO"));
     }
-    
+
     // Todas as notícias publicadas
     return ResponseEntity.ok(newsRepository.findAllByStatusOrderByPublicationDateDesc("PUBLICADO"));
   }
@@ -201,4 +209,73 @@ public class NewsController {
             })
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
+
+  /**
+   * Busca todas as notícias curtidas pelo usuário logado
+   */
+  @GetMapping("/liked")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<List<NewsLikeResponse>> getLikedNews() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User currentUser = (User) authentication.getPrincipal();
+
+    List<NewsLike> likes = newsLikeRepository.findAllByUserIdOrderByLikedAtDesc(currentUser.getId());
+    List<NewsLikeResponse> response = likes.stream()
+        .map(NewsLikeResponse::new)
+        .collect(java.util.stream.Collectors.toList());
+
+    return ResponseEntity.ok(response);
+  }
+
+  /**
+   * Curtir uma notícia
+   */
+  @PostMapping("/{newsId}/like")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<?> likeNews(@PathVariable UUID newsId) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User currentUser = (User) authentication.getPrincipal();
+
+    // Verificar se a notícia existe
+    if (!newsRepository.existsById(newsId)) {
+      return ResponseEntity.notFound().build();
+    }
+
+    // Verificar se já curtiu
+    if (newsLikeRepository.existsByUserIdAndNewsId(currentUser.getId(), newsId)) {
+      return ResponseEntity.status(HttpStatus.CONFLICT)
+          .body(Collections.singletonMap("error", "Você já curtiu esta notícia."));
+    }
+
+    // Criar o like
+    NewsLike newsLike = new NewsLike();
+    newsLike.setUserId(currentUser.getId());
+    newsLike.setNewsId(newsId);
+    newsLikeRepository.save(newsLike);
+
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(Collections.singletonMap("message", "Notícia curtida com sucesso."));
+  }
+
+  /**
+   * Descurtir uma notícia
+   */
+  @DeleteMapping("/{newsId}/like")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<?> unlikeNews(@PathVariable UUID newsId) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User currentUser = (User) authentication.getPrincipal();
+
+    // Verificar se curtiu a notícia
+    if (!newsLikeRepository.existsByUserIdAndNewsId(currentUser.getId(), newsId)) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body(Collections.singletonMap("error", "Você não curtiu esta notícia."));
+    }
+
+    // Remover o like
+    newsLikeRepository.deleteByUserIdAndNewsId(currentUser.getId(), newsId);
+
+    return ResponseEntity.ok(Collections.singletonMap("message", "Like removido com sucesso."));
+  }
 }
+

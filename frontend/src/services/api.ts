@@ -103,7 +103,12 @@ export const newsService = {
   create: (newsData: unknown) => api.post('/api/noticias', newsData),
   update: (id: string, newsData: unknown) => api.put(`/api/noticias/${id}`, newsData),
   delete: (id: string) => api.delete(`/api/noticias/${id}`),
+  // Métodos de like
+  getLikedNews: () => api.get('/api/noticias/liked'),
+  likeNews: (newsId: string) => api.post(`/api/noticias/${newsId}/like`),
+  unlikeNews: (newsId: string) => api.delete(`/api/noticias/${newsId}/like`),
 };
+
 
 /**
  * NOVO: Serviços do Agente de IA

@@ -27,14 +27,23 @@ export interface News {
   id?: string;
   title: string;
   slug?: string;
+  summary?: string;
   content?: unknown;
   excerpt?: string;
-  author?: string;
+  featuredImageUrl?: string;
+  author?: {
+    name: string;
+    username?: string;
+    profileImageUrl?: string;
+  } | string;
+  publicationDate?: string;
+  likedAt?: string;
   createdAt?: string;
   updatedAt?: string;
   published?: boolean;
   [key: string]: unknown;
 }
+
 
 export interface ScreenTimerManager {
   running: boolean;

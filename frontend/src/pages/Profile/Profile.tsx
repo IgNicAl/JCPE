@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { newsService } from '@/services/api';
+import { News } from '@/types';
 import './Profile.css';
 
-// Tipo para publicação curtida (mock - substituir quando API estiver pronta)
+// Tipo para publicação curtida
 type LikedPost = {
   id: string;
   title: string;
@@ -13,37 +15,7 @@ type LikedPost = {
   publicationDate: string;
 };
 
-// Dados mock - substituir com chamada à API
-const mockLikedPosts: LikedPost[] = [
-  {
-    id: '1',
-    title: 'Opening Day Of Boating Season, Seattle WA',
-    summary: 'Of Course The Puget Sound Is Very Much Where There Is Water, There Are Boats. Today Is...',
-    imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop',
-    authorName: 'James',
-    authorAvatar: 'https://i.pravatar.cc/150?img=12',
-    publicationDate: 'August 18, 2022',
-  },
-  {
-    id: '2',
-    title: 'How To Choose The Right Laptop For...',
-    summary: 'Choosing The Right Laptop For Programming Can Be A Tough Process. It\'s Easy To Get Confused...',
-    imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop',
-    authorName: 'Louis Hoebregts',
-    authorAvatar: 'https://i.pravatar.cc/150?img=33',
-    publicationDate: 'May 25, 2022',
-  },
-  {
-    id: '3',
-    title: 'How We Built The First Real Self-Driving Car',
-    summary: 'Electric Self-Driving Cars Will Save Millions Of Lives And Significantly Accelerate The World\'s...',
-    imageUrl: 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=400&h=300&fit=crop',
-    authorName: 'Mary',
-    authorAvatar: 'https://i.pravatar.cc/150?img=5',
-    publicationDate: 'July 3, 2022',
-  },
-];
-
+// Dados mock para compartilhamentos e publicações (ainda não implementados)
 const mockSharedPosts: LikedPost[] = [];
 const mockMyPosts: LikedPost[] = [];
 
@@ -57,15 +29,53 @@ const Profile: React.FC = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<TabType>('curtidas');
   const [currentPage, setCurrentPage] = useState(1);
+  const [likedPosts, setLikedPosts] = useState<LikedPost[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Determinar quais abas mostrar baseado no tipo de usuário
   const isJournalistOrAdmin = user?.userType === 'JOURNALIST' || user?.userType === 'ADMIN';
+
+  // Buscar notícias curtidas ao carregar o componente
+  useEffect(() => {
+    if (activeTab === 'curtidas') {
+      fetchLikedNews();
+    }
+  }, [activeTab]);
+
+  const fetchLikedNews = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await newsService.getLikedNews();
+      const newsData = response.data as News[];
+
+      // Converter para o formato LikedPost
+      const converted = newsData.map((news) => ({
+        id: news.id || '',
+        title: news.title,
+        summary: news.summary || '',
+        imageUrl: news.featuredImageUrl || 'https://via.placeholder.com/400x300?text=Sem+Imagem',
+        authorName: typeof news.author === 'object' ? news.author.name : (news.author || 'Autor Desconhecido'),
+        authorAvatar: typeof news.author === 'object' ? (news.author.profileImageUrl || 'https://i.pravatar.cc/150') : 'https://i.pravatar.cc/150',
+        publicationDate: news.likedAt ? new Date(news.likedAt).toLocaleDateString('pt-BR') : '',
+      }));
+
+      setLikedPosts(converted);
+    } catch (err) {
+      console.error('Erro ao buscar notícias curtidas:', err);
+      setError('Erro ao carregar notícias curtidas');
+      setLikedPosts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Obter posts da aba atual
   const getCurrentPosts = (): LikedPost[] => {
     switch (activeTab) {
       case 'curtidas':
-        return mockLikedPosts;
+        return likedPosts;
       case 'compartilhamentos':
         return mockSharedPosts;
       case 'publicacoes':
@@ -91,6 +101,29 @@ const Profile: React.FC = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Função para curtir/descurtir notícia
+  const handleToggleLike = async (newsId: string) => {
+    try {
+      // Verificar se já está curtida
+      const isLiked = likedPosts.some(post => post.id === newsId);
+
+      if (isLiked) {
+        // Descurtir
+        await newsService.unlikeNews(newsId);
+        // Remover da lista
+        setLikedPosts(prev => prev.filter(post => post.id !== newsId));
+      } else {
+        // Curtir
+        await newsService.likeNews(newsId);
+        // Recarregar a lista
+        fetchLikedNews();
+      }
+    } catch (err) {
+      console.error('Erro ao alternar like:', err);
+      alert('Erro ao processar a ação. Tente novamente.');
+    }
   };
 
   // Mensagens de estado vazio
@@ -120,7 +153,7 @@ const Profile: React.FC = () => {
           {/* Avatar */}
           <div className="profile-avatar-wrapper">
             <img
-              src={(user?.['avatar'] as string | undefined) || 'https://i.pravatar.cc/150?img=68'}
+              src={user?.urlImagemPerfil || 'https://i.pravatar.cc/150?img=68'}
               alt={user?.name || 'User'}
               className="profile-avatar"
             />
@@ -168,7 +201,17 @@ const Profile: React.FC = () => {
 
       {/* Grid de Publicações */}
       <div className="profile-content">
-        {displayPosts.length === 0 ? (
+        {loading ? (
+          <div className="empty-state">
+            <i className="fas fa-spinner fa-spin empty-state-icon" />
+            <p className="empty-state-message">Carregando...</p>
+          </div>
+        ) : error ? (
+          <div className="empty-state">
+            <i className="fas fa-exclamation-triangle empty-state-icon" />
+            <p className="empty-state-message">{error}</p>
+          </div>
+        ) : displayPosts.length === 0 ? (
           <div className="empty-state">
             <i className="fas fa-inbox empty-state-icon" />
             <p className="empty-state-message">{getEmptyMessage()}</p>
@@ -205,7 +248,8 @@ const Profile: React.FC = () => {
                       <button
                         type="button"
                         className={`bookmark-btn ${activeTab === 'curtidas' ? 'active' : ''}`}
-                        aria-label="Remover dos salvos"
+                        onClick={() => handleToggleLike(post.id)}
+                        aria-label={activeTab === 'curtidas' ? 'Descurtir notícia' : 'Curtir notícia'}
                       >
                         <i className={activeTab === 'curtidas' ? 'fas fa-bookmark' : 'far fa-bookmark'} />
                       </button>
