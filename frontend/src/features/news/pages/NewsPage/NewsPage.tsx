@@ -159,7 +159,18 @@ const NewsPage: React.FC = () => {
     if (!window.confirm('Tem certeza que deseja deletar este comentário?')) return;
     try {
       await newsService.deleteComment(commentId);
-      setComments(comments.filter(c => c.id !== commentId));
+
+      const removeCommentRecursive = (list: NewsComment[]): NewsComment[] => {
+        return list
+          .filter(c => c.id !== commentId)
+          .map(c => ({
+            ...c,
+            replies: c.replies ? removeCommentRecursive(c.replies) : []
+          }));
+      };
+
+      setComments(removeCommentRecursive(comments));
+
       if (news?.id) {
         loadStats(news.id);
       }
