@@ -25,6 +25,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (savedUser) {
       const parsed = JSON.parse(savedUser) as User;
       setUser(parsed);
+
+      // Buscar dados atualizados do usuário via API para garantir sincronização
+      // (especialmente para foto de perfil e outros dados que podem ter mudado)
+      userService.getMyProfile()
+        .then((response) => {
+          const updatedUser = {
+            ...parsed,
+            ...response.data,
+            token: parsed.token, // Manter o token original
+          };
+          setUser(updatedUser);
+          localStorage.setItem('user', JSON.stringify(updatedUser));
+        })
+        .catch((error) => {
+          console.error('Erro ao buscar dados atualizados do usuário:', error);
+          // Se falhar, continua com os dados do localStorage
+        });
+
       if (parsed && parsed.userType === 'USER') {
         startScreenTimer();
       }
