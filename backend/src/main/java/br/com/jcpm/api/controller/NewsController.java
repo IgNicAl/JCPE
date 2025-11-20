@@ -23,12 +23,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jcpm.api.domain.entity.News;
+import br.com.jcpm.api.domain.entity.NewsComment;
 import br.com.jcpm.api.domain.entity.NewsLike;
+import br.com.jcpm.api.domain.entity.NewsRating;
+import br.com.jcpm.api.domain.entity.NewsShare;
 import br.com.jcpm.api.domain.entity.User;
+import br.com.jcpm.api.dto.NewsCommentRequest;
+import br.com.jcpm.api.dto.NewsCommentResponse;
 import br.com.jcpm.api.dto.NewsLikeResponse;
+import br.com.jcpm.api.dto.NewsRatingRequest;
 import br.com.jcpm.api.dto.NewsRequest;
+import br.com.jcpm.api.dto.NewsStatsResponse;
+import br.com.jcpm.api.repository.NewsCommentRepository;
 import br.com.jcpm.api.repository.NewsLikeRepository;
+import br.com.jcpm.api.repository.NewsRatingRepository;
 import br.com.jcpm.api.repository.NewsRepository;
+import br.com.jcpm.api.repository.NewsShareRepository;
 import jakarta.validation.Valid;
 
 
@@ -39,10 +49,21 @@ public class NewsController {
 
   private final NewsRepository newsRepository;
   private final NewsLikeRepository newsLikeRepository;
+  private final NewsRatingRepository newsRatingRepository;
+  private final NewsCommentRepository newsCommentRepository;
+  private final NewsShareRepository newsShareRepository;
 
-  public NewsController(NewsRepository newsRepository, NewsLikeRepository newsLikeRepository) {
+  public NewsController(
+      NewsRepository newsRepository,
+      NewsLikeRepository newsLikeRepository,
+      NewsRatingRepository newsRatingRepository,
+      NewsCommentRepository newsCommentRepository,
+      NewsShareRepository newsShareRepository) {
     this.newsRepository = newsRepository;
     this.newsLikeRepository = newsLikeRepository;
+    this.newsRatingRepository = newsRatingRepository;
+    this.newsCommentRepository = newsCommentRepository;
+    this.newsShareRepository = newsShareRepository;
   }
 
 
@@ -276,6 +297,227 @@ public class NewsController {
     newsLikeRepository.deleteByUserIdAndNewsId(currentUser.getId(), newsId);
 
     return ResponseEntity.ok(Collections.singletonMap("message", "Like removido com sucesso."));
+  }
+
+  // ========== ENDPOINTS DE AVALIAÇÃO (RATING) ==========
+
+  /**
+   * Avaliar uma notícia (1-5 estrelas)
+   */
+  @PostMapping("/{newsId}/rate")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<?> rateNews(
+      @PathVariable UUID newsId,
+      @Valid @RequestBody NewsRatingRequest request) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User currentUser = (User) authentication.getPrincipal();
+
+    // Verificar se a notícia existe
+    if (!newsRepository.existsById(newsId)) {
+      return ResponseEntity.notFound().build();
+    }
+
+    // Verificar se já avaliou
+    var existingRating = newsRatingRepository.findByUserIdAndNewsId(currentUser.getId(), newsId);
+
+    if (existingRating.isPresent()) {
+      // Atualizar avaliação existente
+      NewsRating rating = existingRating.get();
+      rating.setRating(request.getRating());
+      newsRatingRepository.save(rating);
+      return ResponseEntity.ok(Collections.singletonMap("message", "Avaliação atualizada com sucesso."));
+    } else {
+      // Criar nova avaliação
+      NewsRating newsRating = new NewsRating();
+      newsRating.setUserId(currentUser.getId());
+      newsRating.setNewsId(newsId);
+      newsRating.setRating(request.getRating());
+      newsRatingRepository.save(newsRating);
+      return ResponseEntity.status(HttpStatus.CREATED)
+          .body(Collections.singletonMap("message", "Notícia avaliada com sucesso."));
+    }
+  }
+
+  /**
+   * Obter média de avaliações de uma notícia
+   */
+  @GetMapping("/{newsId}/rating")
+  public ResponseEntity<?> getNewsRating(@PathVariable UUID newsId) {
+    if (!newsRepository.existsById(newsId)) {
+      return ResponseEntity.notFound().build();
+    }
+
+    Double average = newsRatingRepository.getAverageRatingByNewsId(newsId);
+    long count = newsRatingRepository.countByNewsId(newsId);
+
+    return ResponseEntity.ok(new java.util.HashMap<String, Object>() {{
+      put("averageRating", average != null ? average : 0.0);
+      put("totalRatings", count);
+    }});
+  }
+
+  /**
+   * Obter avaliação do usuário logado para uma notícia
+   */
+  @GetMapping("/{newsId}/user-rating")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<?> getUserRating(@PathVariable UUID newsId) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User currentUser = (User) authentication.getPrincipal();
+
+    var rating = newsRatingRepository.findByUserIdAndNewsId(currentUser.getId(), newsId);
+
+    if (rating.isPresent()) {
+      return ResponseEntity.ok(Collections.singletonMap("rating", rating.get().getRating()));
+    }
+
+    return ResponseEntity.ok(Collections.singletonMap("rating", null));
+  }
+
+  // ========== ENDPOINTS DE COMENTÁRIOS ==========
+
+  /**
+   * Buscar todos os comentários de uma notícia
+   */
+  @GetMapping("/{newsId}/comments")
+  public ResponseEntity<List<NewsCommentResponse>> getNewsComments(@PathVariable UUID newsId) {
+    if (!newsRepository.existsById(newsId)) {
+      return ResponseEntity.notFound().build();
+    }
+
+    List<NewsComment> comments = newsCommentRepository.findAllByNewsIdOrderByCreatedAtDesc(newsId);
+    List<NewsCommentResponse> response = comments.stream()
+        .map(NewsCommentResponse::new)
+        .collect(java.util.stream.Collectors.toList());
+
+    return ResponseEntity.ok(response);
+  }
+
+  /**
+   * Adicionar comentário a uma notícia
+   */
+  @PostMapping("/{newsId}/comments")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<?> addComment(
+      @PathVariable UUID newsId,
+      @Valid @RequestBody NewsCommentRequest request) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User currentUser = (User) authentication.getPrincipal();
+
+    if (!newsRepository.existsById(newsId)) {
+      return ResponseEntity.notFound().build();
+    }
+
+    NewsComment comment = new NewsComment();
+    comment.setNewsId(newsId);
+    comment.setUserId(currentUser.getId());
+    comment.setContent(request.getContent());
+
+    NewsComment savedComment = newsCommentRepository.save(comment);
+
+    // Recarregar com dados do usuário
+    NewsComment fullComment = newsCommentRepository.findById(savedComment.getId()).orElse(savedComment);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(new NewsCommentResponse(fullComment));
+  }
+
+  /**
+   * Deletar comentário (próprio ou admin)
+   */
+  @DeleteMapping("/comments/{commentId}")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<?> deleteComment(@PathVariable UUID commentId) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User currentUser = (User) authentication.getPrincipal();
+
+    return newsCommentRepository.findById(commentId)
+        .map(comment -> {
+          boolean isOwner = comment.getUserId().equals(currentUser.getId());
+          boolean isAdmin = "ADMIN".equals(currentUser.getUserType().name());
+
+          if (!isOwner && !isAdmin) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Collections.singletonMap("error", "Você não tem permissão para deletar este comentário."));
+          }
+
+          newsCommentRepository.delete(comment);
+          return ResponseEntity.ok(Collections.singletonMap("message", "Comentário deletado com sucesso."));
+        })
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  // ========== ENDPOINTS DE COMPARTILHAMENTO ==========
+
+  /**
+   * Registrar compartilhamento de notícia
+   */
+  @PostMapping("/{newsId}/share")
+  public ResponseEntity<?> shareNews(@PathVariable UUID newsId) {
+    if (!newsRepository.existsById(newsId)) {
+      return ResponseEntity.notFound().build();
+    }
+
+    // Verificar se está autenticado
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UUID userId = null;
+
+    if (authentication != null && authentication.getPrincipal() instanceof User) {
+      User currentUser = (User) authentication.getPrincipal();
+      userId = currentUser.getId();
+    }
+
+    NewsShare share = new NewsShare();
+    share.setNewsId(newsId);
+    share.setUserId(userId); // Pode ser null se não autenticado
+    newsShareRepository.save(share);
+
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(Collections.singletonMap("message", "Compartilhamento registrado com sucesso."));
+  }
+
+  // ========== ENDPOINT DE ESTATÍSTICAS ==========
+
+  /**
+   * Obter todas as estatísticas de uma notícia (likes, shares, comments, rating)
+   */
+  @GetMapping("/{newsId}/stats")
+  public ResponseEntity<NewsStatsResponse> getNewsStats(@PathVariable UUID newsId) {
+    if (!newsRepository.existsById(newsId)) {
+      return ResponseEntity.notFound().build();
+    }
+
+    long likesCount = newsLikeRepository.countByNewsId(newsId);
+    long sharesCount = newsShareRepository.countByNewsId(newsId);
+    long commentsCount = newsCommentRepository.countByNewsId(newsId);
+    Double averageRating = newsRatingRepository.getAverageRatingByNewsId(newsId);
+    long totalRatings = newsRatingRepository.countByNewsId(newsId);
+
+    boolean userHasLiked = false;
+    Integer userRating = null;
+
+    // Se usuário está autenticado, buscar suas interações
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getPrincipal() instanceof User) {
+      User currentUser = (User) authentication.getPrincipal();
+      userHasLiked = newsLikeRepository.existsByUserIdAndNewsId(currentUser.getId(), newsId);
+
+      var rating = newsRatingRepository.findByUserIdAndNewsId(currentUser.getId(), newsId);
+      if (rating.isPresent()) {
+        userRating = rating.get().getRating();
+      }
+    }
+
+    NewsStatsResponse stats = new NewsStatsResponse(
+        likesCount,
+        sharesCount,
+        commentsCount,
+        averageRating != null ? averageRating : 0.0,
+        totalRatings,
+        userHasLiked,
+        userRating
+    );
+
+    return ResponseEntity.ok(stats);
   }
 }
 

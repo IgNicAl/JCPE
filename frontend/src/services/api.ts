@@ -103,10 +103,27 @@ export const newsService = {
   create: (newsData: unknown) => api.post('/api/noticias', newsData),
   update: (id: string, newsData: unknown) => api.put(`/api/noticias/${id}`, newsData),
   delete: (id: string) => api.delete(`/api/noticias/${id}`),
+
   // Métodos de like
   getLikedNews: () => api.get('/api/noticias/liked'),
   likeNews: (newsId: string) => api.post(`/api/noticias/${newsId}/like`),
   unlikeNews: (newsId: string) => api.delete(`/api/noticias/${newsId}/like`),
+
+  // Métodos de rating (avaliação)
+  rateNews: (newsId: string, rating: number) => api.post(`/api/noticias/${newsId}/rate`, { rating }),
+  getNewsRating: (newsId: string) => api.get(`/api/noticias/${newsId}/rating`),
+  getUserRating: (newsId: string) => api.get(`/api/noticias/${newsId}/user-rating`),
+
+  // Métodos de comentários
+  getNewsComments: (newsId: string) => api.get(`/api/noticias/${newsId}/comments`),
+  addComment: (newsId: string, content: string) => api.post(`/api/noticias/${newsId}/comments`, { content }),
+  deleteComment: (commentId: string) => api.delete(`/api/noticias/comments/${commentId}`),
+
+  // Métodos de compartilhamento
+  shareNews: (newsId: string) => api.post(`/api/noticias/${newsId}/share`),
+
+  // Estatísticas gerais
+  getNewsStats: (newsId: string) => api.get(`/api/noticias/${newsId}/stats`),
 };
 
 

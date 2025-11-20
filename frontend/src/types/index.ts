@@ -45,6 +45,44 @@ export interface News {
 }
 
 
+export interface NewsRating {
+  newsId: string;
+  userId: string;
+  rating: number;
+  ratedAt: string;
+}
+
+export interface NewsComment {
+  id: string;
+  newsId: string;
+  user: {
+    id: string;
+    name: string;
+    username?: string;
+    urlImagemPerfil?: string;
+  };
+  content: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface NewsShare {
+  newsId: string;
+  userId?: string;
+  sharedAt: string;
+}
+
+export interface NewsStats {
+  likesCount: number;
+  sharesCount: number;
+  commentsCount: number;
+  averageRating: number;
+  totalRatings: number;
+  userHasLiked: boolean;
+  userRating?: number;
+}
+
+
 export interface ScreenTimerManager {
   running: boolean;
   accumulated: number;
