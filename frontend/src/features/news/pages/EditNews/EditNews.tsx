@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, useRef, ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { newsService } from '@/services/api';
+import { newsService, categoryService, tagService } from '@/services/api';
+import { Category, Tag } from '@/types';
 import EditorJS, { OutputData } from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import List from '@editorjs/list';
@@ -9,14 +10,18 @@ import Embed from '@editorjs/embed';
 import Quote from '@editorjs/quote';
 import Table from '@editorjs/table';
 import CodeTool from '@editorjs/code';
-import '../CreateNews/CreateNews.css';
+import styles from '../CreateNews/CreateNews.module.css';
 
 interface NewsFormData {
   title: string;
   summary: string;
   featuredImageUrl?: string;
   priority: number;
-  category?: string;
+  categoryId?: string;
+  tagIds: string[];
+  page?: string;
+  isFeaturedHome?: boolean;
+  isFeaturedPage?: boolean;
   contentJson?: string;
   [key: string]: unknown;
 }
@@ -33,15 +38,40 @@ const EditNews: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
   const [message, setMessage] = useState<MessageState>({ type: '', text: '' });
-  const editorRef = useRef<EditorJS | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [allTags, setAllTags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [tagInput, setTagInput] = useState('');
+  const [tagSuggestions, setTagSuggestions] = useState<Tag[]>([]);
+  const [showPreview, setShowPreview] = useState(false);
 
+  const editorRef = useRef<EditorJS | null>(null);
+  const tagInputRef = useRef<HTMLInputElement>(null);
+
+  // Carregar notícia e dados
   useEffect(() => {
-    const fetchNews = async () => {
+    const fetchData = async () => {
       if (!id) return;
       try {
         setLoading(true);
-        const response = await newsService.getById(id);
-        setFormData(response.data as NewsFormData);
+        const [newsRes, categoriesRes, tagsRes] = await Promise.all([
+          newsService.getById(id),
+          categoryService.getAll(),
+          tagService.getAll(),
+        ]);
+
+        const newsData = newsRes.data as NewsFormData;
+        setFormData(newsData);
+        setCategories(categoriesRes.data);
+        setAllTags(tagsRes.data);
+
+        // Se a notícia já tem tags, carregar elas
+        if (newsData.tagIds && Array.isArray(newsData.tagIds)) {
+          const newsTags = tagsRes.data.filter((tag: Tag) =>
+            newsData.tagIds.includes(tag.id)
+          );
+          setSelectedTags(newsTags);
+        }
       } catch (error) {
         setMessage({ type: 'error', text: 'Erro ao carregar dados da notícia.' });
         console.error('Erro:', error);
@@ -49,9 +79,10 @@ const EditNews: React.FC = () => {
         setLoading(false);
       }
     };
-    fetchNews();
+    fetchData();
   }, [id]);
 
+  // Inicializar Editor.js
   useEffect(() => {
     if (!loading && formData && !editorRef.current) {
       const editor = new EditorJS({
@@ -112,7 +143,87 @@ const EditNews: React.FC = () => {
     );
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setFormData((prev) =>
+      prev
+        ? {
+            ...prev,
+            [name]: checked,
+          }
+        : null
+    );
+  };
+
+  // Gerenciamento de Tags
+  const handleTagInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setTagInput(value);
+
+    if (value.trim()) {
+      const filtered = allTags.filter(tag =>
+        tag.name.toLowerCase().includes(value.toLowerCase()) &&
+        !selectedTags.find(t => t.id === tag.id)
+      );
+      setTagSuggestions(filtered);
+    } else {
+      setTagSuggestions([]);
+    }
+  };
+
+  const handleTagInputKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && tagInput.trim()) {
+      e.preventDefault();
+      await addTag(tagInput.trim());
+    } else if (e.key === 'Backspace' && !tagInput && selectedTags.length > 0) {
+      removeTag(selectedTags[selectedTags.length - 1].id);
+    }
+  };
+
+  const addTag = async (tagName: string) => {
+    const existing = allTags.find(t => t.name.toLowerCase() === tagName.toLowerCase());
+
+    if (existing) {
+      if (!selectedTags.find(t => t.id === existing.id)) {
+        const newSelectedTags = [...selectedTags, existing];
+        setSelectedTags(newSelectedTags);
+        setFormData(prev => prev ? { ...prev, tagIds: newSelectedTags.map(t => t.id) } : null);
+      }
+    } else {
+      try {
+        const response = await tagService.create({ name: tagName });
+        const newTag = response.data as Tag;
+        setAllTags([...allTags, newTag]);
+        const newSelectedTags = [...selectedTags, newTag];
+        setSelectedTags(newSelectedTags);
+        setFormData(prev => prev ? { ...prev, tagIds: newSelectedTags.map(t => t.id) } : null);
+      } catch (error) {
+        console.error('Erro ao criar tag:', error);
+      }
+    }
+
+    setTagInput('');
+    setTagSuggestions([]);
+  };
+
+  const removeTag = (tagId: string) => {
+    const newSelectedTags = selectedTags.filter(t => t.id !== tagId);
+    setSelectedTags(newSelectedTags);
+    setFormData(prev => prev ? { ...prev, tagIds: newSelectedTags.map(t => t.id) } : null);
+  };
+
+  const selectSuggestion = (tag: Tag) => {
+    if (!selectedTags.find(t => t.id === tag.id)) {
+      const newSelectedTags = [...selectedTags, tag];
+      setSelectedTags(newSelectedTags);
+      setFormData(prev => prev ? { ...prev, tagIds: newSelectedTags.map(t => t.id) } : null);
+    }
+    setTagInput('');
+    setTagSuggestions([]);
+    tagInputRef.current?.focus();
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>, isDraft = false) => {
     e.preventDefault();
     if (!editorRef.current || !id || !formData) {
       setMessage({ type: 'error', text: 'Editor não inicializado.' });
@@ -135,10 +246,16 @@ const EditNews: React.FC = () => {
         ...formData,
         content: JSON.stringify(outputData),
         contentJson: JSON.stringify(outputData),
+        status: isDraft ? 'RASCUNHO' : 'PUBLICADO',
+        categoryId: formData.categoryId || null,
+        tagIds: selectedTags.map(t => t.id),
       };
 
       await newsService.update(id, updatedNewsData);
-      setMessage({ type: 'success', text: 'Notícia atualizada com sucesso!' });
+      setMessage({
+        type: 'success',
+        text: isDraft ? 'Rascunho atualizado com sucesso!' : 'Notícia atualizada com sucesso!'
+      });
       setTimeout(() => navigate('/noticias/gerenciar'), 2000);
     } catch (error: unknown) {
       let errorMessage = 'Erro ao atualizar notícia. Tente novamente.';
@@ -153,12 +270,16 @@ const EditNews: React.FC = () => {
     }
   };
 
+  const handleDraft = (e: FormEvent<HTMLFormElement>) => {
+    handleSubmit(e, true);
+  };
+
   if (loading) {
     return (
-      <div className="create-news-container">
-        <div className="loading">
-          <i className="fas fa-spinner fa-spin" />
-          <p>Carregando notícia...</p>
+      <div className={styles.container}>
+        <div className={styles.loading}>
+          <i className="fas fa-spinner fa-spin" style={{ marginRight: '0.5rem' }} />
+          Carregando notícia...
         </div>
       </div>
     );
@@ -166,8 +287,8 @@ const EditNews: React.FC = () => {
 
   if (!formData) {
     return (
-      <div className="create-news-container">
-        <div className="message error">
+      <div className={styles.container}>
+        <div className={`${styles.message} ${styles.error}`}>
           <i className="fas fa-exclamation-circle" />
           {message.text || 'Não foi possível carregar a notícia.'}
         </div>
@@ -176,78 +297,282 @@ const EditNews: React.FC = () => {
   }
 
   return (
-    <div className="create-news-container">
-      <div className="create-news-card">
-        <div className="create-news-header">
-          <h1>
-            <i className="fas fa-edit" /> Editar Notícia
-          </h1>
-          <p>Atualize os detalhes da notícia abaixo</p>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.tabs}>
+          <button className={`${styles.tab} ${styles.active}`}>Editar Notícia</button>
         </div>
-
-        {message.text && (
-          <div className={`message ${message.type}`}>
-            <i className={`fas ${message.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}`} />
-            {message.text}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="create-news-form">
-          <div className="form-group">
-            <label htmlFor="title">
-              <i className="fas fa-heading" /> Título *
-            </label>
-            <input type="text" id="title" name="title" value={formData.title} onChange={handleChange} required />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="summary">
-              <i className="fas fa-align-left" /> Resumo *
-            </label>
-            <textarea id="summary" name="summary" value={formData.summary} onChange={handleChange} required />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="content">
-              <i className="fas fa-file-alt" /> Conteúdo Completo *
-            </label>
-            <div id="editorjs" style={{ border: '1px solid #ccc', borderRadius: '5px', minHeight: '300px' }}></div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="featuredImageUrl">
-              <i className="fas fa-image" /> URL da Imagem de Capa
-            </label>
-            <input type="text" id="featuredImageUrl" name="featuredImageUrl" value={formData.featuredImageUrl || ''} onChange={handleChange} />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="priority">
-              <i className="fas fa-star" /> Prioridade *
-            </label>
-            <select id="priority" name="priority" value={formData.priority} onChange={handleChange}>
-              <option value={1}>Normal</option>
-              <option value={2}>Alta</option>
-              <option value={3}>Urgente</option>
-            </select>
-          </div>
-
-          <button type="submit" className="submit-btn" disabled={saving}>
-            {saving ? (
-              <>
-                <i className="fas fa-spinner fa-spin" /> Salvando...
-              </>
-            ) : (
-              <>
-                <i className="fas fa-save" /> Salvar Alterações
-              </>
-            )}
+        <div className={styles.actions}>
+          <button
+            type="button"
+            className={styles.actionButton}
+            onClick={() => setShowPreview(true)}
+            disabled={saving}
+          >
+            <i className="fas fa-eye" /> Preview
           </button>
-        </form>
+        </div>
       </div>
+
+      {message.text && (
+        <div className={`${styles.message} ${styles[message.type]}`}>
+          <i className={`fas ${message.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}`} />
+          {message.text}
+        </div>
+      )}
+
+      <form onSubmit={(e) => handleSubmit(e, false)}>
+        <div className={styles.mainContent}>
+          <div className={styles.leftColumn}>
+            {/* Título */}
+            <div className={styles.formGroup}>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="Título"
+                className={`${styles.input} ${styles.large}`}
+                required
+              />
+            </div>
+
+            {/* Tags */}
+            <div className={styles.card}>
+              <div className={styles.cardTitle}>Add Tags</div>
+              <div className={styles.formGroup} style={{ position: 'relative' }}>
+                <div
+                  className={styles.tagsInput}
+                  onClick={() => tagInputRef.current?.focus()}
+                >
+                  {selectedTags.map(tag => (
+                    <span key={tag.id} className={styles.tag}>
+                      {tag.name}
+                      <button
+                        type="button"
+                        className={styles.tagRemove}
+                        onClick={() => removeTag(tag.id)}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                  <input
+                    ref={tagInputRef}
+                    type="text"
+                    value={tagInput}
+                    onChange={handleTagInputChange}
+                    onKeyDown={handleTagInputKeyDown}
+                    placeholder="Digite para adicionar tags..."
+                    className={styles.tagInputField}
+                  />
+                </div>
+                {tagSuggestions.length > 0 && (
+                  <div className={styles.suggestions}>
+                    {tagSuggestions.map(tag => (
+                      <div
+                        key={tag.id}
+                        className={styles.suggestionItem}
+                        onClick={() => selectSuggestion(tag)}
+                      >
+                        {tag.name}
+                      </div>
+                    ))}
+                    {tagInput && !allTags.find(t => t.name.toLowerCase() === tagInput.toLowerCase()) && (
+                      <div
+                        className={`${styles.suggestionItem} ${styles.createNew}`}
+                        onClick={() => addTag(tagInput)}
+                      >
+                        <i className="fas fa-plus" /> Criar "{tagInput}"
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Categoria */}
+            <div className={styles.card}>
+              <div className={styles.cardTitle}>Categoria</div>
+              <div className={styles.formGroup}>
+                <select
+                  name="categoryId"
+                  value={formData.categoryId || ''}
+                  onChange={handleChange}
+                  className={styles.select}
+                >
+                  <option value="">Selecione uma categoria</option>
+                  {categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Editor de Conteúdo */}
+            <div className={styles.card}>
+              <div className={styles.cardTitle}>Conteúdo</div>
+              <div className={styles.formGroup}>
+                <label className={styles.label}>
+                  <i className="fas fa-file-alt" /> Descrição completa
+                </label>
+                <div id="editorjs" className={styles.editorContainer}></div>
+              </div>
+            </div>
+
+            {/* Botões de ação */}
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+              <button
+                type="button"
+                className={styles.actionButton}
+                onClick={(e) => handleDraft(e as unknown as FormEvent<HTMLFormElement>)}
+                disabled={saving}
+              >
+                <i className="fas fa-save" /> Salvar Rascunho
+              </button>
+              <button
+                type="submit"
+                className={`${styles.actionButton} ${styles.primary}`}
+                disabled={saving}
+              >
+                {saving ? (
+                  <>
+                    <i className="fas fa-spinner fa-spin" /> Salvando...
+                  </>
+                ) : (
+                  <>
+                    <i className="fas fa-check" /> Atualizar
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          <div className={styles.rightColumn}>
+            {/* Imagem de Capa */}
+            <div className={styles.card}>
+              <div className={styles.cardTitle}>Imagem de Capa</div>
+              <div className={styles.formGroup}>
+                <div className={`${styles.imageUploadArea} ${formData.featuredImageUrl ? styles.hasImage : ''}`}>
+                  {formData.featuredImageUrl ? (
+                    <img src={formData.featuredImageUrl} alt="Preview" className={styles.imagePreview} />
+                  ) : (
+                    <>
+                      <div className={styles.imageUploadIcon}>
+                        <i className="fas fa-image" />
+                      </div>
+                      <div className={styles.imageUploadText}>
+                        Drop image here, Paste Or
+                      </div>
+                      <button type="button" className={styles.selectButton}>
+                        Select
+                      </button>
+                    </>
+                  )}
+                </div>
+                <input
+                  type="text"
+                  name="featuredImageUrl"
+                  value={formData.featuredImageUrl || ''}
+                  onChange={handleChange}
+                  placeholder="URL da imagem"
+                  className={styles.input}
+                  style={{ marginTop: '0.5rem' }}
+                />
+              </div>
+            </div>
+
+            {/* Resumo */}
+            <div className={styles.card}>
+              <div className={styles.cardTitle}>Resumo</div>
+              <div className={styles.formGroup}>
+                <textarea
+                  name="summary"
+                  value={formData.summary}
+                  onChange={handleChange}
+                  placeholder="Escreva um resumo breve da notícia..."
+                  className={styles.input}
+                  rows={4}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Configurações */}
+            <div className={styles.card}>
+              <div className={styles.cardTitle}>Configurações</div>
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Prioridade</label>
+                <select
+                  name="priority"
+                  value={formData.priority}
+                  onChange={handleChange}
+                  className={styles.select}
+                >
+                  <option value={1}>Normal</option>
+                  <option value={2}>Alta</option>
+                  <option value={3}>Urgente</option>
+                </select>
+              </div>
+
+              <div className={styles.formGroup} style={{ marginTop: '1rem' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    name="isFeaturedHome"
+                    checked={formData.isFeaturedHome || false}
+                    onChange={handleCheckboxChange}
+                  />
+                  <span className={styles.label} style={{ marginBottom: 0 }}>Destaque na Home</span>
+                </label>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    name="isFeaturedPage"
+                    checked={formData.isFeaturedPage || false}
+                    onChange={handleCheckboxChange}
+                  />
+                  <span className={styles.label} style={{ marginBottom: 0 }}>Destaque na Página</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      {/* Modal de Preview */}
+      {showPreview && (
+        <div className={styles.previewModal} onClick={() => setShowPreview(false)}>
+          <div className={styles.previewContent} onClick={(e) => e.stopPropagation()}>
+            <button className={styles.previewClose} onClick={() => setShowPreview(false)}>
+              ×
+            </button>
+            <h1>{formData.title || 'Título da Notícia'}</h1>
+            {formData.featuredImageUrl && (
+              <img src={formData.featuredImageUrl} alt="Preview" style={{ width: '100%', marginTop: '1rem' }} />
+            )}
+            <p style={{ marginTop: '1rem', color: 'var(--text-secondary)' }}>
+              {formData.summary || 'Resumo da notícia aparecerá aqui...'}
+            </p>
+            <div style={{ marginTop: '1rem' }}>
+              {selectedTags.length > 0 && (
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  {selectedTags.map(tag => (
+                    <span key={tag.id} className={styles.tag}>{tag.name}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default EditNews;
-

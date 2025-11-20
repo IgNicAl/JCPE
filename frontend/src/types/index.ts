@@ -41,7 +41,27 @@ export interface News {
   createdAt?: string;
   updatedAt?: string;
   published?: boolean;
+  category?: Category;
+  tags?: Tag[];
   [key: string]: unknown;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  color?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Tag {
+  id: string;
+  name: string;
+  slug: string;
+  createdByName?: string;
+  createdAt?: string;
 }
 
 

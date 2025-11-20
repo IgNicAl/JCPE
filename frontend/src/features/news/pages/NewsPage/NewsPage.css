@@ -34,8 +34,35 @@
 .news-grid-layout {
   display: grid;
   grid-template-columns: 1fr 350px;
-  gap: var(--spacing-2xl);
+  gap: 60px; /* Increased from spacing-2xl to fixed 60px for better separation */
   align-items: start;
+}
+
+/* ... (skip unchanged) ... */
+
+/* Related Posts */
+.related-posts-section {
+  margin-top: var(--spacing-3xl);
+  padding-top: var(--spacing-xl);
+  border-top: 1px solid var(--border-color);
+}
+
+.related-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Force 4 columns for full width */
+  gap: var(--spacing-lg);
+}
+
+@media (max-width: 1024px) {
+  .related-posts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .related-posts-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ================================== */

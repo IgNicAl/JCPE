@@ -301,20 +301,6 @@ const NewsPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Related Posts */}
-            <div className="related-posts-section">
-              <h3 className="section-title">Related Posts</h3>
-              <div className="related-posts-grid">
-                {[1, 2, 3, 4].map(i => (
-                  <div key={i} className="related-post-card">
-                    <div className="related-image-placeholder"></div>
-                    <h4>Related News Title {i}</h4>
-                    <span className="related-date">July 19, 2022</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
           </div>
 
           {/* RIGHT COLUMN: Sidebar */}
@@ -398,6 +384,21 @@ const NewsPage: React.FC = () => {
           </aside>
 
         </div>
+
+        {/* Related Posts - Now Full Width */}
+        <div className="related-posts-section">
+          <h3 className="section-title">Related Posts</h3>
+          <div className="related-posts-grid">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="related-post-card">
+                <div className="related-image-placeholder"></div>
+                <h4>Related News Title {i}</h4>
+                <span className="related-date">July 19, 2022</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </div>
   );

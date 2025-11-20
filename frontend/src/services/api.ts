@@ -126,6 +126,28 @@ export const newsService = {
   getNewsStats: (newsId: string) => api.get(`/api/noticias/${newsId}/stats`),
 };
 
+/**
+ * Serviços de Categorias
+ */
+export const categoryService = {
+  getAll: () => api.get('/api/categories'),
+  getById: (id: string) => api.get(`/api/categories/${id}`),
+  create: (categoryData: unknown) => api.post('/api/categories', categoryData),
+  update: (id: string, categoryData: unknown) => api.put(`/api/categories/${id}`, categoryData),
+  delete: (id: string) => api.delete(`/api/categories/${id}`),
+};
+
+/**
+ * Serviços de Tags
+ */
+export const tagService = {
+  getAll: () => api.get('/api/tags'),
+  search: (query: string) => api.get(`/api/tags/search?query=${encodeURIComponent(query)}`),
+  getById: (id: string) => api.get(`/api/tags/${id}`),
+  create: (tagData: unknown) => api.post('/api/tags', tagData),
+  delete: (id: string) => api.delete(`/api/tags/${id}`),
+};
+
 
 /**
  * NOVO: Serviços do Agente de IA

@@ -34,11 +34,13 @@ import br.com.jcpm.api.dto.NewsLikeResponse;
 import br.com.jcpm.api.dto.NewsRatingRequest;
 import br.com.jcpm.api.dto.NewsRequest;
 import br.com.jcpm.api.dto.NewsStatsResponse;
+import br.com.jcpm.api.repository.CategoryRepository;
 import br.com.jcpm.api.repository.NewsCommentRepository;
 import br.com.jcpm.api.repository.NewsLikeRepository;
 import br.com.jcpm.api.repository.NewsRatingRepository;
 import br.com.jcpm.api.repository.NewsRepository;
 import br.com.jcpm.api.repository.NewsShareRepository;
+import br.com.jcpm.api.repository.TagRepository;
 import jakarta.validation.Valid;
 
 
@@ -52,18 +54,24 @@ public class NewsController {
   private final NewsRatingRepository newsRatingRepository;
   private final NewsCommentRepository newsCommentRepository;
   private final NewsShareRepository newsShareRepository;
+  private final CategoryRepository categoryRepository;
+  private final TagRepository tagRepository;
 
   public NewsController(
       NewsRepository newsRepository,
       NewsLikeRepository newsLikeRepository,
       NewsRatingRepository newsRatingRepository,
       NewsCommentRepository newsCommentRepository,
-      NewsShareRepository newsShareRepository) {
+      NewsShareRepository newsShareRepository,
+      CategoryRepository categoryRepository,
+      TagRepository tagRepository) {
     this.newsRepository = newsRepository;
     this.newsLikeRepository = newsLikeRepository;
     this.newsRatingRepository = newsRatingRepository;
     this.newsCommentRepository = newsCommentRepository;
     this.newsShareRepository = newsShareRepository;
+    this.categoryRepository = categoryRepository;
+    this.tagRepository = tagRepository;
   }
 
 
@@ -161,6 +169,18 @@ public class NewsController {
     news.setPublicationDate(LocalDateTime.now());
     news.setStatus(newsRequest.getStatus() != null ? newsRequest.getStatus() : "PUBLICADO");
 
+    // Definir categoria
+    if (newsRequest.getCategoryId() != null) {
+      categoryRepository.findById(newsRequest.getCategoryId()).ifPresent(news::setCategory);
+    }
+
+    // Definir tags
+    if (newsRequest.getTagIds() != null && !newsRequest.getTagIds().isEmpty()) {
+      news.getTags().addAll(
+        tagRepository.findAllById(newsRequest.getTagIds())
+      );
+    }
+
     News savedNews = newsRepository.save(news);
     return new ResponseEntity<>(savedNews, HttpStatus.CREATED);
   }
@@ -198,6 +218,21 @@ public class NewsController {
                   newsRequest.getIsFeaturedPage() != null ? newsRequest.getIsFeaturedPage() : news.getIsFeaturedPage());
               news.setUpdateDate(LocalDateTime.now());
               news.setStatus(newsRequest.getStatus() != null ? newsRequest.getStatus() : news.getStatus());
+
+              // Atualizar categoria
+              if (newsRequest.getCategoryId() != null) {
+                categoryRepository.findById(newsRequest.getCategoryId()).ifPresent(news::setCategory);
+              } else {
+                news.setCategory(null);
+              }
+
+              // Atualizar tags
+              news.getTags().clear();
+              if (newsRequest.getTagIds() != null && !newsRequest.getTagIds().isEmpty()) {
+                news.getTags().addAll(
+                  tagRepository.findAllById(newsRequest.getTagIds())
+                );
+              }
 
               News updatedNews = newsRepository.save(news);
               return ResponseEntity.ok(updatedNews);

@@ -5,7 +5,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.jcpm.api.domain.entity.NewsLike;
 
@@ -38,6 +40,8 @@ public interface NewsLikeRepository extends JpaRepository<NewsLike, NewsLike.New
   /**
    * Remove um like específico
    */
+  @Modifying
+  @Transactional
   void deleteByUserIdAndNewsId(UUID userId, UUID newsId);
 
   /**
