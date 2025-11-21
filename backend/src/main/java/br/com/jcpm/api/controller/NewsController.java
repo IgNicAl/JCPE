@@ -470,6 +470,7 @@ public class NewsController {
    */
   @DeleteMapping("/comments/{commentId}")
   @PreAuthorize("isAuthenticated()")
+  @org.springframework.transaction.annotation.Transactional
   public ResponseEntity<?> deleteComment(@PathVariable UUID commentId) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     User currentUser = (User) authentication.getPrincipal();
@@ -482,6 +483,11 @@ public class NewsController {
           if (!isOwner && !isAdmin) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(Collections.singletonMap("error", "Você não tem permissão para deletar este comentário."));
+          }
+
+          // Se for uma resposta, remover da lista do pai para evitar problemas de persistência
+          if (comment.getParent() != null) {
+            comment.getParent().getReplies().remove(comment);
           }
 
           newsCommentRepository.delete(comment);

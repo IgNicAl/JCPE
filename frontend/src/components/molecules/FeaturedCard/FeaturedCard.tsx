@@ -30,7 +30,7 @@ const FeaturedCard: React.FC<FeaturedCardProps> = ({ news, className = '' }) => 
     e.preventDefault();
     e.stopPropagation();
     setLiked(!liked);
-    setLikesCount(prev => liked ? prev - 1 : prev + 1);
+    setLikesCount((prev: number) => liked ? prev - 1 : prev + 1);
   };
 
   const handleShare = (e: React.MouseEvent) => {
@@ -52,7 +52,7 @@ const FeaturedCard: React.FC<FeaturedCardProps> = ({ news, className = '' }) => 
     <Link to={`/noticia/${news.slug}`} className={classes}>
       <div
         className={styles.featuredImage}
-        style={{ backgroundImage: `url(${news.featuredImageUrl})` }}
+        style={{ backgroundImage: `url('${news.featuredImageUrl}')` }}
       />
       <div className={styles.featuredContent}>
         <Badge variant="warning" className={styles.featuredBadge}>
@@ -79,7 +79,7 @@ const FeaturedCard: React.FC<FeaturedCardProps> = ({ news, className = '' }) => 
             </div>
           </div>
           <div className={styles.featuredActions}>
-            <button 
+            <button
               className={`${styles.actionButton} ${liked ? styles.liked : ''}`}
               onClick={handleLike}
               title="Curtir"
@@ -87,7 +87,7 @@ const FeaturedCard: React.FC<FeaturedCardProps> = ({ news, className = '' }) => 
               <i className={liked ? "fas fa-heart" : "far fa-heart"} />
               {likesCount > 0 && <span>{likesCount}</span>}
             </button>
-            <button 
+            <button
               className={styles.actionButton}
               onClick={handleShare}
               title="Compartilhar"

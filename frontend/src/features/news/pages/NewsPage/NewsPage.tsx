@@ -494,7 +494,7 @@ const NewsPage: React.FC = () => {
                 {topNews.length > 0 ? topNews.map(post => (
                   <div key={post.id} className="top-post-item">
                     <div className="top-post-image" style={{
-                        backgroundImage: `url(${post.featuredImageUrl || '/placeholder-news.jpg'})`,
+                        backgroundImage: `url('${post.featuredImageUrl || '/placeholder-news.jpg'}')`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center'
                     }}></div>

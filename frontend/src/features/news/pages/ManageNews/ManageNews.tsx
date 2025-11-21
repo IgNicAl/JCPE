@@ -227,7 +227,7 @@ const ManageNews: React.FC = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               {searchTerm && (
-                <button type="button" className="clear-search" onClick={() => setSearchTerm('')}>
+                <button type="button" className="clear-search" onClick={() => setSearchTerm('')} aria-label="Limpar busca">
                   <i className="fas fa-times" />
                 </button>
               )}
@@ -284,7 +284,7 @@ const ManageNews: React.FC = () => {
                   <div key={noticia.id} className="news-card">
                     {noticia.featuredImageUrl && (
                       <div className="news-image-wrapper">
-                        <div className="news-image" style={{ backgroundImage: `url(${noticia.featuredImageUrl})` }}>
+                        <div className="news-image" style={{ backgroundImage: `url('${noticia.featuredImageUrl}')` }}>
                           <span className={`priority-badge ${priority.class}`}>
                             <i className="fas fa-flag" />
                             {priority.text}
