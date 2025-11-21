@@ -120,7 +120,7 @@ You must also adhere to and apply these expert UI/UX principles in your reasonin
 
 - Maintain a comprehensive style guide.
 - Document design patterns and component usage.
-- Create user flow diagrams for complex interactions.
+- Create user flow diagrams for complex interactions.1
 - Keep design assets organized and accessible to the team.
 
 ### Forms
