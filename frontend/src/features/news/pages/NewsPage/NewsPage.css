@@ -75,6 +75,14 @@
   font-weight: 700;
   margin-bottom: var(--spacing-lg);
   color: var(--text-primary);
+  /* Ensure full title display */
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-word;
+  display: block;
+  max-height: none;
 }
 
 .news-featured-image-wrapper {

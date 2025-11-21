@@ -246,7 +246,7 @@ const NewsPage: React.FC = () => {
 
             {/* Title */}
             {/* Title */}
-            <h1 className="news-title" style={{ wordBreak: 'break-word' }}>{news.title}</h1>
+            <h1 className="news-title">{news.title}</h1>
 
             {/* Featured Image */}
             {news.featuredImageUrl && (
@@ -277,7 +277,7 @@ const NewsPage: React.FC = () => {
 
             {/* Content */}
             <div className="news-content">
-              <h2 className="content-subtitle">Don't Wait. The Purpose Of Our Lives Is To Be Happy!</h2>
+
               {news.summary && <p className="news-summary">{news.summary}</p>}
 
               {news.contentJson ? (
