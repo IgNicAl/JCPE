@@ -59,7 +59,7 @@ const WeatherSection: React.FC<WeatherSectionProps> = ({
   return (
     <section className="space-y-6">
       <HomeSectionTitle title="weather insights" />
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+      <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px]">
         <article className="rounded-2xl bg-white p-6 shadow-card">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-4">
@@ -119,7 +119,7 @@ const WeatherSection: React.FC<WeatherSectionProps> = ({
           </div>
         </article>
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
           {cities.map((city) => (
             <article
               key={city.id}

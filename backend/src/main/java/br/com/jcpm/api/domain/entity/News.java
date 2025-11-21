@@ -10,6 +10,9 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,7 +49,8 @@ public class News {
   private UUID id;
 
   @ManyToOne
-  @JoinColumn(name = "autor_id", nullable = false)
+  @JoinColumn(name = "autor_id", nullable = true)
+  @OnDelete(action = OnDeleteAction.SET_NULL)
   private User author;
 
   @NotBlank(message = "Título é obrigatório")

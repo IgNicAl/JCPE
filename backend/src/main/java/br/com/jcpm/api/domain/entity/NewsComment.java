@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
@@ -54,6 +56,7 @@ public class NewsComment {
 
   @ManyToOne
   @JoinColumn(name = "user_id", insertable = false, updatable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @lombok.ToString.Exclude
   @lombok.EqualsAndHashCode.Exclude
   private User user;
