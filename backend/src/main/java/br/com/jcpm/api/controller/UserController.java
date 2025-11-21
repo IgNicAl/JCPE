@@ -1,6 +1,7 @@
 package br.com.jcpm.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -100,6 +101,15 @@ public class UserController {
       currentUser.setProfileImageUrl(userDetails.getUrlImagemPerfil());
     }
 
+    // Process password change if requested
+    if (userDetails.getPassword() != null && !userDetails.getPassword().trim().isEmpty()) {
+      try {
+        userService.updatePassword(currentUser, userDetails.getPassword(), userDetails.getOldPassword());
+      } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().build();
+      }
+    }
+
     User updatedUser = userService.update(currentUser);
     return ResponseEntity.ok(new UserResponse(updatedUser));
   }
@@ -122,35 +132,46 @@ public class UserController {
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<UserResponse> updateUser(
-      @PathVariable UUID id, @RequestBody UserUpdateRequest userDetails) { // <-- Alterado para o DTO
-    return userService
-        .findById(id)
-        .map(
-            user -> {
-              // Only update fields that are not null
-              if (userDetails.getName() != null) {
-                user.setName(userDetails.getName());
-              }
-              if (userDetails.getEmail() != null) {
-                user.setEmail(userDetails.getEmail());
-              }
-              if (userDetails.getBiografia() != null) {
-                user.setBiography(userDetails.getBiografia());
-              }
-              if (userDetails.getUrlImagemPerfil() != null) {
-                user.setProfileImageUrl(userDetails.getUrlImagemPerfil());
-              }
-              if (userDetails.getUserType() != null) {
-                user.setUserType(userDetails.getUserType());
-              }
-              if (userDetails.getAtivo() != null) {
-                user.setActive(userDetails.getAtivo());
-              }
+      @PathVariable UUID id, @RequestBody UserUpdateRequest userDetails) {
+    Optional<User> userOptional = userService.findById(id);
 
-              User updatedUser = userService.update(user);
-              return ResponseEntity.ok(new UserResponse(updatedUser));
-            })
-        .orElse(ResponseEntity.notFound().build());
+    if (userOptional.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+
+    User user = userOptional.get();
+
+    // Only update fields that are not null
+    if (userDetails.getName() != null) {
+      user.setName(userDetails.getName());
+    }
+    if (userDetails.getEmail() != null) {
+      user.setEmail(userDetails.getEmail());
+    }
+    if (userDetails.getBiografia() != null) {
+      user.setBiography(userDetails.getBiografia());
+    }
+    if (userDetails.getUrlImagemPerfil() != null) {
+      user.setProfileImageUrl(userDetails.getUrlImagemPerfil());
+    }
+    if (userDetails.getUserType() != null) {
+      user.setUserType(userDetails.getUserType());
+    }
+    if (userDetails.getAtivo() != null) {
+      user.setActive(userDetails.getAtivo());
+    }
+
+    // Process password change if requested (admin can reset without old password)
+    if (userDetails.getPassword() != null && !userDetails.getPassword().trim().isEmpty()) {
+      try {
+        userService.resetPassword(user, userDetails.getPassword());
+      } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().build();
+      }
+    }
+
+    User updatedUser = userService.update(user);
+    return ResponseEntity.ok(new UserResponse(updatedUser));
   }
 
   @DeleteMapping("/{id}")

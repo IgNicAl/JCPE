@@ -151,4 +151,45 @@ public class UserService implements UserDetailsService {
         .filter(user -> user.getUserType().equals(userType))
         .count();
   }
+
+  /**
+   * Atualiza a senha do usuário após validar a senha antiga.
+   *
+   * @param user O usuário cuja senha será atualizada
+   * @param newPassword A nova senha (será criptografada)
+   * @param oldPassword A senha antiga para validação
+   * @throws IllegalArgumentException se a senha antiga estiver incorreta
+   */
+  public void updatePassword(User user, String newPassword, String oldPassword) {
+    if (oldPassword == null || oldPassword.trim().isEmpty()) {
+      throw new IllegalArgumentException("Senha antiga é obrigatória");
+    }
+
+    if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+      throw new IllegalArgumentException("Senha antiga incorreta");
+    }
+
+    if (newPassword == null || newPassword.trim().isEmpty()) {
+      throw new IllegalArgumentException("Nova senha não pode ser vazia");
+    }
+
+    user.setPassword(passwordEncoder.encode(newPassword));
+    userRepository.save(user);
+  }
+
+  /**
+   * Redefine a senha do usuário sem validar a senha antiga.
+   * Usado quando um administrador está redefinindo a senha de outro usuário.
+   *
+   * @param user O usuário cuja senha será redefinida
+   * @param newPassword A nova senha (será criptografada)
+   */
+  public void resetPassword(User user, String newPassword) {
+    if (newPassword == null || newPassword.trim().isEmpty()) {
+      throw new IllegalArgumentException("Nova senha não pode ser vazia");
+    }
+
+    user.setPassword(passwordEncoder.encode(newPassword));
+    userRepository.save(user);
+  }
 }

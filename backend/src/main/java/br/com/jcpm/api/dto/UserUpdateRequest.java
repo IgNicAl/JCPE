@@ -13,6 +13,8 @@ public class UserUpdateRequest {
     private Boolean ativo;
     private String biografia;
     private String urlImagemPerfil;
+    private String password;
+    private String oldPassword;
 
     // Getters e Setters Explícitos (gerados por Lombok, mas adicionados para
     // suporte IDE)
@@ -62,5 +64,21 @@ public class UserUpdateRequest {
 
     public void setUrlImagemPerfil(String urlImagemPerfil) {
         this.urlImagemPerfil = urlImagemPerfil;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 }
