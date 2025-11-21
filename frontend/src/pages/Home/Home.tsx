@@ -292,25 +292,61 @@ const Home: React.FC = () => {
     authorName: item.authorName,
     authorAvatar: item.authorAvatar,
     publicationDate: formatDate(item.publicationDate),
+    slug: item.slug || '',
   }));
 
-  const takenIds = new Set<string>();
-  const pickRange = (start: number, end: number) => {
-    const selection = posts.slice(start, end);
-    selection.forEach((post) => takenIds.add(post.id));
-    return selection;
-  };
+  // Lógica mais flexível para distribuir posts entre as seções
+  // Se não houver posts suficientes, vamos duplicar/reciclar os posts existentes
+  const totalPosts = posts.length;
 
-  const pickNext = (count: number) => {
-    const selection = posts.filter((post) => !takenIds.has(post.id)).slice(0, count);
-    selection.forEach((post) => takenIds.add(post.id));
-    return selection;
-  };
+  let topPosts: PostPreview[] = [];
+  let popularPosts: PostPreview[] = [];
+  let newPosts: PostPreview[] = [];
+  let trendyPosts: PostPreview[] = [];
 
-  const topPosts = pickRange(0, 4);
-  const popularPosts = pickRange(4, 8);
-  const newPosts = pickNext(6);
-  const trendyPosts = pickNext(4);
+  if (totalPosts === 0) {
+    // Sem posts, mantém arrays vazias
+  } else if (totalPosts < 8) {
+    // Se tem menos de 8 posts, vamos duplicar/reciclar para preencher as seções
+    const minPostsPerSection = Math.min(4, totalPosts);
+
+    // Top Posts: primeiros posts disponíveis (até 4)
+    topPosts = posts.slice(0, minPostsPerSection);
+
+    // Popular Posts: recicla posts do início (pode duplicar se necessário)
+    popularPosts = [...posts.slice(0, minPostsPerSection)];
+    if (popularPosts.length < 4 && totalPosts > 0) {
+      // Preenche duplicando os posts que temos
+      while (popularPosts.length < 4) {
+        popularPosts.push(...posts.slice(0, Math.min(4 - popularPosts.length, totalPosts)));
+      }
+    }
+
+    // New Posts: mais posts reciclados
+    newPosts = [...posts.slice(0, Math.min(6, totalPosts))];
+
+    // Trendy Posts: mais posts reciclados
+    trendyPosts = [...posts.slice(0, minPostsPerSection)];
+  } else {
+    // Lógica original para quando há posts suficientes
+    const takenIds = new Set<string>();
+    const pickRange = (start: number, end: number) => {
+      const selection = posts.slice(start, end);
+      selection.forEach((post) => takenIds.add(post.id));
+      return selection;
+    };
+
+    const pickNext = (count: number) => {
+      const selection = posts.filter((post) => !takenIds.has(post.id)).slice(0, count);
+      selection.forEach((post) => takenIds.add(post.id));
+      return selection;
+    };
+
+    topPosts = pickRange(0, 4);
+    popularPosts = pickRange(4, 8);
+    newPosts = pickNext(6);
+    trendyPosts = pickNext(4);
+  }
 
   const weatherMain = {
     city: 'Recife, PE',

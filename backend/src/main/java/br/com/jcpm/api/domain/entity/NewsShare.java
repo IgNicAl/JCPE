@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.type.SqlTypes;
 
 import jakarta.persistence.Column;
@@ -50,6 +52,7 @@ public class NewsShare {
 
   @ManyToOne
   @JoinColumn(name = "user_id", insertable = false, updatable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private User user;
 
   @CreationTimestamp
