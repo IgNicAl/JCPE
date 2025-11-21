@@ -12,8 +12,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt ./
-RUN pip install --upgrade pip && \
-    pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --upgrade pip && \
+    pip wheel --wheel-dir /wheels -r requirements.txt
 
 FROM python:3.11-slim
 
@@ -24,7 +25,8 @@ WORKDIR /app
 
 COPY --from=build /wheels /wheels
 COPY requirements.txt ./
-RUN pip install --no-cache-dir --find-links=/wheels -r requirements.txt && \
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --no-index --find-links=/wheels -r requirements.txt && \
     rm -rf /wheels
 
 COPY app ./app

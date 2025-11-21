@@ -1,15 +1,43 @@
-crewai[google-genai]
-crewai-tools
-langchain
-langchain-google-genai
-google-generativeai
-langgraph-prebuilt
-fastapi
-uvicorn[standard]
-pydantic
-python-dotenv
-requests
-pytest
-SQLAlchemy
-pymysql
-newsapi-python
+# ============================================================================
+# DEPENDÊNCIAS FIXADAS - NÃO ALTERAR SEM TESTAR
+# ============================================================================
+# Versões fixadas para garantir builds rápidos e determinísticos.
+# As versões abaixo têm wheels manylinux pré-compilados disponíveis,
+# evitando compilação demorada durante o build do Docker.
+# ============================================================================
+
+# CrewAI - Framework de agentes AI
+crewai[google-genai]==0.86.0
+crewai-tools==0.17.0
+
+# LangChain - Framework para LLMs
+langchain==0.3.7
+langchain-google-genai==2.0.5
+google-generativeai==0.8.3
+langgraph-prebuilt==0.1.7
+
+# FastAPI - Web framework
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+pydantic==2.10.2
+python-dotenv==1.0.1
+
+# Utilitários
+requests==2.32.3
+
+# Testing
+pytest==8.3.4
+
+# Database
+SQLAlchemy==2.0.36
+pymysql==1.1.1
+
+# News API
+newsapi-python==0.2.7
+
+# ============================================================================
+# BIBLIOTECAS CIENTÍFICAS (numpy, pandas, etc. vêm como dependências transitivas)
+# ============================================================================
+# numpy~=2.0.2 - Instalado automaticamente pelo crewai-tools
+# pandas~=2.2.3 - Instalado automaticamente pelo crewai-tools
+# Versões compatíveis com wheels manylinux2014_x86_64
