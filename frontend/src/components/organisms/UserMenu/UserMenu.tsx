@@ -121,7 +121,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onItemClick, showName = true }) => 
         <div className={styles.dropdownDivider} />
 
         <Link
-          to={ROUTES.USER_AREA}
+          to={ROUTES.PROFILE}
           className={styles.dropdownItem}
           onClick={handleItemClick}
         >
@@ -130,7 +130,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onItemClick, showName = true }) => 
         </Link>
 
         <Link
-          to={ROUTES.USER_AREA}
+          to={ROUTES.PROFILE}
           className={styles.dropdownItem}
           onClick={handleItemClick}
         >

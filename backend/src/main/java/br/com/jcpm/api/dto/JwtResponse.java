@@ -1,7 +1,8 @@
 package br.com.jcpm.api.dto;
 
-import br.com.jcpm.api.domain.enums.UserType;
 import java.util.UUID;
+
+import br.com.jcpm.api.domain.enums.UserType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,14 +19,17 @@ public class JwtResponse {
   private String email;
   private String name;
   private UserType userType;
+  private String urlImagemPerfil;
 
   public JwtResponse(
-      String accessToken, UUID id, String username, String email, String name, UserType userType) {
+      String accessToken, UUID id, String username, String email, String name, UserType userType, String urlImagemPerfil) {
     this.token = accessToken;
     this.id = id;
     this.username = username;
     this.email = email;
     this.name = name;
     this.userType = userType;
+    this.urlImagemPerfil = urlImagemPerfil;
   }
 }
+

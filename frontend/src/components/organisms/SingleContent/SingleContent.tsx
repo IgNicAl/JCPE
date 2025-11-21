@@ -12,7 +12,7 @@ interface SingleContentProps {
 }
 
 const SingleContent: React.FC<SingleContentProps> = ({
-  id,
+
   title,
   summary,
   imageUrl,
@@ -23,7 +23,7 @@ const SingleContent: React.FC<SingleContentProps> = ({
     <Link to={`/noticia/${slug}`} className={`${styles.singleContent} ${className}`}>
       <div
         className={styles.contentImage}
-        style={{ backgroundImage: `url(${imageUrl})` } as React.CSSProperties}
+        style={{ backgroundImage: `url('${imageUrl}')` } as React.CSSProperties}
       >
         <div className={styles.imageOverlay} />
       </div>

@@ -16,7 +16,7 @@ export const ROUTES = {
   NEWS_PAGE: '/noticia',
   CHAT_AI: '/chat',
   POINTS: '/pontos',
-  USER_AREA: '/usuario',
+  PROFILE: '/perfil',
   CLIMA: '/clima',
   RECIFE: '/recife',
   EMPREENDEDORISMO: '/empreendedorismo',

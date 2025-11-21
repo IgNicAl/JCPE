@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+
 import styles from './HeroSlider.module.css';
 
 interface Slide {
@@ -60,7 +60,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({
       <div className={styles.sliderContainer}>
         <div
           className={styles.slideImage}
-          style={{ backgroundImage: `url(${currentSlideData.imageUrl})` }}
+          style={{ backgroundImage: `url('${currentSlideData.imageUrl}')` }}
         >
           <div className={styles.imageOverlay} />
         </div>

@@ -44,7 +44,7 @@ const SingleContent: React.FC<SingleContentProps> = ({
     <Link to={`/noticia/${slug}`} className={`w-full h-[452px] md:h-[400px] sm:h-[400px] relative overflow-hidden rounded-md block no-underline transition-transform duration-normal hover:-translate-y-1 ${className}`}>
       <div
         className="w-full h-full absolute left-0 top-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${imageUrl})` } as React.CSSProperties}
+        style={{ backgroundImage: `url('${imageUrl}')` } as React.CSSProperties}
       >
         {/* Usando placeholder como no HTML */}
         <img src={imageUrl} alt={title} className="w-full h-full object-cover" onError={(e) => (e.currentTarget.src = 'https://placehold.co/384x452/34d399/white?text=Artigo')} />
@@ -54,12 +54,12 @@ const SingleContent: React.FC<SingleContentProps> = ({
       <div className="absolute left-[10px] bottom-[10px] w-[calc(100%-20px)] max-w-[calc(100%-20px)]">
         {/* Estilo de fundo do HTML */}
         <div className="bg-white/75 dark:bg-white/75 rounded-md backdrop-blur-[5px] p-md flex flex-col gap-sm">
-          {/* Título com font-bold e text-black como no HTML */}
-          <h2 className="w-full h-auto text-black dark:text-black text-2xl lg:text-xl sm:text-lg font-roboto font-bold m-0 break-words leading-[1.2]">
+          {/* Título limitado a 1 linha com ellipsis */}
+          <h2 className="w-full text-black dark:text-black text-2xl lg:text-xl sm:text-lg font-roboto font-bold m-0 leading-[1.2] line-clamp-1 overflow-hidden">
             {title}
           </h2>
-          {/* Sumário com text-black/75 como no HTML */}
-          <p className="w-full h-auto text-black/75 dark:text-black/75 text-md lg:text-sm sm:text-sm font-roboto font-normal capitalize leading-5 tracking-[0.25px] m-0 break-words line-clamp-2 sm:line-clamp-3">
+          {/* Sumário limitado a 2 linhas com ellipsis */}
+          <p className="w-full text-black/75 dark:text-black/75 text-md lg:text-sm sm:text-sm font-roboto font-normal leading-5 tracking-[0.25px] m-0 line-clamp-2 overflow-hidden">
             {summary}
           </p>
         </div>
@@ -120,7 +120,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({
       <div className="w-full h-full relative">
         <div
           className="w-full h-full bg-cover bg-center relative"
-          style={{ backgroundImage: `url(${currentSlideData.imageUrl})` }}
+          style={{ backgroundImage: `url('${currentSlideData.imageUrl}')` }}
         >
           {/* Usando placeholder como no HTML */}
           <img src={currentSlideData.imageUrl} alt={currentSlideData.title} className="w-full h-full object-cover" />

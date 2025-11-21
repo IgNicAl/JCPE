@@ -78,6 +78,7 @@ export const userService = {
   getAllUsers: () => api.get('/api/users'),
   getUserById: (id: string) => api.get(`/api/users/${id}`),
   updateUser: (id: string, user: Partial<User>) => api.put(`/api/users/${id}`, user),
+  updateMyProfile: (user: Partial<User>) => api.put('/api/users/me', user),
   deleteUser: (id: string) => api.delete(`/api/users/${id}`),
   sendScreenTime: (seconds: number) => api.post('/api/users/me/screentime', { seconds }),
   getMyPoints: () => api.get('/api/users/me/points'),
@@ -102,7 +103,53 @@ export const newsService = {
   create: (newsData: unknown) => api.post('/api/noticias', newsData),
   update: (id: string, newsData: unknown) => api.put(`/api/noticias/${id}`, newsData),
   delete: (id: string) => api.delete(`/api/noticias/${id}`),
+
+  // Métodos de like
+  getLikedNews: () => api.get('/api/noticias/liked'),
+  likeNews: (newsId: string) => api.post(`/api/noticias/${newsId}/like`),
+  unlikeNews: (newsId: string) => api.delete(`/api/noticias/${newsId}/like`),
+
+  // Métodos de rating (avaliação)
+  rateNews: (newsId: string, rating: number) => api.post(`/api/noticias/${newsId}/rate`, { rating }),
+  getNewsRating: (newsId: string) => api.get(`/api/noticias/${newsId}/rating`),
+  getUserRating: (newsId: string) => api.get(`/api/noticias/${newsId}/user-rating`),
+
+  // Métodos de comentários
+  getNewsComments: (newsId: string) => api.get(`/api/noticias/${newsId}/comments`),
+  addComment: (newsId: string, content: string, parentId?: string) => api.post(`/api/noticias/${newsId}/comments`, { content, parentId }),
+  deleteComment: (commentId: string) => api.delete(`/api/noticias/comments/${commentId}`),
+
+  // Métodos de compartilhamento
+  shareNews: (newsId: string) => api.post(`/api/noticias/${newsId}/share`),
+
+  // Estatísticas gerais
+  getNewsStats: (newsId: string) => api.get(`/api/noticias/${newsId}/stats`),
+  getAuthorPostCount: (authorId: string) => api.get(`/api/noticias/author/${authorId}/count`),
+  getTopNews: () => api.get('/api/noticias/top'),
 };
+
+/**
+ * Serviços de Categorias
+ */
+export const categoryService = {
+  getAll: () => api.get('/api/categories'),
+  getById: (id: string) => api.get(`/api/categories/${id}`),
+  create: (categoryData: unknown) => api.post('/api/categories', categoryData),
+  update: (id: string, categoryData: unknown) => api.put(`/api/categories/${id}`, categoryData),
+  delete: (id: string) => api.delete(`/api/categories/${id}`),
+};
+
+/**
+ * Serviços de Tags
+ */
+export const tagService = {
+  getAll: () => api.get('/api/tags'),
+  search: (query: string) => api.get(`/api/tags/search?query=${encodeURIComponent(query)}`),
+  getById: (id: string) => api.get(`/api/tags/${id}`),
+  create: (tagData: unknown) => api.post('/api/tags', tagData),
+  delete: (id: string) => api.delete(`/api/tags/${id}`),
+};
+
 
 /**
  * NOVO: Serviços do Agente de IA

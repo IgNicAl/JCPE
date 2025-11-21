@@ -1,0 +1,5 @@
+.edit-profile-page {
+  padding: 2rem;
+  background-color: #f4f6f8;
+  min-height: calc(100vh - 64px);
+}

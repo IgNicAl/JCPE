@@ -1,5 +1,8 @@
 package br.com.jcpm.api.dto;
 
+import java.util.List;
+import java.util.UUID;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -35,6 +38,10 @@ public class NewsRequest {
   private Boolean isFeaturedHome; // se é destaque na página principal (Home)
 
   private Boolean isFeaturedPage; // se é destaque na página específica
+
+  private UUID categoryId; // ID da categoria
+
+  private List<UUID> tagIds; // IDs das tags associadas
 
   // Getters e Setters Explícitos (gerados por Lombok @Getter/@Setter, mas
   // adicionados para suporte IDE)
@@ -116,5 +123,21 @@ public class NewsRequest {
 
   public void setIsFeaturedPage(Boolean isFeaturedPage) {
     this.isFeaturedPage = isFeaturedPage;
+  }
+
+  public UUID getCategoryId() {
+    return categoryId;
+  }
+
+  public void setCategoryId(UUID categoryId) {
+    this.categoryId = categoryId;
+  }
+
+  public List<UUID> getTagIds() {
+    return tagIds;
+  }
+
+  public void setTagIds(List<UUID> tagIds) {
+    this.tagIds = tagIds;
   }
 }

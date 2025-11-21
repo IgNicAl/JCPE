@@ -1,29 +1,17 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { userService } from '@/services/api';
-import { User, UserType } from '@/types';
+import { User } from '@/types';
+import UserForm from '@/components/organisms/UserForm/UserForm';
 import './EditUser.css';
-
-interface EditUserFormData extends Partial<User> {
-  name: string;
-  email: string;
-  userType: UserType;
-  urlImagemPerfil?: string;
-  biografia?: string;
-}
-
-interface MessageState {
-  type: 'success' | 'error' | '';
-  text: string;
-}
 
 const EditUser: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<EditUserFormData | null>(null);
+  const [initialData, setInitialData] = useState<Partial<User> | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
-  const [message, setMessage] = useState<MessageState>({ type: '', text: '' });
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -31,9 +19,9 @@ const EditUser: React.FC = () => {
       try {
         setLoading(true);
         const response = await userService.getUserById(id);
-        setFormData(response.data as EditUserFormData);
+        setInitialData(response.data as User);
       } catch (error) {
-        setMessage({ type: 'error', text: 'Erro ao carregar dados do usuário.' });
+        setError('Erro ao carregar dados do usuário.');
         console.error('Erro:', error);
       } finally {
         setLoading(false);
@@ -42,22 +30,16 @@ const EditUser: React.FC = () => {
     fetchUser();
   }, [id]);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => (prev ? { ...prev, [name]: value } : null));
-  };
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!id || !formData) return;
+  const handleSubmit = async (data: Partial<User>) => {
+    if (!id) return;
     setSaving(true);
-    setMessage({ type: '', text: '' });
+    setError('');
     try {
-      await userService.updateUser(id, formData);
-      setMessage({ type: 'success', text: 'Usuário atualizado com sucesso!' });
-      setTimeout(() => navigate('/admin/usuarios'), 2000);
+      await userService.updateUser(id, data);
+      alert('Usuário atualizado com sucesso!');
+      navigate('/admin/usuarios');
     } catch (error) {
-      setMessage({ type: 'error', text: 'Erro ao atualizar usuário. Tente novamente.' });
+      setError('Erro ao atualizar usuário. Tente novamente.');
       console.error('Erro ao atualizar:', error);
     } finally {
       setSaving(false);
@@ -68,62 +50,34 @@ const EditUser: React.FC = () => {
     return <div className="edit-user-container">Carregando...</div>;
   }
 
-  if (!formData) {
+  if (error) {
+    return <div className="edit-user-container error">{error}</div>;
+  }
+
+  if (!initialData) {
     return <div className="edit-user-container">Usuário não encontrado.</div>;
   }
 
   return (
-    <div className="edit-user-container">
-      <div className="edit-user-card">
-        <div className="edit-user-header">
-          <h1>
-            <i className="fas fa-edit" /> Editar Usuário
-          </h1>
-          <p>
-            Altere os dados de <strong>{formData.name}</strong>
-          </p>
-        </div>
-
-        {message.text && (
-          <div className={`message ${message.type}`}>
-            <i className={`fas ${message.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}`} />
-            {message.text}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="edit-user-form">
-          <div className="form-group">
-            <label htmlFor="name">Nome Completo</label>
-            <input type="text" id="name" name="name" value={formData.name || ''} onChange={handleChange} required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input type="email" id="email" name="email" value={formData.email || ''} onChange={handleChange} required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="userType">Tipo de Usuário</label>
-            <select id="userType" name="userType" value={formData.userType} onChange={handleChange}>
-              <option value="ADMIN">Administrador</option>
-              <option value="JOURNALIST">Jornalista</option>
-              <option value="USER">Usuário Padrão</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="urlImagemPerfil">URL da Imagem de Perfil</label>
-            <input type="text" id="urlImagemPerfil" name="urlImagemPerfil" value={formData.urlImagemPerfil || ''} onChange={handleChange} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="biografia">Biografia</label>
-            <textarea id="biografia" name="biografia" value={formData.biografia || ''} onChange={handleChange} />
-          </div>
-          <button type="submit" className="submit-btn" disabled={saving}>
-            {saving ? 'Salvando...' : 'Salvar Alterações'}
-          </button>
-        </form>
+    <div className="edit-user-page">
+      <div className="edit-user-header-wrapper">
+        <h1>
+          <i className="fas fa-user-edit" /> Editar Usuário
+        </h1>
+        <p>
+          Editando usuário: <strong>{initialData.name}</strong>
+        </p>
       </div>
+
+      <UserForm
+        initialData={initialData}
+        onSubmit={handleSubmit}
+        loading={saving}
+        isAdmin={true}
+        title="Editar Usuário"
+      />
     </div>
   );
 };
 
 export default EditUser;
-

@@ -1,14 +1,5 @@
 package br.com.jcpm.api.controller;
 
-import br.com.jcpm.api.domain.entity.User;
-import br.com.jcpm.api.dto.JwtResponse;
-import br.com.jcpm.api.dto.LoginRequest;
-import br.com.jcpm.api.dto.RegisterRequest;
-import br.com.jcpm.api.dto.UserResponse;
-import br.com.jcpm.api.security.JwtTokenProvider;
-import br.com.jcpm.api.service.UserService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +9,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import br.com.jcpm.api.domain.entity.User;
+import br.com.jcpm.api.dto.JwtResponse;
+import br.com.jcpm.api.dto.LoginRequest;
+import br.com.jcpm.api.dto.RegisterRequest;
+import br.com.jcpm.api.dto.UserResponse;
+import br.com.jcpm.api.security.JwtTokenProvider;
+import br.com.jcpm.api.service.UserService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Controlador responsável pelos endpoints de autenticação e registro de usuários.
@@ -55,7 +56,8 @@ public class AuthController {
             userPrincipal.getUsername(),
             userPrincipal.getEmail(),
             userPrincipal.getName(),
-            userPrincipal.getUserType()));
+            userPrincipal.getUserType(),
+            userPrincipal.getProfileImageUrl()));
   }
 
   /**
