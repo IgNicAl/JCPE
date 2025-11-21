@@ -70,6 +70,14 @@ export const useEditor = (options: UseEditorOptions = {}): UseEditorReturn => {
                   return { success: 0 };
                 }
               },
+              async uploadByUrl(url: string) {
+                return {
+                  success: 1,
+                  file: {
+                    url: url,
+                  },
+                };
+              },
             },
           },
         },
