@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import jakarta.persistence.Column;
@@ -13,8 +12,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -22,14 +19,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Representa uma categoria de notícia (apenas ADMINs podem criar/editar).
+ * Representa uma seção da homepage onde notícias podem ser exibidas.
+ * Ex: Latest Videos, New Posts, Popular Posts, Featured, etc.
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "categorias")
-public class Category {
+@Table(name = "homepage_sections")
+public class HomepageSection {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -37,37 +35,21 @@ public class Category {
   @Column(columnDefinition = "CHAR(36)")
   private UUID id;
 
-  @NotBlank(message = "Nome da categoria é obrigatório")
-  @Column(nullable = false, unique = true)
+  @NotBlank(message = "Nome da seção é obrigatório")
+  @Column(nullable = false, unique = true, length = 100)
   private String name;
 
   @NotBlank(message = "Slug é obrigatório")
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false, unique = true, length = 100)
   private String slug;
 
   @Column(length = 512)
   private String description;
 
-  @Column(length = 7) // cor em hexadecimal ex: #FF5733
-  private String color;
-
-  @Column(length = 255)
-  private String icon; // Nome do ícone ou URL
-
-  @ManyToOne
-  @JoinColumn(name = "parent_category_id")
-  private Category parentCategory; // Suporte a subcategorias
-
   @Column(nullable = false)
   private Boolean active = true;
-
-  @Column(nullable = false)
-  private Integer displayOrder = 0; // Ordenação customizada
 
   @CreationTimestamp
   @Column(nullable = false, updatable = false)
   private LocalDateTime createdAt;
-
-  @UpdateTimestamp
-  private LocalDateTime updatedAt;
 }

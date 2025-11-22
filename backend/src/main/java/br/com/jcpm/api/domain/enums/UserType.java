@@ -6,6 +6,7 @@ package br.com.jcpm.api.domain.enums;
 public enum UserType {
   USER("User"),
   JOURNALIST("Jornalista"),
+  REVIEWER("Revisor"),
   ADMIN("Administrador");
 
   private final String description;

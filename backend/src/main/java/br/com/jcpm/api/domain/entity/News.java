@@ -7,15 +7,18 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
+import br.com.jcpm.api.domain.enums.NewsPriority;
+import br.com.jcpm.api.domain.enums.NewsStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -79,13 +82,43 @@ public class News {
   @Column(nullable = true)
   private String featuredImageUrl;
 
+  @NotNull(message = "Tipo de mídia é obrigatório")
+  @Column(nullable = false)
+  private String mediaType = "image"; // image ou video
+
+  @Column(nullable = true)
+  private String mediaSource; // external_url ou uploaded
+
+  // Campos do workflow de aprovação
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private NewsStatus status = NewsStatus.DRAFT;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private NewsPriority newsPriority = NewsPriority.MEDIUM;
+
+  @ManyToOne
+  @JoinColumn(name = "reviewed_by", nullable = true)
+  @OnDelete(action = OnDeleteAction.SET_NULL)
+  private User reviewedBy;
+
+  @Column(nullable = true)
+  private LocalDateTime reviewedAt;
+
+  @Column(nullable = true)
+  private LocalDateTime scheduledPublishDate;
+
+  @Column(length = 255, nullable = true)
+  private String seoTitle;
+
+  @Column(length = 512, nullable = true)
+  private String seoMetaDescription;
+
+  // Campo antigo de prioridade (manter para compatibilidade)
   @NotNull(message = "Prioridade é obrigatória")
   @Column(nullable = false)
   private Integer priority = 1;
-
-  @NotNull(message = "Status é obrigatório")
-  @Column(nullable = false)
-  private String status = "RASCUNHO"; // RASCUNHO ou PUBLICADO
 
   @Column(nullable = true)
   private String page = "noticias"; // página onde a notícia será publicada
@@ -107,6 +140,14 @@ public class News {
     inverseJoinColumns = @JoinColumn(name = "tag_id")
   )
   private Set<Tag> tags = new HashSet<>();
+
+  @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @JoinTable(
+    name = "news_homepage_sections",
+    joinColumns = @JoinColumn(name = "news_id"),
+    inverseJoinColumns = @JoinColumn(name = "section_id")
+  )
+  private Set<HomepageSection> homepageSections = new HashSet<>();
 
   @CreationTimestamp
   @Column(nullable = false, updatable = false)
@@ -181,6 +222,22 @@ public class News {
     this.featuredImageUrl = featuredImageUrl;
   }
 
+  public String getMediaType() {
+    return mediaType;
+  }
+
+  public void setMediaType(String mediaType) {
+    this.mediaType = mediaType;
+  }
+
+  public String getMediaSource() {
+    return mediaSource;
+  }
+
+  public void setMediaSource(String mediaSource) {
+    this.mediaSource = mediaSource;
+  }
+
   public Integer getPriority() {
     return priority;
   }
@@ -189,11 +246,11 @@ public class News {
     this.priority = priority;
   }
 
-  public String getStatus() {
+  public NewsStatus getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(NewsStatus status) {
     this.status = status;
   }
 

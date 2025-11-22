@@ -1,5 +1,6 @@
 package br.com.jcpm.api.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,4 +15,9 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
   Optional<Category> findByName(String name);
   boolean existsBySlug(String slug);
   boolean existsByName(String name);
+
+  List<Category> findByActiveTrue();
+  List<Category> findByParentCategoryIsNull();
+  List<Category> findByParentCategoryId(UUID parentId);
+  List<Category> findByActiveTrueOrderByDisplayOrderAsc();
 }

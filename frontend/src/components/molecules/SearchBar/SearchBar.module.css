@@ -32,7 +32,7 @@
   background: var(--bg-tertiary);
 }
 
-.iconLeft {
+/* .iconLeft {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,7 +45,7 @@
   font-size: 16px;
   font-weight: 900;
   color: rgba(62, 50, 50, 0.75);
-}
+} */
 
 [data-theme='light'] .iconLeft i,
 :root:not([data-theme='dark']) .iconLeft i {

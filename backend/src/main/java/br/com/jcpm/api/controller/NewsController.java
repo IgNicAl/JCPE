@@ -28,6 +28,7 @@ import br.com.jcpm.api.domain.entity.NewsLike;
 import br.com.jcpm.api.domain.entity.NewsRating;
 import br.com.jcpm.api.domain.entity.NewsShare;
 import br.com.jcpm.api.domain.entity.User;
+import br.com.jcpm.api.domain.enums.NewsStatus;
 import br.com.jcpm.api.dto.NewsCommentRequest;
 import br.com.jcpm.api.dto.NewsCommentResponse;
 import br.com.jcpm.api.dto.NewsLikeResponse;
@@ -98,23 +99,23 @@ public class NewsController {
     // Se solicitar notícias em destaque na HOME
     if (featuredHome != null && featuredHome) {
       return ResponseEntity.ok(
-          newsRepository.findAllByIsFeaturedHomeAndStatusOrderByPriorityDescPublicationDateDesc(true, "PUBLICADO"));
+          newsRepository.findAllByIsFeaturedHomeAndStatusOrderByPriorityDescPublicationDateDesc(true, NewsStatus.PUBLISHED));
     }
 
     // Se solicitar notícias em destaque de uma página específica
     if (featuredPage != null && featuredPage && page != null && !page.isBlank()) {
       return ResponseEntity.ok(
-          newsRepository.findAllByPageAndIsFeaturedPageAndStatusOrderByPriorityDescPublicationDateDesc(page, true, "PUBLICADO"));
+          newsRepository.findAllByPageAndIsFeaturedPageAndStatusOrderByPriorityDescPublicationDateDesc(page, true, NewsStatus.PUBLISHED));
     }
 
     // Busca normal por página
     if (page != null && !page.isBlank()) {
       return ResponseEntity.ok(
-          newsRepository.findAllByPageAndStatusOrderByPriorityDescPublicationDateDesc(page, "PUBLICADO"));
+          newsRepository.findAllByPageAndStatusOrderByPriorityDescPublicationDateDesc(page, NewsStatus.PUBLISHED));
     }
 
     // Todas as notícias publicadas
-    return ResponseEntity.ok(newsRepository.findAllByStatusOrderByPublicationDateDesc("PUBLICADO"));
+    return ResponseEntity.ok(newsRepository.findAllByStatusOrderByPublicationDateDesc(NewsStatus.PUBLISHED));
   }
 
   // ROTA CORRIGIDA para evitar ambiguidade
@@ -167,7 +168,7 @@ public class NewsController {
     news.setIsFeaturedPage(newsRequest.getIsFeaturedPage() != null ? newsRequest.getIsFeaturedPage() : false);
     news.setAuthor(currentUser);
     news.setPublicationDate(LocalDateTime.now());
-    news.setStatus(newsRequest.getStatus() != null ? newsRequest.getStatus() : "PUBLICADO");
+    news.setStatus(newsRequest.getStatus() != null ? newsRequest.getStatus() : NewsStatus.DRAFT);
 
     // Definir categoria
     if (newsRequest.getCategoryId() != null) {
@@ -217,7 +218,7 @@ public class NewsController {
               news.setIsFeaturedPage(
                   newsRequest.getIsFeaturedPage() != null ? newsRequest.getIsFeaturedPage() : news.getIsFeaturedPage());
               news.setUpdateDate(LocalDateTime.now());
-              news.setStatus(newsRequest.getStatus() != null ? newsRequest.getStatus() : news.getStatus());
+              // Status será gerenciado pelo workflow de revisão, não permitir edição direta aqui
 
               // Atualizar categoria
               if (newsRequest.getCategoryId() != null) {
@@ -584,7 +585,7 @@ public class NewsController {
    */
   @GetMapping("/top")
   public ResponseEntity<List<News>> getTopNews() {
-    return ResponseEntity.ok(newsRepository.findTop3ByStatusOrderByPublicationDateDesc("PUBLICADO"));
+    return ResponseEntity.ok(newsRepository.findTop3ByStatusOrderByPublicationDateDesc(NewsStatus.PUBLISHED));
   }
 }
 

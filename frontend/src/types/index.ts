@@ -1,4 +1,4 @@
-export type UserType = 'USER' | 'ADMIN' | 'JOURNALIST';
+export type UserType = 'USER' | 'ADMIN' | 'JOURNALIST' | 'REVIEWER';
 
 export interface User {
   id?: string;
@@ -20,6 +20,7 @@ export interface AuthContextType {
   isAuthenticated: () => boolean;
   isAdmin: () => boolean;
   isJournalist: () => boolean;
+  isReviewer: () => boolean;
   loading: boolean;
 }
 
@@ -31,6 +32,8 @@ export interface News {
   content?: unknown;
   excerpt?: string;
   featuredImageUrl?: string;
+  mediaType?: 'image' | 'video';
+  mediaSource?: 'external_url' | 'uploaded';
   author?: {
     id?: string;
     name: string;
