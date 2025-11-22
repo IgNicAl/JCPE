@@ -10,6 +10,7 @@ import Embed from '@editorjs/embed';
 import Quote from '@editorjs/quote';
 import Table from '@editorjs/table';
 import CodeTool from '@editorjs/code';
+import MediaSelector from '@/components/molecules/MediaSelector';
 
 import styles from './CreateNews.module.css';
 
@@ -17,6 +18,8 @@ interface FormState {
   title: string;
   summary: string;
   featuredImageUrl: string;
+  mediaType: 'image' | 'video';
+  mediaSource: 'external_url' | 'uploaded';
   priority: number;
   categoryId: string;
   tagIds: string[];
@@ -29,6 +32,8 @@ const INITIAL_FORM_STATE: FormState = {
   title: '',
   summary: '',
   featuredImageUrl: '',
+  mediaType: 'image',
+  mediaSource: 'external_url',
   priority: 1,
   categoryId: '',
   tagIds: [],
@@ -144,6 +149,8 @@ const CreateNews: React.FC = () => {
         title: draftData.title || '',
         summary: draftData.summary || '',
         featuredImageUrl: draftData.featuredImageUrl || '',
+        mediaType: draftData.mediaType || 'image',
+        mediaSource: draftData.mediaSource || 'external_url',
         priority: draftData.priority || 1,
         categoryId: draftData.categoryId || '',
         tagIds: draftData.tagIds || [],
@@ -470,35 +477,29 @@ const CreateNews: React.FC = () => {
           </div>
 
           <div className={styles.rightColumn}>
-            {/* Imagem de Capa */}
+            {/* Mídia Principal */}
             <div className={styles.card}>
-              <div className={styles.cardTitle}>Imagem de Capa</div>
+              <div className={styles.cardTitle}>Mídia Principal (Thumbnail/Cover)</div>
               <div className={styles.formGroup}>
-                <div className={`${styles.imageUploadArea} ${formData.featuredImageUrl ? styles.hasImage : ''}`}>
-                  {formData.featuredImageUrl ? (
-                    <img src={formData.featuredImageUrl} alt="Preview" className={styles.imagePreview} />
-                  ) : (
-                    <>
-                      <div className={styles.imageUploadIcon}>
-                        <i className="fas fa-image" />
-                      </div>
-                      <div className={styles.imageUploadText}>
-                        Drop image here, Paste Or
-                      </div>
-                      <button type="button" className={styles.selectButton}>
-                        Select
-                      </button>
-                    </>
-                  )}
-                </div>
-                <input
-                  type="text"
-                  name="featuredImageUrl"
+                <MediaSelector
                   value={formData.featuredImageUrl}
-                  onChange={handleChange}
-                  placeholder="URL da imagem"
-                  className={styles.input}
-                  style={{ marginTop: '0.5rem' }}
+                  mediaType={formData.mediaType}
+                  mediaSource={formData.mediaSource}
+                  onChange={(url, mediaType, mediaSource) => {
+                    setFormData({
+                      ...formData,
+                      featuredImageUrl: url,
+                      mediaType,
+                      mediaSource,
+                    });
+                    saveDraft({
+                      ...formData,
+                      featuredImageUrl: url,
+                      mediaType,
+                      mediaSource,
+                    });
+                  }}
+                  required
                 />
               </div>
             </div>

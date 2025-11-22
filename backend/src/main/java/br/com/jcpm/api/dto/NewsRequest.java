@@ -3,6 +3,7 @@ package br.com.jcpm.api.dto;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.jcpm.api.domain.enums.NewsStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -31,7 +32,7 @@ public class NewsRequest {
   @NotNull(message = "Prioridade não pode ser nula")
   private Integer priority;
 
-  private String status;
+  private NewsStatus status; // Status do workflow de aprovação
 
   private String page; // página onde a notícia será publicada
 
@@ -93,11 +94,11 @@ public class NewsRequest {
     this.priority = priority;
   }
 
-  public String getStatus() {
+  public NewsStatus getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(NewsStatus status) {
     this.status = status;
   }
 

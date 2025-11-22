@@ -17,7 +17,7 @@ interface UserMenuProps {
 }
 
 const UserMenu: React.FC<UserMenuProps> = ({ onItemClick, showName = true }) => {
-  const { user, logout, isAdmin, isJournalist } = useAuth();
+  const { user, logout, isAdmin, isJournalist, isReviewer } = useAuth();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useClickOutside<HTMLDivElement>(() => setDropdownOpen(false));
@@ -92,6 +92,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onItemClick, showName = true }) => 
 
   const userName = user.name || user.email?.split('@')[0] || 'Usuário';
   const canManageNews = isAdmin() || isJournalist();
+  const canReview = isAdmin() || isReviewer();
   const canManageUsers = isAdmin();
 
   return (
@@ -101,7 +102,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onItemClick, showName = true }) => 
         onClick={toggleDropdown}
         onKeyDown={handleKeyDown}
         aria-label="Menu do usuário"
-        aria-expanded={dropdownOpen}
+        aria-expanded={dropdownOpen ? 'true' : 'false'}
         aria-haspopup="true"
       >
         <Avatar src={avatarUrl || undefined} name={userName} size="md" />
@@ -162,6 +163,17 @@ const UserMenu: React.FC<UserMenuProps> = ({ onItemClick, showName = true }) => 
               <span>Gerenciar Notícias</span>
             </Link>
           </>
+        )}
+
+        {canReview && (
+          <Link
+            to="/admin/revisao"
+            className={`${styles.dropdownItem} ${styles.managementItem}`}
+            onClick={handleItemClick}
+          >
+            <i className="fas fa-clipboard-check" />
+            <span>Painel de Revisão</span>
+          </Link>
         )}
 
         {canManageUsers && (

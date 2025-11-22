@@ -150,6 +150,54 @@ export const tagService = {
   delete: (id: string) => api.delete(`/api/tags/${id}`),
 };
 
+/**
+ * Serviços de Upload de Mídia
+ */
+export const mediaService = {
+  /**
+   * Faz upload de um arquivo de mídia (imagem ou vídeo).
+   * @param file Arquivo a ser enviado
+   * @param onProgress Callback para progresso do upload
+   * @returns Promise com a URL do arquivo carregado
+   */
+  uploadFile: (file: File, onProgress?: (progress: number) => void): Promise<AxiosResponse> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return api.post('/api/media/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      onUploadProgress: (progressEvent) => {
+        if (onProgress && progressEvent.total) {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          onProgress(percentCompleted);
+        }
+      },
+    });
+  },
+
+  /**
+   * Valida uma URL externa e detecta o tipo de mídia.
+   * @param url URL a ser validada
+   * @returns Promise com informações sobre a URL
+   */
+  validateUrl: (url: string): Promise<AxiosResponse> => {
+    return api.post('/api/media/validate-url', { url });
+  },
+};
+
+/**
+ * Serviços de Revisão de Notícias
+ */
+export const newsReviewService = {
+  getPendingReviews: () => api.get('/api/news/review/pending'),
+  getReviewedNews: () => api.get('/api/news/review/reviewed'),
+  submitForReview: (newsId: string) => api.post(`/api/news/review/${newsId}/submit`),
+  approveNews: (newsId: string, data: unknown) => api.post(`/api/news/review/${newsId}/approve`, data),
+  rejectNews: (newsId: string, comment: string) => api.post(`/api/news/review/${newsId}/reject`, { comment }),
+  requestChanges: (newsId: string, comment: string) => api.post(`/api/news/review/${newsId}/request-changes`, { comment }),
+  getReviewHistory: (newsId: string) => api.get(`/api/news/review/${newsId}/history`),
+};
+
+
 
 /**
  * NOVO: Serviços do Agente de IA

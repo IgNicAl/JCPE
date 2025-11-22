@@ -10,12 +10,15 @@ import Embed from '@editorjs/embed';
 import Quote from '@editorjs/quote';
 import Table from '@editorjs/table';
 import CodeTool from '@editorjs/code';
+import MediaSelector from '@/components/molecules/MediaSelector';
 import styles from '../CreateNews/CreateNews.module.css';
 
 interface NewsFormData {
   title: string;
   summary: string;
   featuredImageUrl?: string;
+  mediaType?: 'image' | 'video';
+  mediaSource?: 'external_url' | 'uploaded';
   priority: number;
   categoryId?: string;
   tagIds: string[];
@@ -459,35 +462,27 @@ const EditNews: React.FC = () => {
           </div>
 
           <div className={styles.rightColumn}>
-            {/* Imagem de Capa */}
+            {/* Mídia Principal */}
             <div className={styles.card}>
-              <div className={styles.cardTitle}>Imagem de Capa</div>
+              <div className={styles.cardTitle}>Mídia Principal (Thumbnail/Cover)</div>
               <div className={styles.formGroup}>
-                <div className={`${styles.imageUploadArea} ${formData.featuredImageUrl ? styles.hasImage : ''}`}>
-                  {formData.featuredImageUrl ? (
-                    <img src={formData.featuredImageUrl} alt="Preview" className={styles.imagePreview} />
-                  ) : (
-                    <>
-                      <div className={styles.imageUploadIcon}>
-                        <i className="fas fa-image" />
-                      </div>
-                      <div className={styles.imageUploadText}>
-                        Drop image here, Paste Or
-                      </div>
-                      <button type="button" className={styles.selectButton}>
-                        Select
-                      </button>
-                    </>
-                  )}
-                </div>
-                <input
-                  type="text"
-                  name="featuredImageUrl"
+                <MediaSelector
                   value={formData.featuredImageUrl || ''}
-                  onChange={handleChange}
-                  placeholder="URL da imagem"
-                  className={styles.input}
-                  style={{ marginTop: '0.5rem' }}
+                  mediaType={formData.mediaType || 'image'}
+                  mediaSource={formData.mediaSource}
+                  onChange={(url, mediaType, mediaSource) => {
+                    setFormData((prev) =>
+                      prev
+                        ? {
+                            ...prev,
+                            featuredImageUrl: url,
+                            mediaType,
+                            mediaSource,
+                          }
+                        : null
+                    );
+                  }}
+                  required
                 />
               </div>
             </div>

@@ -31,9 +31,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className={`${styles.searchBar} ${className}`}>
-      <div className={styles.iconLeft}>
+      {/* <div className={styles.iconLeft}>
         <i className="fas fa-search" />
-      </div>
+      </div> */}
       <input
         type="text"
         placeholder={placeholder}

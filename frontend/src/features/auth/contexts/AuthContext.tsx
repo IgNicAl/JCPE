@@ -81,6 +81,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const isAuthenticated = (): boolean => user !== null;
   const isAdmin = (): boolean => user !== null && user.userType === 'ADMIN';
   const isJournalist = (): boolean => user !== null && user.userType === 'JOURNALIST';
+  const isReviewer = (): boolean => user !== null && user.userType === 'REVIEWER';
 
   const value: AuthContextType = {
     user,
@@ -89,6 +90,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     isAuthenticated,
     isAdmin,
     isJournalist,
+    isReviewer,
     loading
   };
 

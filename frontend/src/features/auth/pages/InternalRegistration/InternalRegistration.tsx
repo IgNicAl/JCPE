@@ -166,6 +166,7 @@ const InternalRegistration: React.FC = () => {
               <select id="userType" name="userType" value={formData.userType} onChange={handleChange}>
                 <option value="ADMIN">Administrador</option>
                 <option value="JOURNALIST">Jornalista</option>
+                <option value="REVIEWER">Revisor</option>
                 <option value="USER">Usuário Padrão</option>
               </select>
             </div>

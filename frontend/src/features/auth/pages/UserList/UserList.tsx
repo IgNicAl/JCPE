@@ -15,7 +15,7 @@ interface UserTypeInfo {
   icon: string;
 }
 
-type FilterType = 'all' | 'admin' | 'journalist' | 'user';
+type FilterType = 'all' | 'admin' | 'journalist' | 'reviewer' | 'user';
 
 /**
  * @description Página para administradores gerenciarem todos os usuários do sistema.
@@ -88,6 +88,8 @@ const UserList: React.FC = () => {
         return { label: 'Administrador', icon: 'fa-user-shield' };
       case 'JOURNALIST':
         return { label: 'Jornalista', icon: 'fa-user-tie' };
+      case 'REVIEWER':
+        return { label: 'Revisor', icon: 'fa-clipboard-check' };
       case 'USER':
         return { label: 'Usuário Padrão', icon: 'fa-user' };
       default:
@@ -121,6 +123,7 @@ const UserList: React.FC = () => {
       total: users.length,
       admins: users.filter(u => u.userType === 'ADMIN').length,
       journalists: users.filter(u => u.userType === 'JOURNALIST').length,
+      reviewers: users.filter(u => u.userType === 'REVIEWER').length,
       regularUsers: users.filter(u => u.userType === 'USER').length,
     };
   }, [users]);
@@ -213,6 +216,16 @@ const UserList: React.FC = () => {
                 <span className="stat-label">Jornalistas</span>
               </div>
             </div>
+            <div className="stat-card reviewer">
+              <div className="stat-icon">
+                <i className="fas fa-clipboard-check" />
+              </div>
+              <div className="stat-content">
+                <span className="stat-value">{stats.reviewers}</span>
+                <span className="stat-label">Revisores</span>
+              </div>
+            </div>
+
             <div className="stat-card user">
               <div className="stat-icon">
                 <i className="fas fa-user" />
@@ -265,6 +278,14 @@ const UserList: React.FC = () => {
               >
                 <i className="fas fa-user-tie" />
                 Jornalistas
+              </button>
+              <button
+                type="button"
+                className={filterType === 'reviewer' ? 'active reviewer-filter' : 'reviewer-filter'}
+                onClick={() => setFilterType('reviewer')}
+              >
+                <i className="fas fa-clipboard-check" />
+                Revisores
               </button>
               <button
                 type="button"
