@@ -12,23 +12,72 @@ interface NewsWithDetails extends News {
   contentJson?: string;
 }
 
-const NewsPage: React.FC = () => {
-  const { slug } = useParams<{ slug: string }>();
-  const { user, isAuthenticated } = useAuth();
+// Helper function to detect if a URL is a video
+  const isVideoUrl = (url?: string): boolean => {
+    if (!url) return false;
 
-  const [news, setNews] = useState<NewsWithDetails | null>(null);
-  const [stats, setStats] = useState<NewsStats | null>(null);
-  const [comments, setComments] = useState<NewsComment[]>([]);
-  const [newComment, setNewComment] = useState('');
+    // Check for YouTube
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      return true;
+    }
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [submittingComment, setSubmittingComment] = useState(false);
-  const [authorPostCount, setAuthorPostCount] = useState<number>(0);
-  const [topNews, setTopNews] = useState<News[]>([]);
-  const [isFollowing, setIsFollowing] = useState(false);
-  const [replyingTo, setReplyingTo] = useState<string | null>(null);
-  const [replyContent, setReplyContent] = useState('');
+    // Check for Vimeo
+    if (url.includes('vimeo.com')) {
+      return true;
+    }
+
+    // Check for direct video files
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
+    if (videoExtensions.some(ext => url.toLowerCase().includes(ext))) {
+      return true;
+    }
+
+    return false;
+  };
+
+  // Helper function to get YouTube embed URL
+  const getYouTubeEmbedUrl = (url: string): string | null => {
+    try {
+      // Handle youtu.be format
+      if (url.includes('youtu.be/')) {
+        const videoId = url.split('youtu.be/')[1]?.split(/[?#]/)[0];
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+      }
+
+      // Handle youtube.com/watch?v= format
+      if (url.includes('youtube.com/watch')) {
+        const urlObj = new URL(url);
+        const videoId = urlObj.searchParams.get('v');
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+      }
+
+      // Handle youtube.com/embed format (already embeddable)
+      if (url.includes('youtube.com/embed/')) {
+        return url;
+      }
+    } catch (e) {
+      console.error('Error parsing YouTube URL:', e);
+    }
+    return null;
+  };
+
+  const NewsPage: React.FC = () => {
+    const { slug } = useParams<{ slug: string }>();
+    const { user, isAuthenticated } = useAuth();
+
+    const [news, setNews] = useState<NewsWithDetails | null>(null);
+    const [stats, setStats] = useState<NewsStats | null>(null);
+    const [comments, setComments] = useState<NewsComment[]>([]);
+    const [newComment, setNewComment] = useState('');
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [submittingComment, setSubmittingComment] = useState(false);
+    const [authorPostCount, setAuthorPostCount] = useState<number>(0);
+    const [topNews, setTopNews] = useState<News[]>([]);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [replyingTo, setReplyingTo] = useState<string | null>(null);
+    const [replyContent, setReplyContent] = useState('');
 
   const loadNewsData = async () => {
     if (!slug) return;
@@ -250,26 +299,55 @@ const NewsPage: React.FC = () => {
             <h1 className="news-title">{news.title}</h1>
 
             {/* Featured Media (Image or Video) */}
-            {news.mediaType === 'video' && news.mediaSource === 'external_url' && news.featuredImageUrl ? (
-               <div className="news-featured-video-wrapper aspect-video w-full overflow-hidden rounded-lg mb-6">
-                 {/* @ts-ignore */}
-                 <ReactPlayer
-                   url={news.featuredImageUrl}
-                   width="100%"
-                   height="100%"
-                   controls
-                   light={false} // Set to true if you want to show thumbnail first (requires thumbnail URL)
-                 />
-               </div>
-            ) : news.featuredImageUrl ? (
-              <div className="news-featured-image-wrapper">
-                <img
-                  src={news.featuredImageUrl}
-                  alt={news.title}
-                  className="news-featured-image"
-                />
-              </div>
-            ) : null}
+            {(() => {
+              // Check if it's a video either by mediaType or by URL detection
+              const isVideo = news.mediaType === 'video' || isVideoUrl(news.featuredImageUrl);
+
+              if (isVideo && news.featuredImageUrl) {
+                // Try to get YouTube embed URL
+                const youtubeEmbedUrl = getYouTubeEmbedUrl(news.featuredImageUrl);
+
+                if (youtubeEmbedUrl) {
+                  // Use iframe for YouTube videos
+                  return (
+                    <div className="news-featured-video-wrapper aspect-video w-full overflow-hidden rounded-lg mb-6">
+                      <iframe
+                        src={youtubeEmbedUrl}
+                        title={news.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        style={{ width: '100%', height: '100%', border: 'none' }}
+                      />
+                    </div>
+                  );
+                } else {
+                  // Fallback to ReactPlayer for other video sources
+                  return (
+                    <div className="news-featured-video-wrapper aspect-video w-full overflow-hidden rounded-lg mb-6">
+                      {/* @ts-ignore */}
+                      <ReactPlayer
+                        url={news.featuredImageUrl}
+                        width="100%"
+                        height="100%"
+                        controls
+                        light={false}
+                      />
+                    </div>
+                  );
+                }
+              } else if (news.featuredImageUrl) {
+                return (
+                  <div className="news-featured-image-wrapper">
+                    <img
+                      src={news.featuredImageUrl}
+                      alt={news.title}
+                      className="news-featured-image"
+                    />
+                  </div>
+                );
+              }
+              return null;
+            })()}
 
             {/* Meta Info Bar */}
             <div className="news-meta-bar">
