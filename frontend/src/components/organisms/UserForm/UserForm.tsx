@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { User } from '@/types';
+import { mediaService } from '@/services/api';
 import './UserForm.css';
 
 interface UserFormProps {
@@ -32,6 +33,8 @@ const UserForm: React.FC<UserFormProps> = ({
   const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
   const [oldPassword, setOldPassword] = useState('');
+  const [uploadingBanner, setUploadingBanner] = useState(false);
+  const [uploadingProfile, setUploadingProfile] = useState(false);
 
   useEffect(() => {
     if (initialData) {
@@ -63,6 +66,39 @@ const UserForm: React.FC<UserFormProps> = ({
     }
   };
 
+  const handleFileUpload = async (file: File, type: 'banner' | 'profile') => {
+    if (type === 'banner') {
+      setUploadingBanner(true);
+    } else {
+      setUploadingProfile(true);
+    }
+
+    try {
+      const response = await mediaService.uploadFile(file);
+      const data = response.data;
+
+      if (data.success) {
+        const fullUrl = `http://localhost:8080${data.url}`;
+        if (type === 'banner') {
+          setFormData((prev) => ({ ...prev, bannerUrl: fullUrl }));
+        } else {
+          setFormData((prev) => ({ ...prev, urlImagemPerfil: fullUrl }));
+        }
+      } else {
+        alert(`Erro ao fazer upload: ${data.message || 'Erro desconhecido'}`);
+      }
+    } catch (error) {
+      console.error('Erro ao fazer upload:', error);
+      alert('Erro ao fazer upload da imagem. Tente novamente.');
+    } finally {
+      if (type === 'banner') {
+        setUploadingBanner(false);
+      } else {
+        setUploadingProfile(false);
+      }
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -70,7 +106,7 @@ const UserForm: React.FC<UserFormProps> = ({
 
     // Fields to never send in updates
     // @ts-ignore
-    const { bannerUrl, id, token, ...rest } = submitData;
+    const { id, token, ...rest } = submitData;
 
     // Build finalData with only changed/necessary fields
     const finalData: any = {};
@@ -93,6 +129,11 @@ const UserForm: React.FC<UserFormProps> = ({
     // Include urlImagemPerfil if changed
     if (rest.urlImagemPerfil !== initialData?.urlImagemPerfil) {
       finalData.urlImagemPerfil = rest.urlImagemPerfil || '';
+    }
+
+    // Include bannerUrl if changed
+    if (rest.bannerUrl !== initialData?.bannerUrl) {
+      finalData.bannerUrl = rest.bannerUrl || '';
     }
 
     // Include userType if changed and user is admin
@@ -217,17 +258,53 @@ const UserForm: React.FC<UserFormProps> = ({
           ) : null}
           <div className="upload-placeholder">
             <i className="fas fa-image upload-icon" />
-            <span>Drop Image Here, Paste Or</span>
-            <button
-              type="button"
-              className="select-btn"
-              onClick={() => {
-                const url = prompt('Enter Banner URL:');
-                if (url) setFormData((prev) => ({ ...prev, bannerUrl: url }));
-              }}
-            >
-              <i className="fas fa-plus" /> Select
-            </button>
+            {uploadingBanner ? (
+              <span>Uploading...</span>
+            ) : (
+              <>
+                <span>Drop Image Here, Paste Or</span>
+                <input
+                  type="url"
+                  className="url-input"
+                  name="bannerUrl"
+                  value={formData.bannerUrl || ''}
+                  onChange={handleChange}
+                  placeholder="Enter Banner URL or paste image link"
+                  style={{
+                    width: '100%',
+                    padding: '8px',
+                    marginTop: '10px',
+                    border: '1px solid #ddd',
+                    borderRadius: '4px',
+                  }}
+                />
+                <div style={{ margin: '10px 0', fontWeight: 'bold' }}>OR</div>
+                <input
+                  type="file"
+                  id="bannerFileInput"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleFileUpload(file, 'banner');
+                  }}
+                  style={{ display: 'none' }}
+                />
+                <label
+                  htmlFor="bannerFileInput"
+                  style={{
+                    display: 'inline-block',
+                    padding: '8px 16px',
+                    backgroundColor: '#007bff',
+                    color: 'white',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    marginTop: '10px',
+                  }}
+                >
+                  <i className="fas fa-upload" /> Upload from Computer
+                </label>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -273,17 +350,53 @@ const UserForm: React.FC<UserFormProps> = ({
             ) : null}
             <div className="upload-placeholder">
               <i className="fas fa-image upload-icon" />
-              <span>Drop Image Here, Paste Or</span>
-              <button
-                type="button"
-                className="select-btn"
-                onClick={() => {
-                  const url = prompt('Enter Image URL:');
-                  if (url) setFormData((prev) => ({ ...prev, urlImagemPerfil: url }));
-                }}
-              >
-                <i className="fas fa-plus" /> Select
-              </button>
+              {uploadingProfile ? (
+                <span>Uploading...</span>
+              ) : (
+                <>
+                  <span>Drop Image Here, Paste Or</span>
+                  <input
+                    type="url"
+                    className="url-input"
+                    name="urlImagemPerfil"
+                    value={formData.urlImagemPerfil || ''}
+                    onChange={handleChange}
+                    placeholder="Enter Image URL or paste image link"
+                    style={{
+                      width: '100%',
+                      padding: '8px',
+                      marginTop: '10px',
+                      border: '1px solid #ddd',
+                      borderRadius: '4px',
+                    }}
+                  />
+                  <div style={{ margin: '10px 0', fontWeight: 'bold' }}>OR</div>
+                  <input
+                    type="file"
+                    id="profileFileInput"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileUpload(file, 'profile');
+                    }}
+                    style={{ display: 'none' }}
+                  />
+                  <label
+                    htmlFor="profileFileInput"
+                    style={{
+                      display: 'inline-block',
+                      padding: '8px 16px',
+                      backgroundColor: '#007bff',
+                      color: 'white',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      marginTop: '10px',
+                    }}
+                  >
+                    <i className="fas fa-upload" /> Upload from Computer
+                  </label>
+                </>
+              )}
             </div>
           </div>
         </div>

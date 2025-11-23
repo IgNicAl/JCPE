@@ -1,0 +1,10 @@
+{
+  "name": "Testador Revisor",
+  "username": "revisor_teste",
+  "email": "revisor@teste.com",
+  "password": "senha123",
+  "confirmPassword": "senha123",
+  "userType": "REVIEWER"
+}
+
+

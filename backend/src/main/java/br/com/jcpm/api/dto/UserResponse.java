@@ -1,9 +1,10 @@
 package br.com.jcpm.api.dto;
 
-import br.com.jcpm.api.domain.entity.User;
-import br.com.jcpm.api.domain.enums.UserType;
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import br.com.jcpm.api.domain.entity.User;
+import br.com.jcpm.api.domain.enums.UserType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class UserResponse {
   private UserType userType;
   private String biografia;
   private String urlImagemPerfil;
+  private String bannerUrl;
   private Boolean ativo;
   private LocalDateTime dataCadastro;
 
@@ -34,6 +36,7 @@ public class UserResponse {
     this.userType = user.getUserType();
     this.biografia = user.getBiography();
     this.urlImagemPerfil = user.getProfileImageUrl();
+    this.bannerUrl = user.getBannerUrl();
     this.ativo = user.getActive();
     this.dataCadastro = user.getRegistrationDate();
   }

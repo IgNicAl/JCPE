@@ -1,10 +1,7 @@
 package br.com.jcpm.api.config;
 
-import br.com.jcpm.api.security.JwtAuthenticationEntryPoint;
-import br.com.jcpm.api.security.JwtRequestFilter;
-import br.com.jcpm.api.service.UserService;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +18,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import br.com.jcpm.api.security.JwtAuthenticationEntryPoint;
+import br.com.jcpm.api.security.JwtRequestFilter;
+import br.com.jcpm.api.service.UserService;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Configuração central de segurança da aplicação utilizando Spring Security.
@@ -95,6 +97,8 @@ public class WebSecurityConfig {
                     .requestMatchers("/api/noticias/**")
                     .permitAll()
                     .requestMatchers("/api/users/perfil/**")
+                    .permitAll()
+                    .requestMatchers("/uploads/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated());
