@@ -100,6 +100,9 @@ public class UserController {
     if (userDetails.getUrlImagemPerfil() != null) {
       currentUser.setProfileImageUrl(userDetails.getUrlImagemPerfil());
     }
+    if (userDetails.getBannerUrl() != null) {
+      currentUser.setBannerUrl(userDetails.getBannerUrl());
+    }
 
     // Process password change if requested
     if (userDetails.getPassword() != null && !userDetails.getPassword().trim().isEmpty()) {
@@ -153,6 +156,9 @@ public class UserController {
     }
     if (userDetails.getUrlImagemPerfil() != null) {
       user.setProfileImageUrl(userDetails.getUrlImagemPerfil());
+    }
+    if (userDetails.getBannerUrl() != null) {
+      user.setBannerUrl(userDetails.getBannerUrl());
     }
     if (userDetails.getUserType() != null) {
       user.setUserType(userDetails.getUserType());

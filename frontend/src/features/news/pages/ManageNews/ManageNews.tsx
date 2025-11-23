@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { newsService } from '@/services/api';
 import { News } from '@/types';
+import ConfirmDialog from '@/components/ConfirmDialog/ConfirmDialog';
 import './ManageNews.css';
 
 interface NewsListItem extends News {
@@ -34,6 +35,7 @@ const ManageNews: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filterPriority, setFilterPriority] = useState<FilterType>('all');
   const navigate = useNavigate();
@@ -60,20 +62,29 @@ const ManageNews: React.FC = () => {
   }, []);
 
   /**
-   * @description Lida com a exclusão de uma notícia.
+   * @description Abre o modal de confirmação para excluir uma notícia.
    * @param {string} id O ID da notícia a ser excluída.
    */
-  const handleDelete = async (id: string): Promise<void> => {
-    if (!window.confirm('Tem certeza que deseja excluir esta notícia?')) return;
+  const handleDeleteClick = (id: string): void => {
+    setDeleteId(id);
+  };
+
+  /**
+   * @description Executa a exclusão da notícia após confirmação.
+   */
+  const confirmDelete = async (): Promise<void> => {
+    if (!deleteId) return;
+
     try {
-      setDeletingId(id);
-      await newsService.delete(id);
+      setDeletingId(deleteId);
+      await newsService.delete(deleteId);
       await loadNews();
     } catch (err) {
       alert('Erro ao excluir notícia. Tente novamente.');
       console.error('Erro:', err);
     } finally {
       setDeletingId(null);
+      setDeleteId(null);
     }
   };
 
@@ -281,7 +292,12 @@ const ManageNews: React.FC = () => {
                 const priority = getPriorityLabel(noticia.priority);
 
                 return (
-                  <div key={noticia.id} className="news-card">
+                  <div
+                    key={noticia.id}
+                    className="news-card"
+                    onClick={() => navigate(`/noticia/${noticia.slug || noticia.id}`)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     {noticia.featuredImageUrl && (
                       <div className="news-image-wrapper">
                         <div className="news-image" style={{ backgroundImage: `url('${noticia.featuredImageUrl}')` }}>
@@ -311,7 +327,10 @@ const ManageNews: React.FC = () => {
                     <div className="news-actions">
                       <button
                         type="button"
-                        onClick={() => navigate(`/noticias/editar/${noticia.id}`)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/noticias/editar/${noticia.id}`);
+                        }}
                         className="btn-action edit"
                       >
                         <i className="fas fa-edit" />
@@ -319,7 +338,10 @@ const ManageNews: React.FC = () => {
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleDelete(noticia.id || '')}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteClick(noticia.id || '');
+                        }}
                         className="btn-action delete"
                         disabled={deletingId === noticia.id}
                       >
@@ -343,6 +365,18 @@ const ManageNews: React.FC = () => {
           )}
         </>
       )}
+
+      {/* Modal de Confirmação */}
+      <ConfirmDialog
+        isOpen={deleteId !== null}
+        title="Confirmar Exclusão"
+        message="Tem certeza que deseja excluir esta notícia? Esta ação não pode ser desfeita."
+        confirmText="Excluir"
+        cancelText="Cancelar"
+        variant="danger"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteId(null)}
+      />
     </div>
   );
 };

@@ -29,6 +29,10 @@ public class NewsRequest {
   // imagem de capa agora é opcional no request (frontend pode enviar vazia)
   private String featuredImageUrl;
 
+  private String mediaType; // "image" ou "video"
+
+  private String mediaSource; // "external_url" ou "uploaded"
+
   @NotNull(message = "Prioridade não pode ser nula")
   private Integer priority;
 
@@ -84,6 +88,22 @@ public class NewsRequest {
 
   public void setFeaturedImageUrl(String featuredImageUrl) {
     this.featuredImageUrl = featuredImageUrl;
+  }
+
+  public String getMediaType() {
+    return mediaType;
+  }
+
+  public void setMediaType(String mediaType) {
+    this.mediaType = mediaType;
+  }
+
+  public String getMediaSource() {
+    return mediaSource;
+  }
+
+  public void setMediaSource(String mediaSource) {
+    this.mediaSource = mediaSource;
   }
 
   public Integer getPriority() {

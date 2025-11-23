@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { userService } from '@/services/api';
 import { AuthContext } from '@/features/auth/contexts/AuthContext';
 import { User, UserType } from '@/types';
+import ConfirmDialog from '@/components/ConfirmDialog/ConfirmDialog';
 import './UserList.css';
 
 interface UserListItem extends User {
@@ -26,6 +27,7 @@ const UserList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filterType, setFilterType] = useState<FilterType>('all');
   const authContext = useContext(AuthContext);
@@ -54,32 +56,43 @@ const UserList: React.FC = () => {
   }, []);
 
   /**
-   * @description Lida com a exclusão de um usuário.
+   * @description Abre o modal de confirmação para excluir um usuário.
    * @param {string} id O ID do usuário a ser excluído.
    */
-  const handleDelete = async (id: string): Promise<void> => {
+  const handleDeleteClick = (id: string): void => {
     if (!currentUser) return;
+
     // Regra de negócio: Impede que o administrador exclua a própria conta.
     if (id === currentUser.id) {
       alert('Você não pode excluir sua própria conta!');
       return;
     }
-    if (!window.confirm('Tem certeza que deseja excluir este usuário?')) return;
+
+    setDeleteId(id); // Abre o modal de confirmação
+  };
+
+  /**
+   * @description Executa a exclusão do usuário após confirmação.
+   */
+  const confirmDelete = async (): Promise<void> => {
+    if (!deleteId) return;
 
     try {
-      setDeletingId(id);
-      await userService.deleteUser(id);
+      setDeletingId(deleteId);
+      await userService.deleteUser(deleteId);
       await loadUsers(); // Recarrega a lista após a exclusão.
     } catch (err) {
+      console.error('Erro ao excluir usuário:', err);
       alert('Erro ao excluir usuário. Tente novamente.');
-      console.error('Erro:', err);
     } finally {
       setDeletingId(null);
+      setDeleteId(null); // Fecha o modal
     }
   };
 
+
   const handleEdit = (id: string): void => {
-    navigate(`/admin/usuarios/editar/${id}`);
+    navigate(`/painel/usuarios/editar/${id}`);
   };
 
   const getUserTypeLabel = (userType: UserType): UserTypeInfo => {
@@ -345,7 +358,7 @@ const UserList: React.FC = () => {
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleDelete(user.id || '')}
+                        onClick={() => handleDeleteClick(user.id || '')}
                         className="btn-action delete"
                         disabled={deletingId === user.id || isCurrentUser}
                         title={isCurrentUser ? 'Você não pode excluir sua própria conta' : 'Excluir usuário'}
@@ -370,9 +383,22 @@ const UserList: React.FC = () => {
           )}
         </>
       )}
+
+      {/* Modal de Confirmação */}
+      <ConfirmDialog
+        isOpen={deleteId !== null}
+        title="Confirmar Exclusão"
+        message="Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita."
+        confirmText="Excluir"
+        cancelText="Cancelar"
+        variant="danger"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteId(null)}
+      />
     </div>
   );
 };
 
 export default UserList;
+
 

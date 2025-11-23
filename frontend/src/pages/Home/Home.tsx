@@ -5,11 +5,13 @@ import { useNews } from '@/hooks/useNews';
 import { ROUTES } from '@/utils/constants';
 import Button from '@/components/atoms/Button';
 import Highlights from './components/Highlights';
-import { MOCK_NEWS, MockNews } from '@/features/news/mocks/news';
+import { MOCK_NEWS } from '@/features/news/mocks/news';
+import { News } from '@/types';
 import TagCarousel, { TagItem } from './components/TagCarousel';
 import PostGridSection from './components/PostGridSection';
 import NewPostsSection from './components/NewPostsSection';
 import LatestVideosSection, { VideoPost } from './components/LatestVideosSection';
+import { getVideoThumbnail } from '@/utils/videoUtils';
 import WeatherSection, {
   HourPoint,
   ForecastDay,
@@ -44,41 +46,7 @@ const TAGS: TagItem[] = [
   { id: 'nature', label: '#nature', imageUrl: TAG_IMAGE_MAP.nature },
 ];
 
-const VIDEO_HIGHLIGHT: VideoPost = {
-  id: 'video-highlight',
-  title: 'How Music Affects Your Brain (Plus 11 Artists To Listen To At Work)',
-  description:
-    'You’ve read all your free member-only stories, become a member to get unlimited access. Your membership fee supports the voices you want to hear more from.',
-  imageUrl: 'https://www.figma.com/api/mcp/asset/9794817d-11c3-41be-9be4-04034cdea369',
-};
 
-const VIDEO_POSTS: VideoPost[] = [
-  {
-    id: 'video-1',
-    title: '5 reasons why you should wrap your hands when boxing',
-    description:
-      'So, you finally went to your first boxing class and learned the basics of the sport.',
-    imageUrl: 'https://www.figma.com/api/mcp/asset/d297ee4e-0dcf-4a22-bc8f-a6d92f36fffd',
-  },
-  {
-    id: 'video-2',
-    title: 'Music genre classification with Python',
-    description: 'A guide to analyzing audio signals em Python para identificar estilos musicais.',
-    imageUrl: 'https://www.figma.com/api/mcp/asset/d65780e2-de48-451f-985d-de8d0e0ee52e',
-  },
-  {
-    id: 'video-3',
-    title: 'This free course can teach you music programming basics',
-    description: 'Um curso interativo direto no navegador para soltar sua criatividade.',
-    imageUrl: 'https://www.figma.com/api/mcp/asset/6e3ca2e7-4537-4a90-8160-aa9b2c221ce7',
-  },
-  {
-    id: 'video-4',
-    title: 'How to create cinematic lighting setups',
-    description: 'Dicas de iluminação para transformar qualquer set caseiro.',
-    imageUrl: 'https://www.figma.com/api/mcp/asset/6e86f515-dd0b-468a-bbfe-2035779b7e05',
-  },
-];
 
 const WEATHER_ICONS = {
   sunny: 'https://www.figma.com/api/mcp/asset/4e287a85-7d15-4020-8dfa-330204e3f567',
@@ -253,12 +221,12 @@ const MATCH_HIGHLIGHT: MatchHighlight = {
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAdmin, isJournalist } = useAuth();
-  const { news, loading, error } = useNews({ autoFetch: true, initialData: MOCK_NEWS, featuredHome: true });
+  const { news, loading, error } = useNews({ autoFetch: true, initialData: MOCK_NEWS as unknown as News[] });
 
-  const newsWithAuthors = (news as MockNews[]).map((item) => {
+  const newsWithAuthors = news.map((item) => {
     const authorName = typeof item.author === 'string'
       ? item.author
-      : (item.author as any)?.name || 'Autor';
+      : item.author?.name || 'Autor';
     const authorInitial = authorName[0] || 'A';
 
     return {
@@ -271,27 +239,27 @@ const Home: React.FC = () => {
   const singleContentItems = newsWithAuthors.slice(0, 2).map(news => ({
     id: news.id || '',
     title: news.title,
-    summary: news.summary,
-    imageUrl: news.featuredImageUrl,
+    summary: news.summary || '',
+    imageUrl: getVideoThumbnail(news.featuredImageUrl),
     slug: news.slug || '',
   }));
 
   const sliderSlides = newsWithAuthors.slice(2, 5).map(news => ({
     id: news.id || '',
     title: news.title,
-    summary: news.summary,
-    imageUrl: news.featuredImageUrl,
+    summary: news.summary || '',
+    imageUrl: getVideoThumbnail(news.featuredImageUrl),
     slug: news.slug || '',
   }));
 
   const posts: PostPreview[] = newsWithAuthors.map((item) => ({
     id: item.id || '',
     title: item.title,
-    summary: item.summary,
-    imageUrl: item.featuredImageUrl,
+    summary: item.summary || '',
+    imageUrl: getVideoThumbnail(item.featuredImageUrl),
     authorName: item.authorName,
     authorAvatar: item.authorAvatar,
-    publicationDate: formatDate(item.publicationDate),
+    publicationDate: formatDate(item.publicationDate || new Date().toISOString()),
     slug: item.slug || '',
   }));
 
@@ -348,6 +316,19 @@ const Home: React.FC = () => {
     trendyPosts = pickNext(4);
   }
 
+  // Filter video posts
+  const videoNews = newsWithAuthors.filter(n => n.mediaType === 'video');
+  const videoPosts: VideoPost[] = videoNews.map(n => ({
+    id: n.id || '',
+    title: n.title,
+    description: n.summary || '',
+    imageUrl: getVideoThumbnail(n.featuredImageUrl),
+    slug: n.slug || ''
+  }));
+
+  const videoHighlight = videoPosts.length > 0 ? videoPosts[0] : null;
+  const latestVideos = videoPosts.length > 1 ? videoPosts.slice(1, 5) : [];
+
   const weatherMain = {
     city: 'Recife, PE',
     datetime: 'Quarta-feira 04:00',
@@ -402,7 +383,9 @@ const Home: React.FC = () => {
           <PostGridSection title="trendy posts" posts={trendyPosts} />
         )}
 
-        <LatestVideosSection highlight={VIDEO_HIGHLIGHT} posts={VIDEO_POSTS} />
+        {videoHighlight && (
+          <LatestVideosSection highlight={videoHighlight} posts={latestVideos} />
+        )}
 
         <WeatherSection
           mainCity={weatherMain}

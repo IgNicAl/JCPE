@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { newsService, categoryService, tagService } from '@/services/api';
-import { Category, Tag } from '@/types';
+import { newsService, categoryService, tagService, homepageSectionService, newsReviewService } from '@/services/api';
+import { Category, Tag, HomepageSection } from '@/types';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
 import EditorJS, { OutputData } from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import List from '@editorjs/list';
@@ -11,6 +12,7 @@ import Quote from '@editorjs/quote';
 import Table from '@editorjs/table';
 import CodeTool from '@editorjs/code';
 import MediaSelector from '@/components/molecules/MediaSelector';
+import PublishModal, { PublishData } from '@/components/molecules/PublishModal';
 
 import styles from './CreateNews.module.css';
 
@@ -22,6 +24,7 @@ interface FormState {
   mediaSource: 'external_url' | 'uploaded';
   priority: number;
   categoryId: string;
+  subcategoryId?: string;
   tagIds: string[];
   page: string;
   isFeaturedHome: boolean;
@@ -36,6 +39,7 @@ const INITIAL_FORM_STATE: FormState = {
   mediaSource: 'external_url',
   priority: 1,
   categoryId: '',
+  subcategoryId: '',
   tagIds: [],
   page: 'noticias',
   isFeaturedHome: false,
@@ -57,6 +61,11 @@ const CreateNews: React.FC = () => {
   const [tagInput, setTagInput] = useState('');
   const [tagSuggestions, setTagSuggestions] = useState<Tag[]>([]);
   const [showPreview, setShowPreview] = useState(false);
+  const [homepageSections, setHomepageSections] = useState<HomepageSection[]>([]);
+  const [showPublishModal, setShowPublishModal] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+
+  const { isAdmin, isReviewer } = useAuth();
 
   const navigate = useNavigate();
   const editorRef = useRef<EditorJS | null>(null);
@@ -66,12 +75,14 @@ const CreateNews: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [categoriesRes, tagsRes] = await Promise.all([
+        const [categoriesRes, tagsRes, sectionsRes] = await Promise.all([
           categoryService.getAll(),
           tagService.getAll(),
+          homepageSectionService.getActive(),
         ]);
         setCategories(categoriesRes.data);
         setAllTags(tagsRes.data);
+        setHomepageSections(sectionsRes.data);
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
       }
@@ -288,8 +299,8 @@ const CreateNews: React.FC = () => {
         ...formData,
         content: JSON.stringify(outputData),
         contentJson: JSON.stringify(outputData),
-        status: isDraft ? 'RASCUNHO' : 'PUBLICADO',
-        categoryId: formData.categoryId || null,
+        status: isDraft ? 'DRAFT' : 'PENDING_REVIEW',
+          categoryId: formData.subcategoryId && formData.subcategoryId !== '' ? formData.subcategoryId : formData.categoryId || null,
         tagIds: formData.tagIds,
       };
 
@@ -320,6 +331,84 @@ const CreateNews: React.FC = () => {
 
   const handleDraft = (e: FormEvent<HTMLFormElement>) => {
     handleSubmit(e, true);
+  };
+
+  const handlePublishClick = (e: FormEvent) => {
+    e.preventDefault();
+    // Se for admin ou reviewer, abrir modal de publicação direta
+    if (isAdmin() || isReviewer()) {
+      if (!formData.categoryId) {
+        setMessage({ type: 'error', text: 'Selecione uma categoria antes de publicar.' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+      setShowPublishModal(true);
+    } else {
+      // Se for jornalista, enviar para revisão (comportamento padrão)
+      handleSubmit(e as unknown as FormEvent<HTMLFormElement>, false);
+    }
+  };
+
+  const handleDirectPublish = async (publishData: PublishData) => {
+    if (!editorRef.current) return;
+    setPublishing(true);
+    setMessage({ type: '', text: '' });
+
+    try {
+      const outputData = await editorRef.current.save();
+
+      if (outputData.blocks.length === 0) {
+        setMessage({ type: 'error', text: 'O conteúdo da notícia não pode estar vazio.' });
+        setPublishing(false);
+        return;
+      }
+
+      // 1. Criar a notícia como PENDING_REVIEW inicialmente
+      const newsData = {
+        ...formData,
+        content: JSON.stringify(outputData),
+        contentJson: JSON.stringify(outputData),
+        status: 'PENDING_REVIEW',
+        categoryId: formData.subcategoryId && formData.subcategoryId !== '' ? formData.subcategoryId : formData.categoryId || null,
+        tagIds: formData.tagIds,
+      };
+
+      const response = await newsService.create(newsData);
+      const createdNews = response.data as { id: string };
+
+      // 2. Aprovar a notícia imediatamente com os dados do modal
+      const reviewData = {
+        categoryId: newsData.categoryId,
+        priority: 'MEDIUM', // Poderia vir do form, mas o modal não tem prioridade ainda, usa o padrão
+        homepageSectionIds: publishData.homepageSectionIds,
+        seoTitle: publishData.seoTitle,
+        seoMetaDescription: publishData.seoMetaDescription,
+        comment: publishData.comments || 'Publicação direta via criação',
+      };
+
+      await newsReviewService.approveNews(createdNews.id, reviewData);
+
+      setMessage({
+        type: 'success',
+        text: 'Notícia publicada com sucesso!'
+      });
+      localStorage.removeItem('newsDraft');
+      setShowPublishModal(false);
+
+      setTimeout(() => {
+        navigate('/noticias/gerenciar');
+      }, 2000);
+    } catch (error: unknown) {
+      let errorMsg = 'Erro ao publicar notícia. Tente novamente.';
+      if (error && typeof error === 'object' && 'response' in error) {
+        const err = error as { response?: { data?: { message?: string } }; message?: string };
+        errorMsg = err.response?.data?.message || err.message || errorMsg;
+      }
+      setMessage({ type: 'error', text: errorMsg });
+      console.error('Erro ao publicar:', error);
+    } finally {
+      setPublishing(false);
+    }
   };
 
   return (
@@ -417,24 +506,56 @@ const CreateNews: React.FC = () => {
               </div>
             </div>
 
-            {/* Categoria */}
+            {/* Categoria e Subcategoria */}
             <div className={styles.card}>
               <div className={styles.cardTitle}>Categoria</div>
               <div className={styles.formGroup}>
+                <label className={styles.label}>Categoria Principal</label>
                 <select
                   name="categoryId"
                   value={formData.categoryId}
                   onChange={handleChange}
                   className={styles.select}
+                  aria-label="Selecione a categoria"
                 >
                   <option value="">Selecione uma categoria</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
+                  {categories
+                    .filter(cat => !cat.parentCategory && !cat.parentCategoryId)
+                    .map(cat => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </option>
+                    ))}
                 </select>
               </div>
+
+              {/* Mostrar subcategorias se uma categoria foi selecionada */}
+              {formData.categoryId && categories.filter(
+                cat => cat.parentCategoryId === formData.categoryId || cat.parentCategory?.id === formData.categoryId
+              ).length > 0 && (
+                <div className={styles.formGroup} style={{ marginTop: '1rem' }}>
+                  <label className={styles.label}>Subcategoria (Opcional)</label>
+                  <select
+                    name="subcategoryId"
+                    value={formData.subcategoryId || ''}
+                    onChange={handleChange}
+                    className={styles.select}
+                    aria-label="Selecione a subcategoria"
+                  >
+                    <option value="">Nenhuma subcategoria</option>
+                    {categories
+                      .filter(cat =>
+                        cat.parentCategoryId === formData.categoryId ||
+                        cat.parentCategory?.id === formData.categoryId
+                      )
+                      .map(subcat => (
+                        <option key={subcat.id} value={subcat.id}>
+                          {subcat.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              )}
             </div>
 
             {/* Editor de Conteúdo */}
@@ -459,17 +580,18 @@ const CreateNews: React.FC = () => {
                 <i className="fas fa-save" /> Salvar Rascunho
               </button>
               <button
-                type="submit"
-                className={`${styles.actionButton} ${styles.primary}`}
-                disabled={loading}
+                type="button"
+                className={`${styles.actionButton} ${isAdmin() || isReviewer() ? styles.success : styles.primary}`}
+                onClick={handlePublishClick}
+                disabled={loading || publishing}
               >
-                {loading ? (
+                {loading || publishing ? (
                   <>
-                    <i className="fas fa-spinner fa-spin" /> Publicando...
+                    <i className="fas fa-spinner fa-spin" /> {isAdmin() || isReviewer() ? 'Publicando...' : 'Enviando...'}
                   </>
                 ) : (
                   <>
-                    <i className="fas fa-paper-plane" /> Publicar
+                    <i className="fas fa-paper-plane" /> {isAdmin() || isReviewer() ? 'Publicar' : 'Enviar para Revisão'}
                   </>
                 )}
               </button>
@@ -591,6 +713,15 @@ const CreateNews: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Modal de Publicação */}
+      <PublishModal
+        isOpen={showPublishModal}
+        onClose={() => setShowPublishModal(false)}
+        onConfirm={handleDirectPublish}
+        homepageSections={homepageSections}
+        loading={publishing}
+      />
     </div>
   );
 };

@@ -56,15 +56,29 @@ export interface Category {
   slug: string;
   description?: string;
   color?: string;
+  parentCategory?: Category | null;
+  parentCategoryId?: string | null;
+  active?: boolean;
+  displayOrder?: number;
   createdAt?: string;
   updatedAt?: string;
 }
+
 
 export interface Tag {
   id: string;
   name: string;
   slug: string;
   createdByName?: string;
+  createdAt?: string;
+}
+
+export interface HomepageSection {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  active: boolean;
   createdAt?: string;
 }
 

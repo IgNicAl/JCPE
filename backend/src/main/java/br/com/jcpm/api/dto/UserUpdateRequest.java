@@ -13,6 +13,7 @@ public class UserUpdateRequest {
     private Boolean ativo;
     private String biografia;
     private String urlImagemPerfil;
+    private String bannerUrl;
     private String password;
     private String oldPassword;
 
@@ -64,6 +65,14 @@ public class UserUpdateRequest {
 
     public void setUrlImagemPerfil(String urlImagemPerfil) {
         this.urlImagemPerfil = urlImagemPerfil;
+    }
+
+    public String getBannerUrl() {
+        return bannerUrl;
+    }
+
+    public void setBannerUrl(String bannerUrl) {
+        this.bannerUrl = bannerUrl;
     }
 
     public String getPassword() {

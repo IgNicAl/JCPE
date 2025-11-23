@@ -71,6 +71,9 @@ public class User implements UserDetails {
   @Column(length = 512)
   private String profileImageUrl;
 
+  @Column(length = 512)
+  private String bannerUrl;
+
   @Column(length = 1024)
   private String biography;
 
@@ -176,6 +179,14 @@ public class User implements UserDetails {
 
   public void setProfileImageUrl(String profileImageUrl) {
     this.profileImageUrl = profileImageUrl;
+  }
+
+  public String getBannerUrl() {
+    return bannerUrl;
+  }
+
+  public void setBannerUrl(String bannerUrl) {
+    this.bannerUrl = bannerUrl;
   }
 
   public String getBiography() {

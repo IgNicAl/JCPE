@@ -83,7 +83,7 @@ const InternalRegistration: React.FC = () => {
       });
       setFormData(INITIAL_FORM_STATE);
       setTimeout(() => {
-        navigate('/admin/usuarios');
+        navigate('/painel/usuarios');
       }, 3000);
     } catch (error: unknown) {
       let errorMessage = 'Erro ao cadastrar usuário. Tente novamente.';

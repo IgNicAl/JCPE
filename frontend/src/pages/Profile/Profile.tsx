@@ -41,7 +41,7 @@ const Profile: React.FC = () => {
     if (activeTab === 'curtidas') {
       fetchLikedNews();
     }
-  }, [activeTab]);
+  }, [activeTab, user]);
 
   const fetchLikedNews = async () => {
     try {
@@ -143,8 +143,17 @@ const Profile: React.FC = () => {
   return (
     <div className="profile-page">
       {/* Banner de Capa */}
-      <div className="profile-banner">
-        <div className="banner-gradient" />
+      <div
+        className="profile-banner"
+        style={{
+          backgroundImage: user?.bannerUrl
+            ? `url(${user.bannerUrl})`
+            : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {!user?.bannerUrl && <div className="banner-gradient" />}
       </div>
 
       {/* Header do Perfil */}

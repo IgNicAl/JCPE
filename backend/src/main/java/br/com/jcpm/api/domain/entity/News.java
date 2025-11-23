@@ -133,7 +133,7 @@ public class News {
   @JoinColumn(name = "category_id", nullable = true)
   private Category category;
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
   @JoinTable(
     name = "noticia_tags",
     joinColumns = @JoinColumn(name = "noticia_id"),

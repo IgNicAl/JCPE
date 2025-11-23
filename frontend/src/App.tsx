@@ -17,6 +17,7 @@ import CreateNews from './features/news/pages/CreateNews/CreateNews';
 import ManageNews from './features/news/pages/ManageNews/ManageNews';
 import EditNews from './features/news/pages/EditNews/EditNews';
 import ReviewDashboard from './features/news/pages/ReviewDashboard/ReviewDashboard';
+import ManageCategories from './features/news/pages/ManageCategories/ManageCategories';
 import NewsPage from './features/news/pages/NewsPage/NewsPage';
 import Jogos from './pages/Jogos/Jogos';
 import Clima from './pages/Clima/Clima';
@@ -28,6 +29,7 @@ import Sobre from './pages/Sobre/Sobre';
 import Contato from './pages/Contato/Contato';
 import Profile from './pages/Profile/Profile';
 import EditProfile from './pages/Profile/EditProfile';
+import AdminPanel from './pages/AdminPanel/AdminPanel';
 
 /**
  * Componente que ouve o evento global 'unauthorized' (disparado pela api.js)
@@ -88,7 +90,16 @@ export function App() {
               />
 
               <Route
-                path="/admin/usuarios/editar/:id"
+                path="/painel"
+                element={
+                  <ProtectedRoute roles={['ADMIN', 'JOURNALIST', 'REVIEWER']}>
+                    <AdminPanel />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/painel/usuarios/editar/:id"
                 element={
                   <ProtectedRoute roles={['ADMIN']}>
                     <EditUser />
@@ -97,10 +108,37 @@ export function App() {
               />
 
               <Route
-                path="/admin/usuarios"
+                path="/painel/usuarios"
                 element={
                   <ProtectedRoute roles={['ADMIN']}>
                     <UserList />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/painel/revisao"
+                element={
+                  <ProtectedRoute roles={['ADMIN', 'REVIEWER']}>
+                    <ReviewDashboard />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/painel/revisao/:id"
+                element={
+                  <ProtectedRoute roles={['ADMIN', 'REVIEWER']}>
+                    <EditNews />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/painel/categorias"
+                element={
+                  <ProtectedRoute roles={['ADMIN', 'REVIEWER']}>
+                    <ManageCategories />
                   </ProtectedRoute>
                 }
               />
@@ -113,23 +151,8 @@ export function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/admin/revisao"
-                element={
-                  <ProtectedRoute roles={['ADMIN', 'REVIEWER']}>
-                    <ReviewDashboard />
-                  </ProtectedRoute>
-                }
-              />
 
-              <Route
-                path="/admin/revisao/:id"
-                element={
-                  <ProtectedRoute roles={['ADMIN', 'REVIEWER']}>
-                    <EditNews />
-                  </ProtectedRoute>
-                }
-              />
+
 
               <Route
                 path="/noticias/gerenciar"
