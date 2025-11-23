@@ -162,6 +162,8 @@ public class NewsController {
     news.setContent(newsRequest.getContent());
     news.setContentJson(newsRequest.getContentJson());
     news.setFeaturedImageUrl(newsRequest.getFeaturedImageUrl());
+    news.setMediaType(newsRequest.getMediaType() != null ? newsRequest.getMediaType() : "image");
+    news.setMediaSource(newsRequest.getMediaSource() != null ? newsRequest.getMediaSource() : "external_url");
     news.setPriority(newsRequest.getPriority());
     news.setPage(newsRequest.getPage() != null ? newsRequest.getPage() : "noticias");
     news.setIsFeaturedHome(newsRequest.getIsFeaturedHome() != null ? newsRequest.getIsFeaturedHome() : false);
@@ -211,6 +213,8 @@ public class NewsController {
               news.setContent(newsRequest.getContent());
               news.setContentJson(newsRequest.getContentJson());
               news.setFeaturedImageUrl(newsRequest.getFeaturedImageUrl());
+              news.setMediaType(newsRequest.getMediaType() != null ? newsRequest.getMediaType() : news.getMediaType());
+              news.setMediaSource(newsRequest.getMediaSource() != null ? newsRequest.getMediaSource() : news.getMediaSource());
               news.setPriority(newsRequest.getPriority());
               news.setPage(newsRequest.getPage() != null ? newsRequest.getPage() : news.getPage());
               news.setIsFeaturedHome(

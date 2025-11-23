@@ -257,7 +257,7 @@ const EditNews: React.FC = () => {
         ...formData,
         content: JSON.stringify(outputData),
         contentJson: JSON.stringify(outputData),
-        status: isDraft ? 'RASCUNHO' : 'PUBLICADO',
+        status: isDraft ? 'DRAFT' : 'PENDING_REVIEW',
         categoryId: formData.categoryId || null,
         tagIds: selectedTags.map(t => t.id),
       };
