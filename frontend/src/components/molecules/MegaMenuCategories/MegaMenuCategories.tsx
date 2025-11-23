@@ -48,6 +48,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
         { label: 'Governo Federal', path: '/categoria/politica/federal' },
         { label: 'Congresso e STF', path: '/categoria/politica/congresso-stf' },
         { label: 'Eleições', path: '/categoria/politica/eleicoes' },
+        { label: 'Bastidores', path: '/categoria/politica/bastidores'},
       ],
     },
     {
