@@ -37,7 +37,7 @@ const EditUser: React.FC = () => {
     try {
       await userService.updateUser(id, data);
       alert('Usuário atualizado com sucesso!');
-      navigate('/admin/usuarios');
+      navigate('/painel/usuarios');
     } catch (error) {
       setError('Erro ao atualizar usuário. Tente novamente.');
       console.error('Erro ao atualizar:', error);

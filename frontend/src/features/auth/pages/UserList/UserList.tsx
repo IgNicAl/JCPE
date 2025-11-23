@@ -92,7 +92,7 @@ const UserList: React.FC = () => {
 
 
   const handleEdit = (id: string): void => {
-    navigate(`/admin/usuarios/editar/${id}`);
+    navigate(`/painel/usuarios/editar/${id}`);
   };
 
   const getUserTypeLabel = (userType: UserType): UserTypeInfo => {

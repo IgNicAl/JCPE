@@ -1,0 +1,265 @@
+.admin-panel {
+  min-height: calc(100vh - 200px);
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.admin-panel-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-panel-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: fadeInDown 0.6s ease-out;
+}
+
+.admin-panel-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.admin-panel-header h1 i {
+  font-size: 2.2rem;
+  color: #c41e3a;
+}
+
+.admin-panel-header p {
+  font-size: 1.1rem;
+  color: #666;
+  font-weight: 400;
+}
+
+.admin-panel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.admin-panel-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.admin-panel-card:nth-child(1) { animation-delay: 0.1s; }
+.admin-panel-card:nth-child(2) { animation-delay: 0.2s; }
+.admin-panel-card:nth-child(3) { animation-delay: 0.3s; }
+.admin-panel-card:nth-child(4) { animation-delay: 0.4s; }
+.admin-panel-card:nth-child(5) { animation-delay: 0.5s; }
+
+.admin-panel-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.admin-panel-card:focus {
+  outline: 2px solid #c41e3a;
+  outline-offset: 2px;
+}
+
+.card-icon-border {
+  border-top: 4px solid;
+  padding-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.card-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s;
+}
+
+.admin-panel-card:hover .card-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.card-content h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.card-content p {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.card-arrow {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  color: #999;
+  font-size: 1.2rem;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s;
+}
+
+.admin-panel-card:hover .card-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.admin-panel-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  animation: fadeIn 0.6s ease-out 0.6s backwards;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card i {
+  font-size: 2rem;
+  color: #c41e3a;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #999;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-panel {
+    padding: 1rem 0.5rem;
+  }
+
+  .admin-panel-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .admin-panel-header h1 i {
+    font-size: 1.6rem;
+  }
+
+  .admin-panel-header p {
+    font-size: 1rem;
+  }
+
+  .admin-panel-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .admin-panel-card {
+    padding: 1.5rem;
+  }
+
+  .card-content h3 {
+    font-size: 1.2rem;
+  }
+
+  .admin-panel-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .admin-panel {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  }
+
+  .admin-panel-header h1,
+  .card-content h3,
+  .stat-value {
+    color: #ffffff;
+  }
+
+  .admin-panel-header p,
+  .card-content p {
+    color: #b0b0b0;
+  }
+
+  .admin-panel-card,
+  .stat-card {
+    background: #0f3460;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-icon {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .card-arrow {
+    color: #666;
+  }
+}

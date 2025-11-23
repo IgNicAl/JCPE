@@ -130,14 +130,16 @@ const UserMenu: React.FC<UserMenuProps> = ({ onItemClick, showName = true }) => 
           <span>Perfil</span>
         </Link>
 
-        <Link
-          to={ROUTES.PROFILE}
-          className={styles.dropdownItem}
-          onClick={handleItemClick}
-        >
-          <i className="fas fa-id-card" />
-          <span>Área do Usuário</span>
-        </Link>
+        {(canManageNews || canReview || canManageUsers) && (
+          <Link
+            to={ROUTES.ADMIN_PANEL}
+            className={styles.dropdownItem}
+            onClick={handleItemClick}
+          >
+            <i className="fas fa-tachometer-alt" />
+            <span>{isAdmin() ? 'Painel Administrativo' : 'Meu Painel'}</span>
+          </Link>
+        )}
 
         {user.userType === 'USER' && (
           <Link
@@ -150,52 +152,15 @@ const UserMenu: React.FC<UserMenuProps> = ({ onItemClick, showName = true }) => 
           </Link>
         )}
 
-        {canManageNews && (
-          <>
-            <div className={styles.dropdownDivider} />
-            <div className={styles.dropdownSection}>Gerenciamento</div>
-            <Link
-              to={ROUTES.MANAGE_NEWS}
-              className={`${styles.dropdownItem} ${styles.managementItem}`}
-              onClick={handleItemClick}
-            >
-              <i className="fas fa-newspaper" />
-              <span>Gerenciar Notícias</span>
-            </Link>
-          </>
-        )}
-
-        {canReview && (
-          <Link
-            to="/admin/revisao"
-            className={`${styles.dropdownItem} ${styles.managementItem}`}
-            onClick={handleItemClick}
-          >
-            <i className="fas fa-clipboard-check" />
-            <span>Painel de Revisão</span>
-          </Link>
-        )}
-
-        {canManageUsers && (
-          <Link
-            to={ROUTES.MANAGE_USERS}
-            className={`${styles.dropdownItem} ${styles.managementItem}`}
-            onClick={handleItemClick}
-          >
-            <i className="fas fa-users-cog" />
-            <span>Gerenciar Usuários</span>
-          </Link>
-        )}
-
         <div className={styles.dropdownDivider} />
 
         <Link
-          to="/configuracoes"
+          to={ROUTES.EDIT_PROFILE}
           className={styles.dropdownItem}
           onClick={handleItemClick}
         >
-          <i className="fas fa-cog" />
-          <span>Configurações</span>
+          <i className="fas fa-user-edit" />
+          <span>Editar Perfil</span>
         </Link>
 
         <button

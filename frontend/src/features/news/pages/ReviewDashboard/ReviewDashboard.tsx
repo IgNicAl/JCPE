@@ -57,11 +57,11 @@ const ReviewDashboard: React.FC = () => {
   const handleReviewClick = (newsId: string) => {
     // Redirecionar para a página de revisão detalhada (a ser criada)
     // Por enquanto, vamos redirecionar para edição, mas idealmente seria uma tela específica
-    navigate(`/admin/revisao/${newsId}`);
+    navigate(`/painel/revisao/${newsId}`);
   };
 
   const handleManageCategories = () => {
-    navigate('/admin/categorias');
+    navigate('/painel/categorias');
   };
 
   const getStatusLabel = (status: string) => {
