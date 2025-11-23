@@ -197,6 +197,16 @@ export const newsReviewService = {
   getReviewHistory: (newsId: string) => api.get(`/api/news/review/${newsId}/history`),
 };
 
+/**
+ * Serviços de Seções da Homepage
+ */
+export const homepageSectionService = {
+  getAll: () => api.get('/api/homepage-sections'),
+  getActive: () => api.get('/api/homepage-sections/active'),
+  getById: (id: string) => api.get(`/api/homepage-sections/${id}`),
+  getBySlug: (slug: string) => api.get(`/api/homepage-sections/slug/${slug}`),
+};
+
 
 
 /**

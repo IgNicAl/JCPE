@@ -75,6 +75,16 @@
   background: var(--primary-hover, #2563eb);
 }
 
+.actionButton.success {
+  background: #10b981;
+  color: white;
+  border-color: #10b981;
+}
+
+.actionButton.success:hover {
+  background: #059669;
+}
+
 .actionButton:disabled {
   opacity: 0.5;
   cursor: not-allowed;

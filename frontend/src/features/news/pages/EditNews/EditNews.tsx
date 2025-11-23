@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { newsService, categoryService, tagService } from '@/services/api';
-import { Category, Tag } from '@/types';
+import { newsService, categoryService, tagService, homepageSectionService, newsReviewService } from '@/services/api';
+import { Category, Tag, HomepageSection } from '@/types';
 import EditorJS, { OutputData } from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import List from '@editorjs/list';
@@ -11,6 +11,7 @@ import Quote from '@editorjs/quote';
 import Table from '@editorjs/table';
 import CodeTool from '@editorjs/code';
 import MediaSelector from '@/components/molecules/MediaSelector';
+import PublishModal, { PublishData } from '@/components/molecules/PublishModal';
 import styles from '../CreateNews/CreateNews.module.css';
 
 interface NewsFormData {
@@ -49,6 +50,9 @@ const EditNews: React.FC = () => {
   const [tagInput, setTagInput] = useState('');
   const [tagSuggestions, setTagSuggestions] = useState<Tag[]>([]);
   const [showPreview, setShowPreview] = useState(false);
+  const [homepageSections, setHomepageSections] = useState<HomepageSection[]>([]);
+  const [showPublishModal, setShowPublishModal] = useState(false);
+  const [publishing, setPublishing] = useState(false);
 
   const editorRef = useRef<EditorJS | null>(null);
   const tagInputRef = useRef<HTMLInputElement>(null);
@@ -59,10 +63,11 @@ const EditNews: React.FC = () => {
       if (!id) return;
       try {
         setLoading(true);
-        const [newsRes, categoriesRes, tagsRes] = await Promise.all([
+        const [newsRes, categoriesRes, tagsRes, sectionsRes] = await Promise.all([
           newsService.getById(id),
           categoryService.getAll(),
           tagService.getAll(),
+          homepageSectionService.getActive(),
         ]);
 
         const newsData = newsRes.data as NewsFormData;
@@ -88,6 +93,7 @@ const EditNews: React.FC = () => {
 
         setCategories(categoriesRes.data);
         setAllTags(tagsRes.data);
+        setHomepageSections(sectionsRes.data);
 
         // Se a notícia já tem tags, carregar elas
         // O backend pode retornar tags como objetos completos ou como IDs
@@ -314,6 +320,70 @@ const EditNews: React.FC = () => {
     handleSubmit(e, true);
   };
 
+  const handlePublish = async (publishData: PublishData) => {
+    if (!editorRef.current || !id || !formData) {
+      setMessage({ type: 'error', text: 'Editor não inicializado.' });
+      return;
+    }
+
+    setPublishing(true);
+    setMessage({ type: '', text: '' });
+
+    try {
+      const outputData = await editorRef.current.save();
+
+      if (outputData.blocks.length === 0) {
+        setMessage({ type: 'error', text: 'O conteúdo da notícia não pode estar vazio.' });
+        setPublishing(false);
+        return;
+      }
+
+      // Primeiro atualizar a notícia
+      const updatedNewsData = {
+        ...formData,
+        content: JSON.stringify(outputData),
+        contentJson: JSON.stringify(outputData),
+        categoryId: formData.subcategoryId && formData.subcategoryId !== ''
+          ? formData.subcategoryId
+          : formData.categoryId || null,
+        tagIds: selectedTags.map(t => t.id),
+      };
+
+      await newsService.update(id, updatedNewsData);
+
+      // Depois aprovar/publicar via API de revisão
+      const reviewData = {
+        categoryId: updatedNewsData.categoryId,
+        priority: 'MEDIUM',
+        homepageSectionIds: publishData.homepageSectionIds,
+        seoTitle: publishData.seoTitle,
+        seoMetaDescription: publishData.seoMetaDescription,
+        comment: publishData.comments,
+      };
+
+      console.log('Enviando requisição de aprovação:', reviewData);
+      await newsReviewService.approveNews(id, reviewData);
+
+      setMessage({ type: 'success', text: 'Notícia publicada com sucesso!' });
+      setShowPublishModal(false);
+      setTimeout(() => navigate('/painel/revisao'), 2000);
+    } catch (error: unknown) {
+      console.error('Erro detalhado ao publicar:', error);
+      let errorMessage = 'Erro ao publicar notícia. Tente novamente.';
+      if (error && typeof error === 'object' && 'response' in error) {
+        const err = error as { response?: { data?: { message?: string, error?: string, errors?: unknown } } };
+        console.error('Dados do erro da API:', err.response?.data);
+        errorMessage = err.response?.data?.message || err.response?.data?.error || errorMessage;
+        if (err.response?.data?.errors) {
+             errorMessage += ' ' + JSON.stringify(err.response?.data?.errors);
+        }
+      }
+      setMessage({ type: 'error', text: errorMessage });
+    } finally {
+      setPublishing(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className={styles.container}>
@@ -495,19 +565,19 @@ const EditNews: React.FC = () => {
             </div>
 
             {/* Botões de ação */}
-            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
               <button
                 type="button"
                 className={styles.actionButton}
                 onClick={(e) => handleDraft(e as unknown as FormEvent<HTMLFormElement>)}
-                disabled={saving}
+                disabled={saving || publishing}
               >
                 <i className="fas fa-save" /> Salvar Rascunho
               </button>
               <button
                 type="submit"
                 className={`${styles.actionButton} ${styles.primary}`}
-                disabled={saving}
+                disabled={saving || publishing}
               >
                 {saving ? (
                   <>
@@ -518,6 +588,22 @@ const EditNews: React.FC = () => {
                     <i className="fas fa-check" /> Atualizar
                   </>
                 )}
+              </button>
+              <button
+                type="button"
+                className={`${styles.actionButton} ${styles.success}`}
+                onClick={() => {
+                  if (!formData?.categoryId) {
+                    setMessage({ type: 'error', text: 'Selecione uma categoria antes de publicar.' });
+                    // Rolar para o topo para ver a mensagem
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                  }
+                  setShowPublishModal(true);
+                }}
+                disabled={saving || publishing}
+              >
+                <i className="fas fa-paper-plane" /> Publicar
               </button>
             </div>
           </div>
@@ -635,6 +721,15 @@ const EditNews: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Modal de Publicação */}
+      <PublishModal
+        isOpen={showPublishModal}
+        onClose={() => setShowPublishModal(false)}
+        onConfirm={handlePublish}
+        homepageSections={homepageSections}
+        loading={publishing}
+      />
     </div>
   );
 };

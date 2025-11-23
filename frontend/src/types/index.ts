@@ -73,6 +73,15 @@ export interface Tag {
   createdAt?: string;
 }
 
+export interface HomepageSection {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  active: boolean;
+  createdAt?: string;
+}
+
 
 export interface NewsRating {
   newsId: string;

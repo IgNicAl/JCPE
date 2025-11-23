@@ -6,6 +6,7 @@ import { ROUTES } from '@/utils/constants';
 import Button from '@/components/atoms/Button';
 import Highlights from './components/Highlights';
 import { MOCK_NEWS, MockNews } from '@/features/news/mocks/news';
+import { News } from '@/types';
 import TagCarousel, { TagItem } from './components/TagCarousel';
 import PostGridSection from './components/PostGridSection';
 import NewPostsSection from './components/NewPostsSection';
@@ -253,12 +254,12 @@ const MATCH_HIGHLIGHT: MatchHighlight = {
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAdmin, isJournalist } = useAuth();
-  const { news, loading, error } = useNews({ autoFetch: true, initialData: MOCK_NEWS, featuredHome: true });
+  const { news, loading, error } = useNews({ autoFetch: true, initialData: MOCK_NEWS as unknown as News[] });
 
-  const newsWithAuthors = (news as MockNews[]).map((item) => {
+  const newsWithAuthors = news.map((item) => {
     const authorName = typeof item.author === 'string'
       ? item.author
-      : (item.author as any)?.name || 'Autor';
+      : item.author?.name || 'Autor';
     const authorInitial = authorName[0] || 'A';
 
     return {
@@ -271,27 +272,27 @@ const Home: React.FC = () => {
   const singleContentItems = newsWithAuthors.slice(0, 2).map(news => ({
     id: news.id || '',
     title: news.title,
-    summary: news.summary,
-    imageUrl: news.featuredImageUrl,
+    summary: news.summary || '',
+    imageUrl: news.featuredImageUrl || '',
     slug: news.slug || '',
   }));
 
   const sliderSlides = newsWithAuthors.slice(2, 5).map(news => ({
     id: news.id || '',
     title: news.title,
-    summary: news.summary,
-    imageUrl: news.featuredImageUrl,
+    summary: news.summary || '',
+    imageUrl: news.featuredImageUrl || '',
     slug: news.slug || '',
   }));
 
   const posts: PostPreview[] = newsWithAuthors.map((item) => ({
     id: item.id || '',
     title: item.title,
-    summary: item.summary,
-    imageUrl: item.featuredImageUrl,
+    summary: item.summary || '',
+    imageUrl: item.featuredImageUrl || '',
     authorName: item.authorName,
     authorAvatar: item.authorAvatar,
-    publicationDate: formatDate(item.publicationDate),
+    publicationDate: formatDate(item.publicationDate || new Date().toISOString()),
     slug: item.slug || '',
   }));
 
