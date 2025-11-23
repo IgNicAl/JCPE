@@ -5,6 +5,7 @@ import { useAuth } from '@/features/auth/contexts/AuthContext';
 import Output from 'editorjs-react-renderer';
 import { News, NewsStats, NewsComment } from '@/types';
 import RatingStars from '@/components/molecules/RatingStars';
+import ReactPlayer from 'react-player';
 import './NewsPage.css';
 
 interface NewsWithDetails extends News {
@@ -248,8 +249,19 @@ const NewsPage: React.FC = () => {
             {/* Title */}
             <h1 className="news-title">{news.title}</h1>
 
-            {/* Featured Image */}
-            {news.featuredImageUrl && (
+            {/* Featured Media (Image or Video) */}
+            {news.mediaType === 'video' && news.mediaSource === 'external_url' && news.featuredImageUrl ? (
+               <div className="news-featured-video-wrapper aspect-video w-full overflow-hidden rounded-lg mb-6">
+                 {/* @ts-ignore */}
+                 <ReactPlayer
+                   url={news.featuredImageUrl}
+                   width="100%"
+                   height="100%"
+                   controls
+                   light={false} // Set to true if you want to show thumbnail first (requires thumbnail URL)
+                 />
+               </div>
+            ) : news.featuredImageUrl ? (
               <div className="news-featured-image-wrapper">
                 <img
                   src={news.featuredImageUrl}
@@ -257,7 +269,7 @@ const NewsPage: React.FC = () => {
                   className="news-featured-image"
                 />
               </div>
-            )}
+            ) : null}
 
             {/* Meta Info Bar */}
             <div className="news-meta-bar">

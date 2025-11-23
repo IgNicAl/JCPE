@@ -32,7 +32,6 @@ interface SingleContentProps {
 }
 
 const SingleContent: React.FC<SingleContentProps> = ({
-  id,
   title,
   summary,
   imageUrl,
@@ -46,6 +45,7 @@ const SingleContent: React.FC<SingleContentProps> = ({
         className="w-full h-full absolute left-0 top-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url('${imageUrl}')` } as React.CSSProperties}
       >
+        {/* Usando placeholder como no HTML */}
         {/* Usando placeholder como no HTML */}
         <img src={imageUrl} alt={title} className="w-full h-full object-cover" onError={(e) => (e.currentTarget.src = 'https://placehold.co/384x452/34d399/white?text=Artigo')} />
         <div className="w-full h-full absolute left-0 top-0 bg-overlay-dark dark:bg-overlay-dark" />
