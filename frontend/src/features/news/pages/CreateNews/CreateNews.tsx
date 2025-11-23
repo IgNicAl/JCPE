@@ -22,6 +22,7 @@ interface FormState {
   mediaSource: 'external_url' | 'uploaded';
   priority: number;
   categoryId: string;
+  subcategoryId?: string;
   tagIds: string[];
   page: string;
   isFeaturedHome: boolean;
@@ -36,6 +37,7 @@ const INITIAL_FORM_STATE: FormState = {
   mediaSource: 'external_url',
   priority: 1,
   categoryId: '',
+  subcategoryId: '',
   tagIds: [],
   page: 'noticias',
   isFeaturedHome: false,
@@ -289,7 +291,7 @@ const CreateNews: React.FC = () => {
         content: JSON.stringify(outputData),
         contentJson: JSON.stringify(outputData),
         status: isDraft ? 'DRAFT' : 'PENDING_REVIEW',
-        categoryId: formData.categoryId || null,
+          categoryId: formData.subcategoryId && formData.subcategoryId !== '' ? formData.subcategoryId : formData.categoryId || null,
         tagIds: formData.tagIds,
       };
 
@@ -417,24 +419,56 @@ const CreateNews: React.FC = () => {
               </div>
             </div>
 
-            {/* Categoria */}
+            {/* Categoria e Subcategoria */}
             <div className={styles.card}>
               <div className={styles.cardTitle}>Categoria</div>
               <div className={styles.formGroup}>
+                <label className={styles.label}>Categoria Principal</label>
                 <select
                   name="categoryId"
                   value={formData.categoryId}
                   onChange={handleChange}
                   className={styles.select}
+                  aria-label="Selecione a categoria"
                 >
                   <option value="">Selecione uma categoria</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
+                  {categories
+                    .filter(cat => !cat.parentCategory && !cat.parentCategoryId)
+                    .map(cat => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </option>
+                    ))}
                 </select>
               </div>
+
+              {/* Mostrar subcategorias se uma categoria foi selecionada */}
+              {formData.categoryId && categories.filter(
+                cat => cat.parentCategoryId === formData.categoryId || cat.parentCategory?.id === formData.categoryId
+              ).length > 0 && (
+                <div className={styles.formGroup} style={{ marginTop: '1rem' }}>
+                  <label className={styles.label}>Subcategoria (Opcional)</label>
+                  <select
+                    name="subcategoryId"
+                    value={formData.subcategoryId || ''}
+                    onChange={handleChange}
+                    className={styles.select}
+                    aria-label="Selecione a subcategoria"
+                  >
+                    <option value="">Nenhuma subcategoria</option>
+                    {categories
+                      .filter(cat =>
+                        cat.parentCategoryId === formData.categoryId ||
+                        cat.parentCategory?.id === formData.categoryId
+                      )
+                      .map(subcat => (
+                        <option key={subcat.id} value={subcat.id}>
+                          {subcat.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              )}
             </div>
 
             {/* Editor de Conteúdo */}

@@ -17,6 +17,7 @@ import CreateNews from './features/news/pages/CreateNews/CreateNews';
 import ManageNews from './features/news/pages/ManageNews/ManageNews';
 import EditNews from './features/news/pages/EditNews/EditNews';
 import ReviewDashboard from './features/news/pages/ReviewDashboard/ReviewDashboard';
+import ManageCategories from './features/news/pages/ManageCategories/ManageCategories';
 import NewsPage from './features/news/pages/NewsPage/NewsPage';
 import Jogos from './pages/Jogos/Jogos';
 import Clima from './pages/Clima/Clima';
@@ -127,6 +128,15 @@ export function App() {
                 element={
                   <ProtectedRoute roles={['ADMIN', 'REVIEWER']}>
                     <EditNews />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/admin/categorias"
+                element={
+                  <ProtectedRoute roles={['ADMIN', 'REVIEWER']}>
+                    <ManageCategories />
                   </ProtectedRoute>
                 }
               />

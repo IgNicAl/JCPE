@@ -21,7 +21,9 @@ interface NewsFormData {
   mediaSource?: 'external_url' | 'uploaded';
   priority: number;
   categoryId?: string;
-  tagIds: string[];
+  subcategoryId?: string;
+  tagIds?: string[];
+  tags?: Tag[];
   page?: string;
   isFeaturedHome?: boolean;
   isFeaturedPage?: boolean;
@@ -64,14 +66,38 @@ const EditNews: React.FC = () => {
         ]);
 
         const newsData = newsRes.data as NewsFormData;
-        setFormData(newsData);
+
+        // Detectar se a categoria é uma subcategoria
+        if (newsData.categoryId) {
+          const category = categoriesRes.data.find((cat: Category) => cat.id === newsData.categoryId);
+          if (category?.parentCategory || category?.parentCategoryId) {
+            // É uma subcategoria - precisamos preencher ambos os campos
+            const parentId = category.parentCategoryId || category.parentCategory?.id;
+            setFormData({
+              ...newsData,
+              categoryId: parentId,
+              subcategoryId: newsData.categoryId,
+            });
+          } else {
+            // É uma categoria raiz
+            setFormData(newsData);
+          }
+        } else {
+          setFormData(newsData);
+        }
+
         setCategories(categoriesRes.data);
         setAllTags(tagsRes.data);
 
         // Se a notícia já tem tags, carregar elas
-        if (newsData.tagIds && Array.isArray(newsData.tagIds)) {
+        // O backend pode retornar tags como objetos completos ou como IDs
+        if (newsData.tags && Array.isArray(newsData.tags)) {
+          // Backend retornou objetos Tag completos
+          setSelectedTags(newsData.tags as Tag[]);
+        } else if (newsData.tagIds && Array.isArray(newsData.tagIds)) {
+          // Backend retornou apenas IDs
           const newsTags = tagsRes.data.filter((tag: Tag) =>
-            newsData.tagIds.includes(tag.id)
+            newsData.tagIds!.includes(tag.id)
           );
           setSelectedTags(newsTags);
         }
@@ -258,7 +284,10 @@ const EditNews: React.FC = () => {
         content: JSON.stringify(outputData),
         contentJson: JSON.stringify(outputData),
         status: isDraft ? 'DRAFT' : 'PENDING_REVIEW',
-        categoryId: formData.categoryId || null,
+        // Se subcategoria foi selecionada, usar seu ID; caso contrário, usar a categoria principal
+        categoryId: formData.subcategoryId && formData.subcategoryId !== ''
+          ? formData.subcategoryId
+          : formData.categoryId || null,
         tagIds: selectedTags.map(t => t.id),
       };
 
@@ -402,24 +431,56 @@ const EditNews: React.FC = () => {
               </div>
             </div>
 
-            {/* Categoria */}
+            {/* Categoria e Subcategoria */}
             <div className={styles.card}>
               <div className={styles.cardTitle}>Categoria</div>
               <div className={styles.formGroup}>
+                <label className={styles.label}>Categoria Principal</label>
                 <select
                   name="categoryId"
                   value={formData.categoryId || ''}
                   onChange={handleChange}
                   className={styles.select}
+                  aria-label="Selecione a categoria"
                 >
                   <option value="">Selecione uma categoria</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
+                  {categories
+                    .filter(cat => !cat.parentCategory && !cat.parentCategoryId)
+                    .map(cat => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </option>
+                    ))}
                 </select>
               </div>
+
+              {/* Mostrar subcategorias se uma categoria foi selecionada */}
+              {formData.categoryId && categories.filter(
+                cat => cat.parentCategoryId === formData.categoryId || cat.parentCategory?.id === formData.categoryId
+              ).length > 0 && (
+                <div className={styles.formGroup} style={{ marginTop: '1rem' }}>
+                  <label className={styles.label}>Subcategoria (Opcional)</label>
+                  <select
+                    name="subcategoryId"
+                    value={formData.subcategoryId || ''}
+                    onChange={handleChange}
+                    className={styles.select}
+                    aria-label="Selecione a subcategoria"
+                  >
+                    <option value="">Nenhuma subcategoria</option>
+                    {categories
+                      .filter(cat =>
+                        cat.parentCategoryId === formData.categoryId ||
+                        cat.parentCategory?.id === formData.categoryId
+                      )
+                      .map(subcat => (
+                        <option key={subcat.id} value={subcat.id}>
+                          {subcat.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              )}
             </div>
 
             {/* Editor de Conteúdo */}
