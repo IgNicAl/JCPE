@@ -1,6 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import pernambucoImg from '@/assets/pernambuco.png';
+import politicaImg from '@/assets/politica.png';
+import economiaImg from '@/assets/economia.png';
+import esportesImg from '@/assets/esportes.png';
+import culturaImg from '@/assets/cultura.png';
+import mundoImg from '@/assets/mundo.png';
 
 interface SubCategory {
   label: string;
@@ -30,7 +36,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
   const categories: Category[] = [
     {
       title: 'Pernambuco',
-      image: 'https://placehold.co/300x200/0066cc/ffffff?text=Pernambuco',
+      image: pernambucoImg,
       path: '/categoria/pernambuco',
       subcategories: [
         { label: 'Região Metropolitana', path: '/categoria/pernambuco/metropolitana' },
@@ -44,7 +50,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     },
     {
       title: 'Política',
-      image: 'https://placehold.co/300x200/0066cc/ffffff?text=Politica',
+      image: politicaImg,
       path: '/categoria/politica',
       subcategories: [
         { label: 'Governo Federal', path: '/categoria/politica/federal' },
@@ -57,7 +63,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     },
     {
       title: 'Economia',
-      image: 'https://placehold.co/300x200/0066cc/ffffff?text=Economia',
+      image: economiaImg,
       path: '/categoria/economia',
       subcategories: [
         { label: 'Negócios', path: '/categoria/economia/negocios' },
@@ -70,7 +76,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     },
     {
       title: 'Esportes',
-      image: 'https://placehold.co/300x200/0066cc/ffffff?text=Esportes',
+      image: esportesImg,
       path: '/categoria/esportes',
       subcategories: [
         { label: 'Futebol Pernambucano', path: '/categoria/esportes/futebol-pe' },
@@ -82,7 +88,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     },
     {
       title: 'Cultura',
-      image: 'https://placehold.co/300x200/0066cc/ffffff?text=Cultura',
+      image: culturaImg,
       path: '/categoria/cultura',
       subcategories: [
         { label: 'Música', path: '/categoria/cultura/musica' },
@@ -95,7 +101,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     },
     {
       title: 'Mundo',
-      image: 'https://placehold.co/300x200/0066cc/ffffff?text=Mundo',
+      image: mundoImg,
       path: '/categoria/mundo',
       subcategories: [
         { label: 'Américas', path: '/categoria/mundo/americas' },
@@ -132,7 +138,6 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     {
       title: 'Tecnologia',
       image: 'https://placehold.co/300x200/0066cc/ffffff?text=Tecnologia',
-      path: '/categoria/tecnologia',
       subcategories: [
         { label: 'Inovação', path: '/categoria/tecnologia/inovacao' },
         { label: 'Startups', path: '/categoria/tecnologia/startups' },
