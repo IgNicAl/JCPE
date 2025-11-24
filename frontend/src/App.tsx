@@ -31,6 +31,19 @@ import Profile from './pages/Profile/Profile';
 import EditProfile from './pages/Profile/EditProfile';
 import AdminPanel from './pages/AdminPanel/AdminPanel';
 
+// Category Pages
+import Pernambuco from './pages/Pernambuco/Pernambuco';
+import Politica from './pages/Politica/Politica';
+import Economia from './pages/Economia/Economia';
+import Esportes from './pages/Esportes/Esportes';
+import Cultura from './pages/Cultura/Cultura';
+import Mundo from './pages/Mundo/Mundo';
+import Saude from './pages/Saude/Saude';
+import Educacao from './pages/Educacao/Educacao';
+import Tecnologia from './pages/Tecnologia/Tecnologia';
+import CategoryPage from './pages/CategoryPage/CategoryPage';
+
+
 /**
  * Componente que ouve o evento global 'unauthorized' (disparado pela api.js)
  * e força o redirecionamento para a página de login.
@@ -213,7 +226,35 @@ export function App() {
                     <InternalRegistration />
                   </ProtectedRoute>
                 }
-              />
+               />
+
+              {/* Category Routes */}
+              <Route path="/categoria/pernambuco" element={<Pernambuco />} />
+              <Route path="/categoria/pernambuco/:subcategorySlug" element={<CategoryPage />} />
+
+              <Route path="/categoria/politica" element={<Politica />} />
+              <Route path="/categoria/politica/:subcategorySlug" element={<CategoryPage />} />
+
+              <Route path="/categoria/economia" element={<Economia />} />
+              <Route path="/categoria/economia/:subcategorySlug" element={<CategoryPage />} />
+
+              <Route path="/categoria/esportes" element={<Esportes />} />
+              <Route path="/categoria/esportes/:subcategorySlug" element={<CategoryPage />} />
+
+              <Route path="/categoria/cultura" element={<Cultura />} />
+              <Route path="/categoria/cultura/:subcategorySlug" element={<CategoryPage />} />
+
+              <Route path="/categoria/mundo" element={<Mundo />} />
+              <Route path="/categoria/mundo/:subcategorySlug" element={<CategoryPage />} />
+
+              <Route path="/categoria/saude" element={<Saude />} />
+              <Route path="/categoria/saude/:subcategorySlug" element={<CategoryPage />} />
+
+              <Route path="/categoria/educacao" element={<Educacao />} />
+              <Route path="/categoria/educacao/:subcategorySlug" element={<CategoryPage />} />
+
+              <Route path="/categoria/tecnologia" element={<Tecnologia />} />
+              <Route path="/categoria/tecnologia/:subcategorySlug" element={<CategoryPage />} />
 
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

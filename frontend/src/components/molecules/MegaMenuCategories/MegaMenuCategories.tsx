@@ -11,6 +11,7 @@ interface Category {
   title: string;
   subcategories: SubCategory[];
   image: string;
+  path?: string;
 }
 
 interface MegaMenuCategoriesProps {
@@ -30,6 +31,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     {
       title: 'Pernambuco',
       image: 'https://placehold.co/300x200/0066cc/ffffff?text=Pernambuco',
+      path: '/categoria/pernambuco',
       subcategories: [
         { label: 'Região Metropolitana', path: '/categoria/pernambuco/metropolitana' },
         { label: 'Segurança Pública', path: '/categoria/pernambuco/seguranca' },
@@ -43,6 +45,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     {
       title: 'Política',
       image: 'https://placehold.co/300x200/0066cc/ffffff?text=Politica',
+      path: '/categoria/politica',
       subcategories: [
         { label: 'Governo Federal', path: '/categoria/politica/federal' },
         { label: 'Congresso e STF', path: '/categoria/politica/congresso-stf' },
@@ -55,6 +58,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     {
       title: 'Economia',
       image: 'https://placehold.co/300x200/0066cc/ffffff?text=Economia',
+      path: '/categoria/economia',
       subcategories: [
         { label: 'Negócios', path: '/categoria/economia/negocios' },
         { label: 'Finanças Pessoais', path: '/categoria/economia/financas' },
@@ -67,6 +71,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     {
       title: 'Esportes',
       image: 'https://placehold.co/300x200/0066cc/ffffff?text=Esportes',
+      path: '/categoria/esportes',
       subcategories: [
         { label: 'Futebol Pernambucano', path: '/categoria/esportes/futebol-pe' },
         { label: 'Futebol Nacional', path: '/categoria/esportes/futebol-br' },
@@ -78,6 +83,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     {
       title: 'Cultura',
       image: 'https://placehold.co/300x200/0066cc/ffffff?text=Cultura',
+      path: '/categoria/cultura',
       subcategories: [
         { label: 'Música', path: '/categoria/cultura/musica' },
         { label: 'Cinema', path: '/categoria/cultura/cinema' },
@@ -90,6 +96,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     {
       title: 'Mundo',
       image: 'https://placehold.co/300x200/0066cc/ffffff?text=Mundo',
+      path: '/categoria/mundo',
       subcategories: [
         { label: 'Américas', path: '/categoria/mundo/americas' },
         { label: 'Europa', path: '/categoria/mundo/europa' },
@@ -101,6 +108,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     {
       title: 'Saúde',
       image: 'https://placehold.co/300x200/0066cc/ffffff?text=Saude',
+      path: '/categoria/saude',
       subcategories: [
         { label: 'Nutrição', path: '/categoria/saude/nutricao' },
         { label: 'Fitness', path: '/categoria/saude/fitness' },
@@ -112,6 +120,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     {
       title: 'Educação',
       image: 'https://placehold.co/300x200/0066cc/ffffff?text=Educacao',
+      path: '/categoria/educacao',
       subcategories: [
         { label: 'Provas e Gabaritos', path: '/categoria/educacao/provas' },
         { label: 'Dicas de Estudo', path: '/categoria/educacao/dicas' },
@@ -123,6 +132,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     {
       title: 'Tecnologia',
       image: 'https://placehold.co/300x200/0066cc/ffffff?text=Tecnologia',
+      path: '/categoria/tecnologia',
       subcategories: [
         { label: 'Inovação', path: '/categoria/tecnologia/inovacao' },
         { label: 'Startups', path: '/categoria/tecnologia/startups' },
