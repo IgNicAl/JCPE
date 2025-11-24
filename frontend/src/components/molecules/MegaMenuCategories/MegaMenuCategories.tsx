@@ -7,6 +7,9 @@ import economiaImg from '@/assets/economia.png';
 import esportesImg from '@/assets/esportes.png';
 import culturaImg from '@/assets/cultura.png';
 import mundoImg from '@/assets/mundo.png';
+import saudeImg from '@/assets/saude.png';
+import educacaoImg from '@/assets/educacao.png';
+import tecnologiaImg from '@/assets/tecnologia.png';
 
 interface SubCategory {
   label: string;
@@ -113,7 +116,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     },
     {
       title: 'Saúde',
-      image: 'https://placehold.co/300x200/0066cc/ffffff?text=Saude',
+      image: saudeImg,
       path: '/categoria/saude',
       subcategories: [
         { label: 'Nutrição', path: '/categoria/saude/nutricao' },
@@ -125,7 +128,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     },
     {
       title: 'Educação',
-      image: 'https://placehold.co/300x200/0066cc/ffffff?text=Educacao',
+      image: educacaoImg,
       path: '/categoria/educacao',
       subcategories: [
         { label: 'Provas e Gabaritos', path: '/categoria/educacao/provas' },
@@ -137,7 +140,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
     },
     {
       title: 'Tecnologia',
-      image: 'https://placehold.co/300x200/0066cc/ffffff?text=Tecnologia',
+      image: tecnologiaImg,
       subcategories: [
         { label: 'Inovação', path: '/categoria/tecnologia/inovacao' },
         { label: 'Startups', path: '/categoria/tecnologia/startups' },
