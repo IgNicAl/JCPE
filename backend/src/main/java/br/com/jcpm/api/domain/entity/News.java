@@ -129,7 +129,7 @@ public class News {
   @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
   private Boolean isFeaturedPage = false; // se é destaque na página específica
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "category_id", nullable = true)
   private Category category;
 

@@ -30,6 +30,47 @@ import Contato from './pages/Contato/Contato';
 import Profile from './pages/Profile/Profile';
 import EditProfile from './pages/Profile/EditProfile';
 import AdminPanel from './pages/AdminPanel/AdminPanel';
+import Busca from './pages/Busca/Busca';
+
+// Importar subcategorias de Pernambuco
+import Metropolitana from './pages/Pernambuco/Metropolitana/Metropolitana';
+import Seguranca from './pages/Pernambuco/Seguranca/Seguranca';
+import Mobilidade from './pages/Pernambuco/Mobilidade/Mobilidade';
+import Interior from './pages/Pernambuco/Interior/Interior';
+import EducacaoEstadual from './pages/Pernambuco/EducacaoEstadual/EducacaoEstadual';
+import SaudePublica from './pages/Pernambuco/SaudePublica/SaudePublica';
+import TurismoLocal from './pages/Pernambuco/TurismoLocal/TurismoLocal';
+
+// Importar subcategorias de Esportes
+import FutebolPE from './pages/Esportes/FutebolPE/FutebolPE';
+import FutebolBR from './pages/Esportes/FutebolBR/FutebolBR';
+import FutebolInt from './pages/Esportes/FutebolInt/FutebolInt';
+import OutrosEsportes from './pages/Esportes/OutrosEsportes/OutrosEsportes';
+import TabelaBrasileirao from './pages/Esportes/TabelaBrasileirao/TabelaBrasileirao';
+
+// Importar subcategorias de Cultura
+import Musica from './pages/Cultura/Musica/Musica';
+import Cinema from './pages/Cultura/Cinema/Cinema';
+import Teatro from './pages/Cultura/Teatro/Teatro';
+import Literatura from './pages/Cultura/Literatura/Literatura';
+import ArtesPlasticas from './pages/Cultura/ArtesPlasticas/ArtesPlasticas';
+import AgendaCultural from './pages/Cultura/AgendaCultural/AgendaCultural';
+
+// Importar subcategorias de Economia
+import Negocios from './pages/Economia/Negocios/Negocios';
+import Financas from './pages/Economia/Financas/Financas';
+import Emprego from './pages/Economia/Emprego/Emprego';
+import Agro from './pages/Economia/Agro/Agro';
+import Imoveis from './pages/Economia/Imoveis/Imoveis';
+import Cripto from './pages/Economia/Cripto/Cripto';
+
+// Importar subcategorias de Política
+import Federal from './pages/Politica/Federal/Federal';
+import CongressoSTF from './pages/Politica/CongressoSTF/CongressoSTF';
+import Eleicoes from './pages/Politica/Eleicoes/Eleicoes';
+import Bastidores from './pages/Politica/Bastidores/Bastidores';
+import Partidos from './pages/Politica/Partidos/Partidos';
+import Reforma from './pages/Politica/Reforma/Reforma';
 
 /**
  * Componente que ouve o evento global 'unauthorized' (disparado pela api.js)
@@ -70,6 +111,47 @@ export function App() {
               <Route path="/noticias" element={<Home />} />
               <Route path="/sobre" element={<Sobre />} />
               <Route path="/contato" element={<Contato />} />
+              <Route path="/busca" element={<Busca />} />
+
+              {/* Subcategorias de Pernambuco */}
+              <Route path="/pernambuco/metropolitana" element={<Metropolitana />} />
+              <Route path="/pernambuco/seguranca" element={<Seguranca />} />
+              <Route path="/pernambuco/mobilidade" element={<Mobilidade />} />
+              <Route path="/pernambuco/interior" element={<Interior />} />
+              <Route path="/pernambuco/educacao-estadual" element={<EducacaoEstadual />} />
+              <Route path="/pernambuco/saude-publica" element={<SaudePublica />} />
+              <Route path="/pernambuco/turismo-local" element={<TurismoLocal />} />
+
+              {/* Subcategorias de Esportes */}
+              <Route path="/esportes/futebol-pe" element={<FutebolPE />} />
+              <Route path="/esportes/futebol-br" element={<FutebolBR />} />
+              <Route path="/esportes/futebol-int" element={<FutebolInt />} />
+              <Route path="/esportes/outros-esportes" element={<OutrosEsportes />} />
+              <Route path="/esportes/tabela-brasileirao" element={<TabelaBrasileirao />} />
+
+              {/* Subcategorias de Cultura */}
+              <Route path="/cultura/musica" element={<Musica />} />
+              <Route path="/cultura/cinema" element={<Cinema />} />
+              <Route path="/cultura/teatro" element={<Teatro />} />
+              <Route path="/cultura/literatura" element={<Literatura />} />
+              <Route path="/cultura/artes-plasticas" element={<ArtesPlasticas />} />
+              <Route path="/cultura/agenda-cultural" element={<AgendaCultural />} />
+
+              {/* Subcategorias de Economia */}
+              <Route path="/economia/negocios" element={<Negocios />} />
+              <Route path="/economia/financas" element={<Financas />} />
+              <Route path="/economia/emprego" element={<Emprego />} />
+              <Route path="/economia/agro" element={<Agro />} />
+              <Route path="/economia/imoveis" element={<Imoveis />} />
+              <Route path="/economia/cripto" element={<Cripto />} />
+
+              {/* Subcategorias de Política */}
+              <Route path="/politica/federal" element={<Federal />} />
+              <Route path="/politica/congresso-stf" element={<CongressoSTF />} />
+              <Route path="/politica/eleicoes" element={<Eleicoes />} />
+              <Route path="/politica/bastidores" element={<Bastidores />} />
+              <Route path="/politica/partidos" element={<Partidos />} />
+              <Route path="/politica/reforma" element={<Reforma />} />
 
               <Route
                 path="/chat"

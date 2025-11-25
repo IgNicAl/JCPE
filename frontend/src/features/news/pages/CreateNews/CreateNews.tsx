@@ -510,17 +510,29 @@ const CreateNews: React.FC = () => {
             <div className={styles.card}>
               <div className={styles.cardTitle}>Categoria</div>
               <div className={styles.formGroup}>
-                <label className={styles.label}>Categoria Principal</label>
+                <label className={styles.label}>
+                  <i className="fas fa-folder" /> Categoria Principal *
+                </label>
                 <select
                   name="categoryId"
                   value={formData.categoryId}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const updatedFormData = {
+                      ...formData,
+                      categoryId: e.target.value,
+                      subcategoryId: '', // Limpar subcategoria quando trocar categoria principal
+                    };
+                    setFormData(updatedFormData);
+                    saveDraft(updatedFormData);
+                  }}
                   className={styles.select}
                   aria-label="Selecione a categoria"
+                  required
                 >
                   <option value="">Selecione uma categoria</option>
                   {categories
                     .filter(cat => !cat.parentCategory && !cat.parentCategoryId)
+                    .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
                     .map(cat => (
                       <option key={cat.id} value={cat.id}>
                         {cat.name}
@@ -534,7 +546,9 @@ const CreateNews: React.FC = () => {
                 cat => cat.parentCategoryId === formData.categoryId || cat.parentCategory?.id === formData.categoryId
               ).length > 0 && (
                 <div className={styles.formGroup} style={{ marginTop: '1rem' }}>
-                  <label className={styles.label}>Subcategoria (Opcional)</label>
+                  <label className={styles.label}>
+                    <i className="fas fa-folder-open" /> Subcategoria (Opcional)
+                  </label>
                   <select
                     name="subcategoryId"
                     value={formData.subcategoryId || ''}
@@ -542,18 +556,22 @@ const CreateNews: React.FC = () => {
                     className={styles.select}
                     aria-label="Selecione a subcategoria"
                   >
-                    <option value="">Nenhuma subcategoria</option>
+                    <option value="">Selecione uma subcategoria</option>
                     {categories
                       .filter(cat =>
                         cat.parentCategoryId === formData.categoryId ||
                         cat.parentCategory?.id === formData.categoryId
                       )
+                      .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
                       .map(subcat => (
                         <option key={subcat.id} value={subcat.id}>
                           {subcat.name}
                         </option>
                       ))}
                   </select>
+                  <small style={{ display: 'block', marginTop: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+                    <i className="fas fa-info-circle" /> Se uma subcategoria for selecionada, ela será usada como categoria da notícia
+                  </small>
                 </div>
               )}
             </div>
