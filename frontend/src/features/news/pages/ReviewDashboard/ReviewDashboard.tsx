@@ -9,7 +9,8 @@ const ReviewDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'pending' | 'reviewed'>('pending');
   const [newsList, setNewsList] = useState<News[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedParentCategory, setSelectedParentCategory] = useState<string>('all');
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string>('all');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -19,7 +20,7 @@ const ReviewDashboard: React.FC = () => {
 
   useEffect(() => {
     fetchNews();
-  }, [activeTab, selectedCategory]);
+  }, [activeTab, selectedParentCategory, selectedSubcategory]);
 
   const fetchCategories = async () => {
     try {
@@ -39,11 +40,23 @@ const ReviewDashboard: React.FC = () => {
 
       let filteredNews = response.data;
 
-      // Filtrar por categoria se uma categoria específica foi selecionada
-      if (selectedCategory !== 'all') {
+      // Filtrar por categoria/subcategoria
+      if (selectedSubcategory !== 'all') {
+        // Se subcategoria específica selecionada, mostrar apenas dessa subcategoria
         filteredNews = filteredNews.filter((news: News) =>
-          news.category?.id === selectedCategory
+          news.category?.id === selectedSubcategory
         );
+      } else if (selectedParentCategory !== 'all') {
+        // Se apenas categoria pai selecionada, mostrar todas as notícias dessa categoria e suas subcategorias
+        filteredNews = filteredNews.filter((news: News) => {
+          if (!news.category) return false;
+          // Verificar se a categoria da notícia é a categoria pai selecionada
+          if (news.category.id === selectedParentCategory) return true;
+          // Ou se a categoria da notícia tem como pai a categoria selecionada
+          if (news.category.parentCategoryId === selectedParentCategory ||
+              news.category.parentCategory?.id === selectedParentCategory) return true;
+          return false;
+        });
       }
 
       setNewsList(filteredNews);
@@ -73,6 +86,41 @@ const ReviewDashboard: React.FC = () => {
       DRAFT: 'Rascunho'
     };
     return labels[status] || status;
+  };
+
+  // Função auxiliar para obter o nome completo da categoria (incluindo pai)
+  const getFullCategoryName = (category: Category | undefined) => {
+    if (!category) return '';
+
+    // Se tem categoria pai, mostrar "Pai > Filho"
+    if (category.parentCategory) {
+      return `${category.parentCategory.name} > ${category.name}`;
+    }
+    // Se tem parentCategoryId, buscar o pai nas categorias
+    if (category.parentCategoryId) {
+      const parent = categories.find(cat => cat.id === category.parentCategoryId);
+      if (parent) {
+        return `${parent.name} > ${category.name}`;
+      }
+    }
+    // Se não tem pai, é categoria principal
+    return category.name;
+  };
+
+  // Obter categorias pai (sem parent)
+  const parentCategories = categories.filter(cat => !cat.parentCategory && !cat.parentCategoryId);
+
+  // Obter subcategorias filtradas pela categoria pai selecionada
+  const getSubcategories = () => {
+    if (selectedParentCategory === 'all') {
+      // Mostrar todas as subcategorias
+      return categories.filter(cat => cat.parentCategory || cat.parentCategoryId);
+    }
+    // Mostrar apenas subcategorias da categoria pai selecionada
+    return categories.filter(cat =>
+      cat.parentCategoryId === selectedParentCategory ||
+      cat.parentCategory?.id === selectedParentCategory
+    );
   };
 
   return (
@@ -107,19 +155,42 @@ const ReviewDashboard: React.FC = () => {
         </div>
 
         <div className="category-filter">
-          <label htmlFor="category-select">
+          <label htmlFor="parent-category-select">
             <i className="fas fa-filter" /> Filtrar por Categoria:
           </label>
           <select
-            id="category-select"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
+            id="parent-category-select"
+            value={selectedParentCategory}
+            onChange={(e) => {
+              setSelectedParentCategory(e.target.value);
+              // Resetar subcategoria quando mudar categoria pai
+              setSelectedSubcategory('all');
+            }}
             className="category-select"
           >
             <option value="all">Todas as Categorias</option>
-            {categories.map(cat => (
+            {parentCategories.map(cat => (
               <option key={cat.id} value={cat.id}>
                 {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="category-filter">
+          <label htmlFor="subcategory-select">
+            <i className="fas fa-filter" /> Filtrar por Subcategoria:
+          </label>
+          <select
+            id="subcategory-select"
+            value={selectedSubcategory}
+            onChange={(e) => setSelectedSubcategory(e.target.value)}
+            className="category-select"
+          >
+            <option value="all">Todas as Subcategorias</option>
+            {getSubcategories().map(subcat => (
+              <option key={subcat.id} value={subcat.id}>
+                {subcat.name}
               </option>
             ))}
           </select>
@@ -154,7 +225,7 @@ const ReviewDashboard: React.FC = () => {
                   {news.category && (
                     <span>
                       <i className="fas fa-folder" />
-                      {news.category.name}
+                      {getFullCategoryName(news.category)}
                     </span>
                   )}
                 </div>
