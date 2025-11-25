@@ -168,6 +168,17 @@ export function App() {
 
 
               <Route
+                path="/noticias/criar"
+                element={
+                  <ProtectedRoute roles={['JOURNALIST', 'ADMIN']}>
+                    <CreateNews />
+                  </ProtectedRoute>
+                }
+              />
+
+
+
+              <Route
                 path="/noticias/gerenciar"
                 element={
                   <ProtectedRoute roles={['ADMIN', 'JOURNALIST']}>
