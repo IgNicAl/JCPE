@@ -36,14 +36,14 @@ const TAG_IMAGE_MAP: Record<string, string> = {
 };
 
 const TAGS: TagItem[] = [
-  { id: 'food', label: '#food', imageUrl: TAG_IMAGE_MAP.food },
+  { id: 'food', label: '#comida', imageUrl: TAG_IMAGE_MAP.food },
   { id: 'animal', label: '#animal', imageUrl: TAG_IMAGE_MAP.animal },
-  { id: 'car', label: '#car', imageUrl: TAG_IMAGE_MAP.car },
-  { id: 'sport', label: '#sport', imageUrl: TAG_IMAGE_MAP.sport },
-  { id: 'music', label: '#music', imageUrl: TAG_IMAGE_MAP.music },
-  { id: 'technology', label: '#technology', imageUrl: TAG_IMAGE_MAP.technology },
-  { id: 'abstract', label: '#abstract', imageUrl: TAG_IMAGE_MAP.abstract },
-  { id: 'nature', label: '#nature', imageUrl: TAG_IMAGE_MAP.nature },
+  { id: 'car', label: '#carro', imageUrl: TAG_IMAGE_MAP.car },
+  { id: 'sport', label: '#esporte', imageUrl: TAG_IMAGE_MAP.sport },
+  { id: 'music', label: '#musica', imageUrl: TAG_IMAGE_MAP.music },
+  { id: 'technology', label: '#tecnologia', imageUrl: TAG_IMAGE_MAP.technology },
+  { id: 'abstract', label: '#abstrato', imageUrl: TAG_IMAGE_MAP.abstract },
+  { id: 'nature', label: '#natureza', imageUrl: TAG_IMAGE_MAP.nature },
 ];
 
 
@@ -366,7 +366,7 @@ const Home: React.FC = () => {
         />
 
         {popularPosts.length > 0 && (
-          <PostGridSection title="popular posts" posts={popularPosts} />
+          <PostGridSection title="posts populares" posts={popularPosts} />
         )}
 
         <SportsScoreboard
@@ -380,7 +380,7 @@ const Home: React.FC = () => {
         )}
 
         {trendyPosts.length > 0 && (
-          <PostGridSection title="trendy posts" posts={trendyPosts} />
+          <PostGridSection title="em alta" posts={trendyPosts} />
         )}
 
         {videoHighlight && (
@@ -395,7 +395,7 @@ const Home: React.FC = () => {
           />
 
          {topPosts.length > 0 && (
-          <PostGridSection title="top posts" posts={topPosts} disableLeftArrow />
+          <PostGridSection title="destaques" posts={topPosts} disableLeftArrow />
         )}
 
         {user && (isAdmin() || isJournalist()) && (

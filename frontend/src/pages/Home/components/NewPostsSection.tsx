@@ -17,13 +17,13 @@ const NewPostsSection: React.FC<NewPostsSectionProps> = ({ posts, onShowAll }) =
 
   return (
     <section className="space-y-6">
-      <HomeSectionTitle title="new posts">
+      <HomeSectionTitle title="novos posts">
         <button
           type="button"
           onClick={handleShowAll}
           className="flex items-center gap-2 rounded-lg bg-gray px-6 py-2 text-sm font-medium capitalize text-dark-75 transition hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
-          Show all
+          Ver todos
           <i className="fas fa-chevron-right text-base" />
         </button>
       </HomeSectionTitle>

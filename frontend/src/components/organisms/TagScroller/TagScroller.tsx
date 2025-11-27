@@ -15,14 +15,14 @@ interface TagScrollerProps {
 }
 
 const DEFAULT_TAGS: Tag[] = [
-  { id: 'food', label: '#food' },
+  { id: 'food', label: '#comida' },
   { id: 'animal', label: '#animal' },
-  { id: 'car', label: '#car' },
-  { id: 'sport', label: '#sport' },
-  { id: 'music', label: '#music' },
-  { id: 'technology', label: '#technology' },
-  { id: 'abstract', label: '#abstract' },
-  { id: 'nature', label: '#nature' },
+  { id: 'car', label: '#carro' },
+  { id: 'sport', label: '#esporte' },
+  { id: 'music', label: '#musica' },
+  { id: 'technology', label: '#tecnologia' },
+  { id: 'abstract', label: '#abstrato' },
+  { id: 'nature', label: '#natureza' },
 ];
 
 const TagScroller: React.FC<TagScrollerProps> = ({

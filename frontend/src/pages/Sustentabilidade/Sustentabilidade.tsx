@@ -126,7 +126,7 @@ const Sustentabilidade: React.FC = () => {
         {/* Seção de Posts Populares */}
         {popularNews.length > 0 && (
           <PostSection
-            title="popular posts"
+            title="posts populares"
             news={popularNews as MockNews[]}
             showArrows={true}
             leftArrowDisabled={true}
@@ -137,10 +137,10 @@ const Sustentabilidade: React.FC = () => {
         {/* Seção de Novos Posts */}
         {newNews.length > 0 && (
           <PostSection
-            title="new posts"
+            title="novos posts"
             news={newNews as MockNews[]}
             showButton={true}
-            buttonText="Show all"
+            buttonText="Ver todos"
             onButtonClick={() => navigate('/noticias')}
           />
         )}
@@ -148,7 +148,7 @@ const Sustentabilidade: React.FC = () => {
         {/* Seção de Posts em Tendência */}
         {trendyNews.length > 0 && (
           <PostSection
-            title="trendy posts"
+            title="em alta"
             news={trendyNews as MockNews[]}
             showArrows={true}
             leftArrowDisabled={true}

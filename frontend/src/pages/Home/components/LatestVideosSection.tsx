@@ -17,7 +17,7 @@ type LatestVideosSectionProps = {
 
 const LatestVideosSection: React.FC<LatestVideosSectionProps> = ({ highlight, posts }) => (
   <section className="space-y-6">
-    <HomeSectionTitle title="latest videos">
+    <HomeSectionTitle title="últimos vídeos">
       <ArrowControls disableLeft />
     </HomeSectionTitle>
     <div className="rounded-2xl bg-gray/70 p-4">

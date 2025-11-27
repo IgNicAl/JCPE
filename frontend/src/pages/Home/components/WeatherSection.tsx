@@ -58,7 +58,7 @@ const WeatherSection: React.FC<WeatherSectionProps> = ({
 
   return (
     <section className="space-y-6">
-      <HomeSectionTitle title="weather insights" />
+      <HomeSectionTitle title="clima" />
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px]">
         <article className="rounded-2xl bg-white p-6 shadow-card">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">

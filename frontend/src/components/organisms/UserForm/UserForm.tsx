@@ -165,36 +165,36 @@ const UserForm: React.FC<UserFormProps> = ({
       <h2 className="sr-only">{title}</h2>
       <div className="user-form-grid">
         <div className="form-group">
-          <label htmlFor="firstName">First Name</label>
+          <label htmlFor="firstName">Nome</label>
           <input
             type="text"
             id="firstName"
             value={firstName}
             onChange={(e) => handleNameChange('first', e.target.value)}
-            placeholder="Your First Name"
+            placeholder="Seu primeiro nome"
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="lastName">Last Name</label>
+          <label htmlFor="lastName">Sobrenome</label>
           <input
             type="text"
             id="lastName"
             value={lastName}
             onChange={(e) => handleNameChange('last', e.target.value)}
-            placeholder="Your Last Name"
+            placeholder="Seu sobrenome"
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="username">User Name</label>
+          <label htmlFor="username">Usuário</label>
           <input
             type="text"
             id="username"
             name="username"
             value={formData.username || ''}
             onChange={handleChange}
-            placeholder="Your User Name"
+            placeholder="Seu nome de usuário"
           />
         </div>
 
@@ -206,30 +206,30 @@ const UserForm: React.FC<UserFormProps> = ({
             name="email"
             value={formData.email || ''}
             onChange={handleChange}
-            placeholder="Your Email"
+            placeholder="Seu email"
             disabled={!isAdmin} // Users typically can't change email easily
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="oldPassword">Old Password</label>
+          <label htmlFor="oldPassword">Senha Antiga</label>
           <input
             type="password"
             id="oldPassword"
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
-            placeholder="Old Password"
+            placeholder="Senha atual"
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">Senha</label>
           <input
             type="password"
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="New Password"
+            placeholder="Nova senha"
           />
         </div>
 
@@ -251,25 +251,25 @@ const UserForm: React.FC<UserFormProps> = ({
       </div>
 
       <div className="banner-section">
-        <h3>Add Banner</h3>
+        <h3>Adicionar Banner</h3>
         <div className="banner-upload-area">
           {formData.bannerUrl ? (
-            <img src={formData.bannerUrl} alt="Banner Preview" className="banner-preview" />
+            <img src={formData.bannerUrl} alt="Prévia do Banner" className="banner-preview" />
           ) : null}
           <div className="upload-placeholder">
             <i className="fas fa-image upload-icon" />
             {uploadingBanner ? (
-              <span>Uploading...</span>
+              <span>Enviando...</span>
             ) : (
               <>
-                <span>Drop Image Here, Paste Or</span>
+                <span>Solte a imagem aqui, cole ou</span>
                 <input
                   type="url"
                   className="url-input"
                   name="bannerUrl"
                   value={formData.bannerUrl || ''}
                   onChange={handleChange}
-                  placeholder="Enter Banner URL or paste image link"
+                  placeholder="Insira a URL do banner ou cole o link da imagem"
                   style={{
                     width: '100%',
                     padding: '8px',
@@ -278,7 +278,7 @@ const UserForm: React.FC<UserFormProps> = ({
                     borderRadius: '4px',
                   }}
                 />
-                <div style={{ margin: '10px 0', fontWeight: 'bold' }}>OR</div>
+                <div style={{ margin: '10px 0', fontWeight: 'bold' }}>OU</div>
                 <input
                   type="file"
                   id="bannerFileInput"
@@ -301,7 +301,7 @@ const UserForm: React.FC<UserFormProps> = ({
                     marginTop: '10px',
                   }}
                 >
-                  <i className="fas fa-upload" /> Upload from Computer
+                  <i className="fas fa-upload" /> Enviar do Computador
                 </label>
               </>
             )}
@@ -311,19 +311,19 @@ const UserForm: React.FC<UserFormProps> = ({
 
       <div className="explanation-image-grid">
         <div className="explanation-section">
-          <h3>Explanation</h3>
+          <h3>Biografia</h3>
           <div className="editor-toolbar">
             <button type="button" className="toolbar-btn">
-              <i className="fas fa-image" /> Image
+              <i className="fas fa-image" /> Imagem
             </button>
             <button type="button" className="toolbar-btn">
-              <i className="fas fa-pen" /> Color
+              <i className="fas fa-pen" /> Cor
             </button>
             <button type="button" className="toolbar-btn">
-              <i className="fas fa-code" /> Text
+              <i className="fas fa-code" /> Texto
             </button>
             <button type="button" className="toolbar-btn">
-              <i className="fas fa-align-left" /> Align
+              <i className="fas fa-align-left" /> Alinhar
             </button>
             <button type="button" className="toolbar-btn">
               <i className="fas fa-link" /> Link
@@ -334,34 +334,34 @@ const UserForm: React.FC<UserFormProps> = ({
             name="biografia"
             value={formData.biografia || ''}
             onChange={handleChange}
-            placeholder="Type your biography here..."
+            placeholder="Digite sua biografia aqui..."
           />
         </div>
 
         <div className="image-section">
-          <h3>Add Image</h3>
+          <h3>Adicionar Imagem</h3>
           <div className="image-upload-card">
             {formData.urlImagemPerfil ? (
               <img
                 src={formData.urlImagemPerfil}
-                alt="Profile Preview"
+                alt="Prévia do Perfil"
                 className="image-preview"
               />
             ) : null}
             <div className="upload-placeholder">
               <i className="fas fa-image upload-icon" />
               {uploadingProfile ? (
-                <span>Uploading...</span>
+                <span>Enviando...</span>
               ) : (
                 <>
-                  <span>Drop Image Here, Paste Or</span>
+                  <span>Solte a imagem aqui, cole ou</span>
                   <input
                     type="url"
                     className="url-input"
                     name="urlImagemPerfil"
                     value={formData.urlImagemPerfil || ''}
                     onChange={handleChange}
-                    placeholder="Enter Image URL or paste image link"
+                    placeholder="Insira a URL da imagem ou cole o link"
                     style={{
                       width: '100%',
                       padding: '8px',
@@ -370,7 +370,7 @@ const UserForm: React.FC<UserFormProps> = ({
                       borderRadius: '4px',
                     }}
                   />
-                  <div style={{ margin: '10px 0', fontWeight: 'bold' }}>OR</div>
+                  <div style={{ margin: '10px 0', fontWeight: 'bold' }}>OU</div>
                   <input
                     type="file"
                     id="profileFileInput"
@@ -393,7 +393,7 @@ const UserForm: React.FC<UserFormProps> = ({
                       marginTop: '10px',
                     }}
                   >
-                    <i className="fas fa-upload" /> Upload from Computer
+                    <i className="fas fa-upload" /> Enviar do Computador
                   </label>
                 </>
               )}
@@ -405,7 +405,7 @@ const UserForm: React.FC<UserFormProps> = ({
       <div className="form-actions">
         <button type="submit" className="save-btn" disabled={loading}>
           <i className="fas fa-save" />
-          {loading ? 'Saving...' : 'Save'}
+          {loading ? 'Salvando...' : 'Salvar'}
         </button>
       </div>
     </form>

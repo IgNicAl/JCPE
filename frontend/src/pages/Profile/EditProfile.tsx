@@ -36,11 +36,11 @@ const EditProfile: React.FC = () => {
 
       login(updatedUser as User); // This updates the AuthContext and localStorage
 
-      alert('Profile updated successfully!');
+      alert('Perfil atualizado com sucesso!');
       navigate('/perfil');
     } catch (error) {
       console.error('Error updating profile:', error);
-      alert('Failed to update profile. Please try again.');
+      alert('Falha ao atualizar perfil. Por favor, tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -53,7 +53,7 @@ const EditProfile: React.FC = () => {
         onSubmit={handleSubmit}
         loading={loading}
         isAdmin={false}
-        title="Edit Profile"
+        title="Editar Perfil"
       />
     </div>
   );
