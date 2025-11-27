@@ -4,7 +4,7 @@ import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { useNews } from '@/hooks/useNews';
 import { ROUTES } from '@/utils/constants';
 import Button from '@/components/atoms/Button';
-import TagScroller from '@/components/organisms/TagScroller';
+import TagCarousel from '@/pages/Home/components/TagCarousel';
 import HeroSlider from '@/components/organisms/HeroSlider';
 import PostSection from '@/components/organisms/PostSection';
 import { News } from '@/types';
@@ -116,7 +116,7 @@ const Recife: React.FC = () => {
     <div className="recife-page">
       <div className="recife-content">
         {/* Tags Scroller */}
-        <TagScroller className="recife-tag-scroller" />
+        <TagCarousel />
 
         {/* Hero Slider */}
         <div className="hero-section">

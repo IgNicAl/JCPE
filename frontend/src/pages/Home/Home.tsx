@@ -23,6 +23,11 @@ import SportsScoreboard, {
   MatchHighlight,
 } from './components/SportsScoreboard';
 import { PostPreview } from './components/PostCardVertical';
+import { WEATHER_ICONS } from '@/utils/weatherIcons';
+import petrolinaImg from '@/assets/weather-cities/petrolina.png';
+import garanhunImg from '@/assets/weather-cities/garanhuns.png';
+import caruaruImg from '@/assets/weather-cities/caruaru.png';
+import olindaImg from '@/assets/weather-cities/olinda.png';
 
 const TAG_IMAGE_MAP: Record<string, string> = {
   food: 'https://www.figma.com/api/mcp/asset/ab7f8a76-4b72-43cd-a265-82ce679d2e93',
@@ -45,16 +50,6 @@ const TAGS: TagItem[] = [
   { id: 'abstract', label: '#abstract', imageUrl: TAG_IMAGE_MAP.abstract },
   { id: 'nature', label: '#nature', imageUrl: TAG_IMAGE_MAP.nature },
 ];
-
-
-
-const WEATHER_ICONS = {
-  sunny: 'https://www.figma.com/api/mcp/asset/4e287a85-7d15-4020-8dfa-330204e3f567',
-  cloudy: 'https://www.figma.com/api/mcp/asset/5ca7ee5f-1598-4b57-8987-19dfdcb2bf23',
-  rainy: 'https://www.figma.com/api/mcp/asset/127c378e-908e-49bd-a3eb-ed172de5376c',
-  storm: 'https://www.figma.com/api/mcp/asset/8bab9be7-e6a1-4cbd-88a1-47c1c0ab3bd8',
-  clearNight: 'https://www.figma.com/api/mcp/asset/11729396-0409-41e7-bb28-f149e68d921c',
-};
 
 const WEATHER_HOURLY: HourPoint[] = [
   { label: '5 AM', value: 27 },
@@ -86,10 +81,10 @@ const WEATHER_CITIES: CityWeather[] = [
     precipitation: '0%',
     humidity: '41%',
     wind: '27 km/h',
-    image: 'https://www.figma.com/api/mcp/asset/1ba037af-a592-4230-816b-ea85a8d077e3',
+    image: petrolinaImg,
     gradient:
       'linear-gradient(161.7deg, rgba(251,68,28,0.91) 0%, rgba(251,202,28,0.6) 99%), linear-gradient(90deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.45) 100%)',
-    icon: 'https://www.figma.com/api/mcp/asset/adbee3b8-9e35-477c-ba47-4347b75da167',
+    icon: WEATHER_ICONS.sunny,
   },
   {
     id: 'garanhuns',
@@ -98,10 +93,10 @@ const WEATHER_CITIES: CityWeather[] = [
     precipitation: '18%',
     humidity: '32%',
     wind: '16 km/h',
-    image: 'https://www.figma.com/api/mcp/asset/f70eab7f-958c-47ae-b779-ecccd0b77f34',
+    image: garanhunImg,
     gradient:
       'linear-gradient(161.7deg, rgba(28,50,251,0.91) 0%, rgba(28,251,224,0.6) 99%), linear-gradient(90deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.45) 100%)',
-    icon: 'https://www.figma.com/api/mcp/asset/499dcd66-c728-434d-9a61-d4235172086f',
+    icon: WEATHER_ICONS.cloudy,
   },
   {
     id: 'caruaru',
@@ -110,10 +105,10 @@ const WEATHER_CITIES: CityWeather[] = [
     precipitation: '70%',
     humidity: '50%',
     wind: '14 km/h',
-    image: 'https://www.figma.com/api/mcp/asset/4557b075-721e-4fc3-815a-622361c9cd1f',
+    image: caruaruImg,
     gradient:
       'linear-gradient(161.7deg, rgba(113,28,251,0.91) 0%, rgba(251,28,148,0.6) 99%), linear-gradient(90deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.45) 100%)',
-    icon: 'https://www.figma.com/api/mcp/asset/4b2ead3c-58f0-41b9-a553-27406f0f00ed',
+    icon: WEATHER_ICONS.rainy,
   },
   {
     id: 'olinda',
@@ -122,10 +117,10 @@ const WEATHER_CITIES: CityWeather[] = [
     precipitation: '10%',
     humidity: '44%',
     wind: '14 km/h',
-    image: 'https://www.figma.com/api/mcp/asset/a18d1972-7362-4e0b-bc9a-3ca2dce9678f',
+    image: olindaImg,
     gradient:
       'linear-gradient(161.7deg, rgba(7,156,39,0.91) 0%, rgba(192,255,113,0.6) 99%), linear-gradient(90deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.45) 100%)',
-    icon: 'https://www.figma.com/api/mcp/asset/adbee3b8-9e35-477c-ba47-4347b75da167',
+    icon: WEATHER_ICONS.sunny,
   },
 ];
 
@@ -366,7 +361,7 @@ const Home: React.FC = () => {
         />
 
         {popularPosts.length > 0 && (
-          <PostGridSection title="popular posts" posts={popularPosts} />
+          <PostGridSection title="Mais populares" posts={popularPosts} />
         )}
 
         <SportsScoreboard
@@ -380,7 +375,7 @@ const Home: React.FC = () => {
         )}
 
         {trendyPosts.length > 0 && (
-          <PostGridSection title="trendy posts" posts={trendyPosts} />
+          <PostGridSection title="mais compartilhados" posts={trendyPosts} />
         )}
 
         {videoHighlight && (
@@ -395,7 +390,7 @@ const Home: React.FC = () => {
           />
 
          {topPosts.length > 0 && (
-          <PostGridSection title="top posts" posts={topPosts} disableLeftArrow />
+          <PostGridSection title="Mais curtidos" posts={topPosts} disableLeftArrow />
         )}
 
         {user && (isAdmin() || isJournalist()) && (

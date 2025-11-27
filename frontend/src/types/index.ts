@@ -47,6 +47,7 @@ export interface News {
   published?: boolean;
   category?: Category;
   tags?: Tag[];
+  readCount?: number;
   [key: string]: unknown;
 }
 

@@ -1,4 +1,17 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { tagService, newsService } from '@/services/api';
+import { Tag, News } from '@/types';
+
+// Importar imagens das categorias
+import culturaImg from '@/assets/cultura.png';
+import economiaImg from '@/assets/economia.png';
+import educacaoImg from '@/assets/educacao.png';
+import esportesImg from '@/assets/esportes.png';
+import mundoImg from '@/assets/mundo.png';
+import pernambucoImg from '@/assets/pernambuco.png';
+import politicaImg from '@/assets/politica.png';
+import saudeImg from '@/assets/saude.png';
+import tecnologiaImg from '@/assets/tecnologia.png';
 
 export type TagItem = {
   id: string;
@@ -6,8 +19,44 @@ export type TagItem = {
   imageUrl: string;
 };
 
+// Mapa de imagens de categorias por slug
+const CATEGORY_IMAGES: Record<string, string> = {
+  cultura: culturaImg,
+  economia: economiaImg,
+  educacao: educacaoImg,
+  esportes: esportesImg,
+  mundo: mundoImg,
+  pernambuco: pernambucoImg,
+  politica: politicaImg,
+  saude: saudeImg,
+  tecnologia: tecnologiaImg,
+};
+
+// Imagem padrão para tags sem categoria
+const DEFAULT_IMAGE = pernambucoImg;
+
 type TagCarouselProps = {
-  tags: TagItem[];
+  // Sem props necessárias, buscaremos as tags internamente
+};
+
+/**
+ * Função auxiliar para mapear tags do backend para o formato TagItem
+ * Usa a categoria da notícia associada para determinar a imagem de fundo
+ */
+const mapTagToTagItem = (tag: Tag, tagToCategoryMap: Map<string, string>): TagItem => {
+  // Buscar a categoria associada a esta tag no mapa
+  const categorySlug = tagToCategoryMap.get(tag.id);
+
+  // Usar imagem da categoria se encontrada, senão usar imagem padrão
+  const imageUrl = categorySlug && CATEGORY_IMAGES[categorySlug]
+    ? CATEGORY_IMAGES[categorySlug]
+    : DEFAULT_IMAGE;
+
+  return {
+    id: tag.id,
+    label: `#${tag.name}`,
+    imageUrl,
+  };
 };
 
 const scrollContainerClasses =
@@ -20,16 +69,65 @@ const tagTextClasses =
 const arrowButtonClasses =
   'absolute top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-xl bg-white text-stone-700 shadow-lg transition hover:text-blue-600 dark:bg-neutral-800 dark:text-stone-200 dark:hover:text-blue-400 z-10';
 
-// CORREÇÃO: Adicionado valor padrão `[]` para a prop `tags`
-const TagCarousel: React.FC<TagCarouselProps> = ({ tags = [] }) => {
+const TagCarousel: React.FC<TagCarouselProps> = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [canGoLeft, setCanGoLeft] = useState(false);
-  // ATUALIZADO: Define canGoRight com base nas tags reais no início
   const [canGoRight, setCanGoRight] = useState(true);
+  const [tags, setTags] = useState<TagItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const isDownRef = useRef(false);
   const startXRef = useRef(0);
   const scrollLeftRef = useRef(0);
+
+  // Buscar tags, categorias e notícias do backend
+  useEffect(() => {
+    const fetchTagsAndCategories = async () => {
+      try {
+        setLoading(true);
+
+        // Buscar tags, categorias e notícias em paralelo
+        const [tagsResponse, newsResponse] = await Promise.all([
+          tagService.getAll(),
+          newsService.getAll(),
+        ]);
+
+        const fetchedTags: Tag[] = tagsResponse.data;
+        const fetchedNews: News[] = newsResponse.data;
+
+        // Criar um mapa de tag ID -> category slug
+        // Para cada tag, encontrar a primeira notícia que a usa e pegar sua categoria
+        const tagToCategoryMap = new Map<string, string>();
+
+        fetchedTags.forEach(tag => {
+          // Encontrar a primeira notícia que tem esta tag
+          const newsWithTag = fetchedNews.find(news =>
+            news.tags?.some(newsTag => newsTag.id === tag.id)
+          );
+
+          // Se encontrou uma notícia e ela tem categoria, adicionar ao mapa
+          if (newsWithTag?.category?.slug) {
+            tagToCategoryMap.set(tag.id, newsWithTag.category.slug);
+          }
+        });
+
+        // Mapear tags para TagItems com imagens baseadas nas categorias das notícias
+        const tagItems = fetchedTags.map(tag =>
+          mapTagToTagItem(tag, tagToCategoryMap)
+        );
+
+        setTags(tagItems);
+      } catch (error) {
+        console.error('Erro ao buscar tags e notícias:', error);
+        // Em caso de erro, usar array vazio ou manter vazio
+        setTags([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTagsAndCategories();
+  }, []);
 
   const handleScrollUpdate = () => {
     if (!containerRef.current) return;
@@ -103,6 +201,23 @@ const TagCarousel: React.FC<TagCarouselProps> = ({ tags = [] }) => {
       node.removeEventListener('mousemove', onMouseMove as EventListener);
     };
   }, [tags.length]);
+
+  // Exibir placeholder enquanto carrega
+  if (loading) {
+    return (
+      <div
+        data-layer="top-tags"
+        className="TopTags w-full max-w-[1512px] h-16 relative flex items-center justify-center"
+      >
+        <span className="text-stone-500 dark:text-stone-400">Carregando tags...</span>
+      </div>
+    );
+  }
+
+  // Não renderizar nada se não houver tags
+  if (tags.length === 0) {
+    return null;
+  }
 
   return (
     <div
