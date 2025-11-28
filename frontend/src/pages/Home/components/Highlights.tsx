@@ -50,16 +50,15 @@ const SingleContent: React.FC<SingleContentProps> = ({
         <img src={imageUrl} alt={title} className="w-full h-full object-cover" onError={(e) => (e.currentTarget.src = 'https://placehold.co/384x452/34d399/white?text=Artigo')} />
         <div className="w-full h-full absolute left-0 top-0 bg-overlay-dark dark:bg-overlay-dark" />
       </div>
-      {/* Posição atualizada para bottom-[10px] como no HTML */}
-      <div className="absolute left-[10px] bottom-[10px] w-[calc(100%-20px)] max-w-[calc(100%-20px)]">
-        {/* Estilo de fundo do HTML */}
-        <div className="bg-white/75 dark:bg-white/75 rounded-md backdrop-blur-[5px] p-md flex flex-col gap-sm">
-          {/* Título limitado a 1 linha com ellipsis */}
-          <h2 className="w-full text-black dark:text-black text-2xl lg:text-xl sm:text-lg font-roboto font-bold m-0 leading-[1.2] line-clamp-1 overflow-hidden">
+      {/* Container de informações otimizado */}
+      <div className="absolute left-2 right-2 bottom-2">
+        <div className="bg-white/80 dark:bg-white/80 rounded-lg backdrop-blur-md px-4 py-3 flex flex-col gap-2 shadow-lg">
+          {/* Título limitado a 2 linhas com ellipsis */}
+          <h2 className="text-black dark:text-black text-xl lg:text-lg sm:text-base font-roboto font-bold m-0 leading-tight line-clamp-2 overflow-hidden">
             {title}
           </h2>
           {/* Sumário limitado a 2 linhas com ellipsis */}
-          <p className="w-full text-black/75 dark:text-black/75 text-md lg:text-sm sm:text-sm font-roboto font-normal leading-5 tracking-[0.25px] m-0 line-clamp-2 overflow-hidden">
+          <p className="text-black/70 dark:text-black/70 text-sm lg:text-xs sm:text-xs font-roboto font-normal leading-relaxed tracking-wide m-0 line-clamp-2 overflow-hidden">
             {summary}
           </p>
         </div>
@@ -117,7 +116,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({
 
   return (
     <div className={`w-full h-[452px] md:h-[400px] sm:h-[350px] relative overflow-hidden rounded-md mb-xl ${className}`}>
-      <div className="w-full h-full relative">
+      <Link to={`/noticia/${currentSlideData.slug}`} className="block w-full h-full relative no-underline">
         <div
           className="w-full h-full bg-cover bg-center relative"
           style={{ backgroundImage: `url('${currentSlideData.imageUrl}')` }}
@@ -126,75 +125,75 @@ const HeroSlider: React.FC<HeroSliderProps> = ({
           <img src={currentSlideData.imageUrl} alt={currentSlideData.title} className="w-full h-full object-cover" />
           <div className="w-full h-full absolute inset-0 bg-overlay-dark dark:bg-overlay-dark" />
         </div>
-        {/* Posição atualizada para top-[325px] como no HTML */}
-        <div className="absolute left-[10px] top-[325px] bg-white/75 dark:bg-white/75 rounded-md backdrop-blur-[5px] p-md max-w-[calc(100%-20px)]">
-          <div className="flex flex-col gap-md">
-            {/* Título com font-bold e text-black como no HTML */}
-            <h2 className="w-full text-black dark:text-black text-2xl md:text-xl sm:text-lg font-roboto font-bold m-0 leading-[1.2]">
+        {/* Container de informações otimizado para o slider */}
+        <div className="absolute left-2 right-2 bottom-2">
+          <div className="bg-white/80 dark:bg-white/80 rounded-lg backdrop-blur-md px-5 py-4 flex flex-col gap-2 shadow-lg">
+            {/* Título com font-bold e text-black */}
+            <h2 className="text-black dark:text-black text-2xl md:text-xl sm:text-lg font-roboto font-bold m-0 leading-tight line-clamp-2">
               {currentSlideData.title}
             </h2>
-            {/* Sumário com text-black/75 como no HTML */}
-            <p className="w-full text-black/75 dark:text-black/75 text-md md:text-sm sm:text-xs font-roboto font-normal capitalize leading-5 tracking-[0.25px] m-0 line-clamp-2 sm:line-clamp-3">
+            {/* Sumário com text-black/70 */}
+            <p className="text-black/70 dark:text-black/70 text-base md:text-sm sm:text-xs font-roboto font-normal leading-relaxed tracking-wide m-0 line-clamp-2 md:line-clamp-2 sm:line-clamp-1">
               {currentSlideData.summary}
             </p>
           </div>
         </div>
-        {slides.length > 1 && (
-          <>
-            {/* Posição das setas atualizada para top-[206px] como no HTML */}
-            <div className="absolute left-[10px] top-[206px] flex justify-between w-[calc(100%-20px)] pointer-events-none">
-              <button
-                type="button"
-                onClick={handlePrevious}
-                className={`w-10 h-10 sm:w-9 sm:h-9 relative border-none bg-transparent cursor-pointer p-0 rounded-md flex items-center justify-center pointer-events-auto ${currentSlide === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                aria-label="Slide anterior"
-                disabled={currentSlide === 0}
-              >
-                <div className={`w-10 h-10 sm:w-9 sm:h-9 absolute left-0 top-0 rounded-md transition-all duration-normal ${currentSlide === 0 ? 'bg-primary-overlay-light dark:bg-primary-overlay-light' : 'bg-gray-100 dark:bg-gray-100 hover:bg-primary-overlay-light dark:hover:bg-primary-overlay-light'}`} />
-                {/* Ícone Font Awesome adicionado como no HTML */}
-                <i className={`relative z-10 text-lg text-stone-700 dark:text-stone-700 fa-solid fa-chevron-left ${currentSlide === 0 ? 'text-stone-700/50 dark:text-stone-700/50' : ''}`} />
-              </button>
-              <button
-                type="button"
-                onClick={handleNext}
-                className={`w-10 h-10 sm:w-9 sm:h-9 relative border-none bg-transparent cursor-pointer p-0 rounded-md flex items-center justify-center pointer-events-auto ${currentSlide === slides.length - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                aria-label="Próximo slide"
-                disabled={currentSlide === slides.length - 1}
-              >
-                <div className={`w-10 h-10 sm:w-9 sm:h-9 absolute left-0 top-0 rounded-md transition-all duration-normal ${currentSlide === slides.length - 1 ? 'bg-primary-overlay-light dark:bg-primary-overlay-light' : 'bg-gray-100 dark:bg-gray-100 hover:bg-primary-overlay-light dark:hover:bg-primary-overlay-light'}`} />
-                {/* Ícone Font Awesome adicionado como no HTML */}
-                <i className={`relative z-10 text-lg text-stone-700 dark:text-stone-700 fa-solid fa-chevron-right ${currentSlide === slides.length - 1 ? 'text-stone-700/50 dark:text-stone-700/50' : ''}`} />
-              </button>
-            </div>
+      </Link>
+      {slides.length > 1 && (
+        <>
+          {/* Posição das setas atualizada para top-[206px] como no HTML */}
+          <div className="absolute left-[10px] top-[206px] flex justify-between w-[calc(100%-20px)] pointer-events-none z-10">
+            <button
+              type="button"
+              onClick={handlePrevious}
+              className={`w-10 h-10 sm:w-9 sm:h-9 relative border-none bg-transparent cursor-pointer p-0 rounded-md flex items-center justify-center pointer-events-auto ${currentSlide === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              aria-label="Slide anterior"
+              disabled={currentSlide === 0}
+            >
+              <div className={`w-10 h-10 sm:w-9 sm:h-9 absolute left-0 top-0 rounded-md transition-all duration-normal ${currentSlide === 0 ? 'bg-primary-overlay-light dark:bg-primary-overlay-light' : 'bg-gray-100 dark:bg-gray-100 hover:bg-primary-overlay-light dark:hover:bg-primary-overlay-light'}`} />
+              {/* Ícone Font Awesome adicionado como no HTML */}
+              <i className={`relative z-10 text-lg text-stone-700 dark:text-stone-700 fa-solid fa-chevron-left ${currentSlide === 0 ? 'text-stone-700/50 dark:text-stone-700/50' : ''}`} />
+            </button>
+            <button
+              type="button"
+              onClick={handleNext}
+              className={`w-10 h-10 sm:w-9 sm:h-9 relative border-none bg-transparent cursor-pointer p-0 rounded-md flex items-center justify-center pointer-events-auto ${currentSlide === slides.length - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              aria-label="Próximo slide"
+              disabled={currentSlide === slides.length - 1}
+            >
+              <div className={`w-10 h-10 sm:w-9 sm:h-9 absolute left-0 top-0 rounded-md transition-all duration-normal ${currentSlide === slides.length - 1 ? 'bg-primary-overlay-light dark:bg-primary-overlay-light' : 'bg-gray-100 dark:bg-gray-100 hover:bg-primary-overlay-light dark:hover:bg-primary-overlay-light'}`} />
+              {/* Ícone Font Awesome adicionado como no HTML */}
+              <i className={`relative z-10 text-lg text-stone-700 dark:text-stone-700 fa-solid fa-chevron-right ${currentSlide === slides.length - 1 ? 'text-stone-700/50 dark:text-stone-700/50' : ''}`} />
+            </button>
+          </div>
 
-            {/* Posição dos pontos atualizada como no HTML (para desktop) */}
-            <div className="absolute left-[633px] top-[421px] flex justify-end items-center gap-[5px] md:hidden sm:hidden">
-              {slides.map((_, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() => handleDotClick(index)}
-                  className={`w-[10px] h-[10px] rounded-full border-none cursor-pointer p-0 transition-all duration-normal ${index === currentSlide ? 'w-[27px] h-[10px] rounded-[50px] bg-white' : 'bg-[rgba(255,255,255,0.7)] hover:bg-[rgba(255,255,255,0.8)]'}`}
-                  aria-label={`Ir para slide ${index + 1}`}
-                />
-              ))}
-            </div>
+          {/* Posição dos pontos atualizada como no HTML (para desktop) */}
+          <div className="absolute left-[633px] top-[421px] flex justify-end items-center gap-[5px] md:hidden sm:hidden z-10">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => handleDotClick(index)}
+                className={`w-[10px] h-[10px] rounded-full border-none cursor-pointer p-0 transition-all duration-normal ${index === currentSlide ? 'w-[27px] h-[10px] rounded-[50px] bg-white' : 'bg-[rgba(255,255,255,0.7)] hover:bg-[rgba(255,255,255,0.8)]'}`}
+                aria-label={`Ir para slide ${index + 1}`}
+              />
+            ))}
+          </div>
 
-            {/* Fallback responsivo para os pontos (original do TSX) */}
-            <div className="absolute right-[10px] bottom-[10px] hidden md:flex sm:flex justify-end items-center gap-[5px]">
-              {slides.map((_, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() => handleDotClick(index)}
-                  className={`w-[10px] h-[10px] rounded-full border-none cursor-pointer p-0 transition-all duration-normal ${index === currentSlide ? 'w-[27px] h-[10px] rounded-[50px] bg-white' : 'bg-[rgba(255,255,255,0.7)] hover:bg-[rgba(255,255,255,0.8)]'}`}
-                  aria-label={`Ir para slide ${index + 1}`}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
+          {/* Fallback responsivo para os pontos (original do TSX) */}
+          <div className="absolute right-[10px] bottom-[10px] hidden md:flex sm:flex justify-end items-center gap-[5px] z-10">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => handleDotClick(index)}
+                className={`w-[10px] h-[10px] rounded-full border-none cursor-pointer p-0 transition-all duration-normal ${index === currentSlide ? 'w-[27px] h-[10px] rounded-[50px] bg-white' : 'bg-[rgba(255,255,255,0.7)] hover:bg-[rgba(255,255,255,0.8)]'}`}
+                aria-label={`Ir para slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };
