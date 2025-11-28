@@ -1,0 +1,309 @@
+.journalist-overview-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.overview-header {
+  margin-bottom: 2rem;
+}
+
+.overview-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.overview-header h1 i {
+  color: #c41e3a;
+}
+
+.overview-header .subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Global Stats Grid */
+.global-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.global-stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.global-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.global-stat-card .stat-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #fff;
+}
+
+.global-stat-card.total-journalists .stat-icon {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.global-stat-card.total-news .stat-icon {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.global-stat-card.avg-per-journalist .stat-icon {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.global-stat-card .stat-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.global-stat-card .stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.global-stat-card .stat-label {
+  font-size: 0.875rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+/* Chart Section */
+.chart-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.chart-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chart-section h3 i {
+  color: #c41e3a;
+}
+
+/* Ranking Section */
+.ranking-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.ranking-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ranking-section h3 i {
+  color: #c41e3a;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ranking-table thead {
+  background: linear-gradient(135deg, #c41e3a 0%, #8b1528 100%);
+  color: #fff;
+}
+
+.ranking-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ranking-table th.sortable {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background 0.2s ease;
+  position: relative;
+}
+
+.ranking-table th.sortable:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ranking-table th.sortable i {
+  margin-left: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.ranking-table tbody tr {
+  border-bottom: 1px solid #e9ecef;
+  transition: background 0.2s ease;
+}
+
+.ranking-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.ranking-table td {
+  padding: 1rem;
+  font-size: 0.875rem;
+  color: #495057;
+}
+
+.rank-cell {
+  font-weight: 700;
+  color: #c41e3a;
+  font-size: 1rem;
+}
+
+.name-cell {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.likes-cell {
+  color: #ff6b6b;
+  font-weight: 600;
+}
+
+.comments-cell {
+  color: #4ecdc4;
+  font-weight: 600;
+}
+
+.shares-cell {
+  color: #45b7d1;
+  font-weight: 600;
+}
+
+.rating-cell {
+  color: #ffc107;
+  font-weight: 600;
+}
+
+.rating-cell i {
+  margin-right: 0.25rem;
+}
+
+/* Loading & Error States */
+.loading-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  min-height: 400px;
+}
+
+.loading-state i {
+  font-size: 3rem;
+  color: #c41e3a;
+  margin-bottom: 1rem;
+}
+
+.error-state i {
+  font-size: 3rem;
+  color: #dc3545;
+  margin-bottom: 1rem;
+}
+
+.loading-state p,
+.error-state p {
+  font-size: 1.125rem;
+  color: #666;
+  margin: 0 0 1.5rem 0;
+}
+
+.retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #c41e3a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.retry-btn:hover {
+  background: #a01729;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .journalist-overview-container {
+    padding: 1rem;
+  }
+
+  .overview-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .global-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .global-stat-card .stat-value {
+    font-size: 2rem;
+  }
+
+  .ranking-table {
+    font-size: 0.75rem;
+  }
+
+  .ranking-table th,
+  .ranking-table td {
+    padding: 0.5rem;
+  }
+}
