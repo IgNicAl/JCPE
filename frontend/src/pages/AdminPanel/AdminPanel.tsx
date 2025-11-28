@@ -65,6 +65,14 @@ const AdminPanel: React.FC = () => {
       route: '/cadastro-interno',
       permission: canManageUsers,
     },
+    {
+      title: 'Gerenciar Anúncios',
+      description: 'Crie e gerencie anúncios exibidos nas páginas de notícias',
+      icon: 'fa-ad',
+      color: '#ff6f00',
+      route: '/painel/anuncios',
+      permission: canManageUsers,
+    },
   ];
 
   const availableCards = cards.filter(card => card.permission);

@@ -1,0 +1,80 @@
+.sidebar-widget.ad-widget {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.ad-title {
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  font-weight: 500;
+}
+
+.ad-placeholder {
+  padding: 60px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+  color: #999;
+}
+
+.ad-placeholder span {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.ad-placeholder small {
+  font-size: 12px;
+  color: #bbb;
+}
+
+.ad-content {
+  position: relative;
+  width: 100%;
+}
+
+.ad-content img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ad-indicator {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 6px 12px;
+  border-radius: 12px;
+}
+
+.ad-indicator .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transition: background 0.3s ease;
+}
+
+.ad-indicator .dot.active {
+  background: #fff;
+}
+
+/* Dark mode */
+[data-theme='dark'] .sidebar-widget.ad-widget {
+  background: var(--bg-card);
+}
+
+[data-theme='dark'] .ad-title {
+  background: var(--bg-card);
+}

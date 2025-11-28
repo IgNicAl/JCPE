@@ -17,6 +17,7 @@ export const ROUTES = {
   REVIEW_DASHBOARD: '/painel/revisao',
   REVIEW_NEWS: '/painel/revisao',
   MANAGE_CATEGORIES: '/painel/categorias',
+  MANAGE_ADS: '/painel/anuncios',
   NEWS_PAGE: '/noticia',
   CHAT_AI: '/chat',
   POINTS: '/pontos',

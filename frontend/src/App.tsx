@@ -19,6 +19,7 @@ import EditNews from './features/news/pages/EditNews/EditNews';
 import ReviewDashboard from './features/news/pages/ReviewDashboard/ReviewDashboard';
 import ManageCategories from './features/news/pages/ManageCategories/ManageCategories';
 import NewsPage from './features/news/pages/NewsPage/NewsPage';
+import ManageAds from './pages/AdminPanel/ManageAds/ManageAds';
 import Jogos from './pages/Jogos/Jogos';
 import Clima from './pages/Clima/Clima';
 import Recife from './pages/Recife/Recife';
@@ -152,6 +153,15 @@ export function App() {
                 element={
                   <ProtectedRoute roles={['ADMIN', 'REVIEWER']}>
                     <ManageCategories />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/painel/anuncios"
+                element={
+                  <ProtectedRoute roles={['ADMIN']}>
+                    <ManageAds />
                   </ProtectedRoute>
                 }
               />
