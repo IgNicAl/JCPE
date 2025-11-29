@@ -1,4 +1,5 @@
 import React, { useState, useCallback, FormEvent, ChangeEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './SearchBar.module.css';
 
 interface SearchBarProps {
@@ -14,15 +15,28 @@ const SearchBar: React.FC<SearchBarProps> = ({
   ...props
 }) => {
   const [query, setQuery] = useState<string>('');
+  const navigate = useNavigate();
 
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (onSearch) {
-        onSearch(query);
+      const trimmedQuery = query.trim();
+      
+      if (!trimmedQuery) {
+        return; // Não fazer nada se a busca estiver vazia
       }
+
+      if (onSearch) {
+        onSearch(trimmedQuery);
+      } else {
+        // Navegação padrão para página de busca com query parameter
+        navigate(`/busca?q=${encodeURIComponent(trimmedQuery)}`);
+      }
+      
+      // Limpar o input após a busca
+      setQuery('');
     },
-    [query, onSearch]
+    [query, onSearch, navigate]
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
