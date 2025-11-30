@@ -24,6 +24,7 @@ import ManageCategories from './features/news/pages/ManageCategories/ManageCateg
 import NewsPage from './features/news/pages/NewsPage/NewsPage';
 import MyJournalistDashboard from './features/news/pages/MyJournalistDashboard/MyJournalistDashboard';
 import JournalistStatsOverview from './features/news/pages/JournalistStatsOverview/JournalistStatsOverview';
+import ManageAds from './pages/AdminPanel/ManageAds/ManageAds';
 import Jogos from './pages/Jogos/Jogos';
 import Clima from './pages/Clima/Clima';
 import Recife from './pages/Recife/Recife';
@@ -259,6 +260,15 @@ export function App() {
                 element={
                   <ProtectedRoute roles={['ADMIN']}>
                     <JournalistStatsOverview />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/painel/anuncios"
+                element={
+                  <ProtectedRoute roles={['ADMIN']}>
+                    <ManageAds />
                   </ProtectedRoute>
                 }
               />

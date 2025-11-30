@@ -6,6 +6,7 @@ import Output from 'editorjs-react-renderer';
 import { News, NewsStats, NewsComment } from '@/types';
 import RatingStars from '@/components/molecules/RatingStars';
 import ReactPlayer from 'react-player';
+import AdWidget from '@/components/organisms/AdWidget';
 import './NewsPage.css';
 
 interface NewsWithDetails extends News {
@@ -599,20 +600,9 @@ interface NewsWithDetails extends News {
               </div>
             </div>
 
-            {/* Advertising Widget */}
-            <div className="sidebar-widget ad-widget">
-              <div className="ad-placeholder">
-                <span>Anúncio</span>
-                <small>350 px * 180 px</small>
-              </div>
-            </div>
-
-            <div className="sidebar-widget ad-widget">
-              <div className="ad-placeholder">
-                <span>Anúncio</span>
-                <small>350 px * 180 px</small>
-              </div>
-            </div>
+            {/* Advertising Widgets */}
+            <AdWidget location="id" />
+            <AdWidget location="class" />
 
           </aside>
 
