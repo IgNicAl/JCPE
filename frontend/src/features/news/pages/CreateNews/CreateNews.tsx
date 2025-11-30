@@ -421,7 +421,18 @@ const CreateNews: React.FC = () => {
           <button
             type="button"
             className={styles.actionButton}
-            onClick={() => setShowPreview(true)}
+            onClick={async () => {
+              if (editorRef.current) {
+                try {
+                  const content = await editorRef.current.save();
+                  // Armazenar conteúdo para preview
+                  (window as any).previewContent = content;
+                } catch (error) {
+                  console.error('Erro ao capturar conteúdo:', error);
+                }
+              }
+              setShowPreview(true);
+            }}
             disabled={loading}
           >
             <i className="fas fa-eye" /> Preview
@@ -716,17 +727,159 @@ const CreateNews: React.FC = () => {
             {formData.featuredImageUrl && (
               <img src={formData.featuredImageUrl} alt="Preview" style={{ width: '100%', marginTop: '1rem' }} />
             )}
-            <p style={{ marginTop: '1rem', color: 'var(--text-secondary)' }}>
+            <p style={{ marginTop: '1rem', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
               {formData.summary || 'Resumo da notícia aparecerá aqui...'}
             </p>
             <div style={{ marginTop: '1rem' }}>
               {selectedTags.length > 0 && (
-                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
                   {selectedTags.map(tag => (
                     <span key={tag.id} className={styles.tag}>{tag.name}</span>
                   ))}
                 </div>
               )}
+            </div>
+            {/* Renderizar conteúdo do Editor.js */}
+            <div
+              style={{
+                marginTop: '2rem',
+                padding: '1.5rem',
+                backgroundColor: 'var(--background-secondary, #fff)',
+                borderRadius: '8px',
+                minHeight: '200px',
+                lineHeight: '1.6'
+              }}
+            >
+              {(() => {
+                const content = (window as any).previewContent;
+                if (!content || !content.blocks || content.blocks.length === 0) {
+                  return (
+                    <p style={{ color: 'var(--text-secondary)', textAlign: 'center', fontStyle: 'italic' }}>
+                      <i className="fas fa-info-circle" /> Nenhum conteúdo para visualizar. Escreva algo no editor acima.
+                    </p>
+                  );
+                }
+
+                return content.blocks.map((block: any, index: number) => {
+                  switch (block.type) {
+                    case 'header':
+                      const HeaderTag = `h${block.data.level}` as keyof JSX.IntrinsicElements;
+                      return <HeaderTag key={index} style={{ marginTop: '1.5rem', marginBottom: '0.75rem' }}>{block.data.text}</HeaderTag>;
+
+                    case 'paragraph':
+                      return <p key={index} style={{ marginBottom: '1rem' }} dangerouslySetInnerHTML={{ __html: block.data.text }} />;
+
+                    case 'list':
+                      const ListTag = block.data.style === 'ordered' ? 'ol' : 'ul';
+                      return (
+                        <ListTag key={index} style={{ marginBottom: '1rem', paddingLeft: '2rem' }}>
+                          {block.data.items.map((item: string, i: number) => (
+                            <li key={i} dangerouslySetInnerHTML={{ __html: item }} />
+                          ))}
+                        </ListTag>
+                      );
+
+                    case 'image':
+                      return (
+                        <div key={index} style={{ margin: '1.5rem 0', textAlign: 'center' }}>
+                          <img
+                            src={block.data.file.url}
+                            alt={block.data.caption || ''}
+                            style={{ maxWidth: '100%', borderRadius: '8px' }}
+                          />
+                          {block.data.caption && (
+                            <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+                              {block.data.caption}
+                            </p>
+                          )}
+                        </div>
+                      );
+
+                    case 'quote':
+                      return (
+                        <blockquote
+                          key={index}
+                          style={{
+                            borderLeft: '4px solid var(--primary-color, #007bff)',
+                            paddingLeft: '1rem',
+                            marginLeft: 0,
+                            marginBottom: '1rem',
+                            fontStyle: 'italic',
+                            color: 'var(--text-secondary)'
+                          }}
+                        >
+                          <p dangerouslySetInnerHTML={{ __html: block.data.text }} />
+                          {block.data.caption && (
+                            <footer style={{ marginTop: '0.5rem', fontSize: '0.9rem' }}>— {block.data.caption}</footer>
+                          )}
+                        </blockquote>
+                      );
+
+                    case 'code':
+                      return (
+                        <pre
+                          key={index}
+                          style={{
+                            backgroundColor: '#f4f4f4',
+                            padding: '1rem',
+                            borderRadius: '4px',
+                            overflow: 'auto',
+                            marginBottom: '1rem'
+                          }}
+                        >
+                          <code>{block.data.code}</code>
+                        </pre>
+                      );
+
+                    case 'table':
+                      return (
+                        <div key={index} style={{ overflowX: 'auto', marginBottom: '1rem' }}>
+                          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                            <tbody>
+                              {block.data.content.map((row: string[], rowIndex: number) => (
+                                <tr key={rowIndex}>
+                                  {row.map((cell: string, cellIndex: number) => (
+                                    <td
+                                      key={cellIndex}
+                                      style={{
+                                        border: '1px solid #ddd',
+                                        padding: '0.5rem',
+                                        textAlign: 'left'
+                                      }}
+                                      dangerouslySetInnerHTML={{ __html: cell }}
+                                    />
+                                  ))}
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      );
+
+                    case 'embed':
+                      return (
+                        <div key={index} style={{ margin: '1.5rem 0' }}>
+                          <iframe
+                            src={block.data.embed}
+                            width="100%"
+                            height="400"
+                            frameBorder="0"
+                            allowFullScreen
+                            style={{ borderRadius: '8px' }}
+                          />
+                          {block.data.caption && (
+                            <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)', textAlign: 'center' }}>
+                              {block.data.caption}
+                            </p>
+                          )}
+                        </div>
+                      );
+
+                    default:
+                      return <p key={index} style={{ marginBottom: '1rem' }}>Bloco não suportado: {block.type}</p>;
+                  }
+                });
+              })()}
             </div>
           </div>
         </div>

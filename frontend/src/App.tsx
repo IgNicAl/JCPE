@@ -3,9 +3,12 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'r
 
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './features/auth/contexts/AuthContext';
+import { ChatProvider } from './contexts/ChatContext';
 import ProtectedRoute from './features/auth/routes/ProtectedRoute';
 import Navbar from './components/organisms/Navbar';
 import Footer from './components/organisms/Footer';
+import ChatButton from './components/organisms/ChatButton';
+import ChatPopup from './components/organisms/ChatPopup';
 
 import Home from './pages/Home/Home';
 import Login from './features/auth/pages/Login/Login';
@@ -19,7 +22,8 @@ import EditNews from './features/news/pages/EditNews/EditNews';
 import ReviewDashboard from './features/news/pages/ReviewDashboard/ReviewDashboard';
 import ManageCategories from './features/news/pages/ManageCategories/ManageCategories';
 import NewsPage from './features/news/pages/NewsPage/NewsPage';
-import ManageAds from './pages/AdminPanel/ManageAds/ManageAds';
+import MyJournalistDashboard from './features/news/pages/MyJournalistDashboard/MyJournalistDashboard';
+import JournalistStatsOverview from './features/news/pages/JournalistStatsOverview/JournalistStatsOverview';
 import Jogos from './pages/Jogos/Jogos';
 import Clima from './pages/Clima/Clima';
 import Recife from './pages/Recife/Recife';
@@ -86,6 +90,7 @@ import Tecnologia from './pages/Tecnologia/Tecnologia';
 import CategoryPage from './pages/CategoryPage/CategoryPage';
 
 
+
 /**
  * Componente que ouve o evento global 'unauthorized' (disparado pela api.js)
  * e força o redirecionamento para a página de login.
@@ -108,12 +113,13 @@ export function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <Router>
-          <RedirectController />
-          <div className="App">
-            <Navbar />
-            <main className="main-content">
-              <Routes>
+        <ChatProvider>
+          <Router>
+            <RedirectController />
+            <div className="App">
+              <Navbar />
+              <main className="main-content">
+                <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/cadastro" element={<UserRegistration />} />
@@ -240,24 +246,22 @@ export function App() {
               />
 
               <Route
-                path="/painel/anuncios"
+                path="/painel/minhas-estatisticas"
                 element={
-                  <ProtectedRoute roles={['ADMIN']}>
-                    <ManageAds />
+                  <ProtectedRoute roles={['JOURNALIST', 'ADMIN']}>
+                    <MyJournalistDashboard />
                   </ProtectedRoute>
                 }
               />
 
               <Route
-                path="/noticias/criar"
+                path="/painel/estatisticas/jornalistas"
                 element={
-                  <ProtectedRoute roles={['JOURNALIST', 'ADMIN']}>
-                    <CreateNews />
+                  <ProtectedRoute roles={['ADMIN']}>
+                    <JournalistStatsOverview />
                   </ProtectedRoute>
                 }
               />
-
-
 
               <Route
                 path="/noticias/criar"
@@ -363,8 +367,13 @@ export function App() {
             </Routes>
           </main>
           <Footer />
+
+          {/* Chat Popup Global */}
+          <ChatButton />
+          <ChatPopup />
         </div>
       </Router>
+        </ChatProvider>
     </AuthProvider>
     </ThemeProvider>
   );

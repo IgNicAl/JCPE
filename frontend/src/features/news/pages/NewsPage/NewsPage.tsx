@@ -6,7 +6,6 @@ import Output from 'editorjs-react-renderer';
 import { News, NewsStats, NewsComment } from '@/types';
 import RatingStars from '@/components/molecules/RatingStars';
 import ReactPlayer from 'react-player';
-import AdWidget from '@/components/organisms/AdWidget';
 import './NewsPage.css';
 
 interface NewsWithDetails extends News {
@@ -358,11 +357,11 @@ interface NewsWithDetails extends News {
               </div>
               <div className="meta-item">
                 <span className="icon">💬</span>
-                <span>Comments: {stats?.commentsCount || 0}</span>
+                <span>Comentários: {stats?.commentsCount || 0}</span>
               </div>
               <div className="meta-item">
                 <span className="icon">📂</span>
-                <span>Category: News</span>
+                <span>Categoria: {news.category?.name || 'Sem categoria'}</span>
               </div>
             </div>
 
@@ -531,18 +530,18 @@ interface NewsWithDetails extends News {
             {/* Top Actions */}
             <div className="sidebar-actions">
               <button className="action-btn share" onClick={() => handleShare('copy')}>
-                <span className="icon">🔗</span> Share
+                <span className="icon">🔗</span> Compartilhar
               </button>
               <button
                 className={`action-btn mark ${stats?.userHasLiked ? 'active' : ''}`}
                 onClick={handleLike}
                 title={stats?.userHasLiked ? 'Descurtir' : 'Curtir'}
               >
-                <span className="icon">{stats?.userHasLiked ? '❤️' : '🔖'}</span>
-                {stats?.userHasLiked ? 'Liked' : 'Marking'}
+                <span className="icon">{stats?.userHasLiked ? '🔖' : '🔖'}</span>
+                {stats?.userHasLiked ? 'Salvo' : 'Salvar'}
               </button>
               <button className="action-btn comment" onClick={() => document.getElementById('comments')?.scrollIntoView({ behavior: 'smooth' })}>
-                <span className="icon">💬</span> Comment
+                <span className="icon">💬</span> Comentar
               </button>
             </div>
 
@@ -591,18 +590,29 @@ interface NewsWithDetails extends News {
                     }}></div>
                     <div className="top-post-info">
                       <a href={`/noticia/${post.slug}`} className="top-post-title">{post.title}</a>
-                      <span className="top-post-read">read</span>
+                      <span className="top-post-read">{post.readCount} Visualizações</span>
                     </div>
                   </div>
                 )) : (
-                    <div className="top-post-item">No top posts yet.</div>
+                    <div className="top-post-item">Ainda não há posts.</div>
                 )}
               </div>
             </div>
 
-            {/* Advertising Widgets */}
-            <AdWidget location="id" />
-            <AdWidget location="class" />
+            {/* Advertising Widget */}
+            <div className="sidebar-widget ad-widget">
+              <div className="ad-placeholder">
+                <span>Anúncio</span>
+                <small>350 px * 180 px</small>
+              </div>
+            </div>
+
+            <div className="sidebar-widget ad-widget">
+              <div className="ad-placeholder">
+                <span>Anúncio</span>
+                <small>350 px * 180 px</small>
+              </div>
+            </div>
 
           </aside>
 
@@ -610,12 +620,12 @@ interface NewsWithDetails extends News {
 
         {/* Related Posts - Now Full Width */}
         <div className="related-posts-section">
-          <h3 className="section-title">Related Posts</h3>
+          <h3 className="section-title">Postagens Relacionadas</h3>
           <div className="related-posts-grid">
             {[1, 2, 3, 4].map(i => (
               <div key={i} className="related-post-card">
                 <div className="related-image-placeholder"></div>
-                <h4>Related News Title {i}</h4>
+                <h4>Postagem Relacionada {i}</h4>
                 <span className="related-date">July 19, 2022</span>
               </div>
             ))}

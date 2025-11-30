@@ -58,6 +58,22 @@ const AdminPanel: React.FC = () => {
       permission: canManageCategories,
     },
     {
+      title: 'Estatísticas de Jornalistas',
+      description: 'Visão geral do desempenho de todos os jornalistas',
+      icon: 'fa-chart-bar',
+      color: '#00bcd4',
+      route: '/painel/estatisticas/jornalistas',
+      permission: canManageUsers,
+    },
+    {
+      title: 'Minhas Estatísticas',
+      description: 'Acompanhe o desempenho das suas notícias',
+      icon: 'fa-chart-line',
+      color: '#4caf50',
+      route: '/painel/minhas-estatisticas',
+      permission: canManageNews,
+    },
+    {
       title: 'Cadastrar Usuário',
       description: 'Registre novos jornalistas, revisores ou administradores',
       icon: 'fa-user-plus',

@@ -48,14 +48,6 @@ const WeatherSection: React.FC<WeatherSectionProps> = ({
   weekly,
   cities,
 }) => {
-  const chartPoints = hourly
-    .map((point, index) => {
-      const x = (index / (hourly.length - 1)) * 100;
-      const y = 100 - ((point.value - 15) / 20) * 100;
-      return `${x},${y}`;
-    })
-    .join(' ');
-
   return (
     <section className="space-y-6">
       <HomeSectionTitle title="clima" />
@@ -85,18 +77,80 @@ const WeatherSection: React.FC<WeatherSectionProps> = ({
           </div>
 
           <div className="mt-6">
-            <svg viewBox="0 0 100 40" className="h-32 w-full">
+            <svg viewBox="0 0 700 280" className="h-32 w-full" preserveAspectRatio="none">
+              <defs>
+                {/* Gradiente para a linha */}
+                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#FF6B35" />
+                  <stop offset="50%" stopColor="#FFD93D" />
+                  <stop offset="100%" stopColor="#FF6B35" />
+                </linearGradient>
+
+                {/* Gradiente para a área preenchida */}
+                <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#FFD93D" stopOpacity="0.3" />
+                  <stop offset="100%" stopColor="#FFD93D" stopOpacity="0.0" />
+                </linearGradient>
+              </defs>
+
+              {/* Área preenchida abaixo da linha */}
+              <path
+                d={`M 0,280 L ${hourly.map((point, index) => {
+                  const x = (index / (hourly.length - 1)) * 700;
+                  const y = 280 - ((point.value - 15) / 20) * 280;
+                  return `${x},${y}`;
+                }).join(' L ')} L 700,280 Z`}
+                fill="url(#areaGradient)"
+              />
+
+              {/* Linha do gráfico */}
               <polyline
                 fill="none"
-                stroke="#FBBF24"
-                strokeWidth="2"
-                points={chartPoints}
-                vectorEffect="non-scaling-stroke"
+                stroke="url(#lineGradient)"
+                strokeWidth="3"
+                points={hourly.map((point, index) => {
+                  const x = (index / (hourly.length - 1)) * 700;
+                  const y = 280 - ((point.value - 15) / 20) * 280;
+                  return `${x},${y}`;
+                }).join(' ')}
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
+
+              {/* Valores de temperatura nos pontos */}
+              {hourly.map((point, index) => {
+                const x = (index / (hourly.length - 1)) * 700;
+                const y = 280 - ((point.value - 15) / 20) * 280;
+                return (
+                  <g key={`point-${index}`}>
+                    {/* Pequeno ponto no vértice */}
+                    <circle
+                      cx={x}
+                      cy={y}
+                      r="4"
+                      fill="#FFD93D"
+                      stroke="#FF6B35"
+                      strokeWidth="2"
+                    />
+                    {/* Valor da temperatura acima do ponto */}
+                    <text
+                      x={x}
+                      y={y - 15}
+                      textAnchor="middle"
+                      fontSize="16"
+                      fill="#374955"
+                      fontWeight="500"
+                      fontFamily="system-ui, -apple-system, sans-serif"
+                    >
+                      {point.value}
+                    </text>
+                  </g>
+                );
+              })}
             </svg>
-            <div className="mt-2 flex items-center justify-between text-xs text-dark-75">
+            <div className="mt-2 grid grid-cols-8 gap-1 text-xs text-dark-75">
               {hourly.map((point) => (
-                <span key={point.label}>{point.label}</span>
+                <span key={point.label} className="text-center">{point.label}</span>
               ))}
             </div>
           </div>
@@ -119,7 +173,7 @@ const WeatherSection: React.FC<WeatherSectionProps> = ({
           </div>
         </article>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+        <div className="grid gap-4 grid-cols-2">
           {cities.map((city) => (
             <article
               key={city.id}
@@ -128,7 +182,7 @@ const WeatherSection: React.FC<WeatherSectionProps> = ({
               <img
                 src={city.image}
                 alt=""
-                className="absolute inset-0 h-full w-full object-cover"
+                className="absolute inset-0 h-full w-full object-cover blur-sm"
                 aria-hidden="true"
               />
               <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-black/40" aria-hidden="true" />

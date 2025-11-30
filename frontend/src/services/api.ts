@@ -207,6 +207,15 @@ export const homepageSectionService = {
   getBySlug: (slug: string) => api.get(`/api/homepage-sections/slug/${slug}`),
 };
 
+/**
+ * Serviços de Estatísticas de Jornalistas
+ */
+export const journalistStatsService = {
+  getMyStats: () => api.get('/api/stats/my-stats'),
+  getJournalistStats: (id: string) => api.get(`/api/stats/journalist/${id}`),
+  getAllJournalistsStats: () => api.get('/api/stats/journalists/all'),
+};
+
 
 
 /**

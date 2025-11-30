@@ -4,7 +4,7 @@ import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { useNews } from '@/hooks/useNews';
 import { ROUTES } from '@/utils/constants';
 import Button from '@/components/atoms/Button';
-import TagScroller from '@/components/organisms/TagScroller';
+import TagCarousel from '@/pages/Home/components/TagCarousel';
 import HeroSlider from '@/components/organisms/HeroSlider';
 import PostSection from '@/components/organisms/PostSection';
 import { News } from '@/types';
@@ -106,7 +106,7 @@ const Jogos: React.FC = () => {
     <div className="jogos-page">
       <div className="jogos-content">
         <div className="jogos-tag-scroller">
-          <TagScroller />
+          <TagCarousel />
         </div>
 
         {user && (isAdmin() || isJournalist()) && (
@@ -135,14 +135,14 @@ const Jogos: React.FC = () => {
         )}
 
         <section className="hero-section">
-          <HeroSlider 
+          <HeroSlider
             slides={news.slice(0, 5).map(item => ({
               id: item.id,
               title: item.title,
               summary: item.summary,
               imageUrl: item.featuredImageUrl,
               slug: item.slug
-            }))} 
+            }))}
           />
         </section>
 
@@ -215,8 +215,8 @@ const Jogos: React.FC = () => {
                     </thead>
                     <tbody>
                       {standings.slice(0, 10).map(standing => (
-                        <tr 
-                          key={standing.position} 
+                        <tr
+                          key={standing.position}
                           className={getClassificationZone(standing.position)}
                         >
                           <td className="pos">{standing.position}</td>
@@ -247,7 +247,7 @@ const Jogos: React.FC = () => {
           </div>
         </section>
 
-        <PostSection 
+        <PostSection
           title="Notícias de Jogos"
           news={news}
         />
