@@ -64,7 +64,42 @@ services:
       - jcpe_net
 
   # =======================================================================
-  # 4. AGENTES DE IA (PYTHON FASTAPI)
+  # 4. REDIS (CACHE)
+  # =======================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: jcpe-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - jcpe_net
+
+  # =======================================================================
+  # 5. OLLAMA (OPCIONAL - LLM Local)
+  # Remova o comentário abaixo se quiser rodar Ollama no Docker
+  # =======================================================================
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: jcpe-ollama
+  #   restart: unless-stopped
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_data:/root/.ollama
+  #   networks:
+  #     - jcpe_net
+
+  # =======================================================================
+  # 6. AGENTES DE IA (PYTHON FASTAPI)
   # =======================================================================
   agents:
     build:
@@ -73,16 +108,34 @@ services:
     restart: unless-stopped
     env_file: ./.env
     environment:
+      # Database
       DB_HOST: database
       DB_PORT: 3306
+
+      # Redis Cache
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+
+      # LLM Configuration
+      # Para usar Gemini (padrão):
+      LLM_PROVIDER: ${LLM_PROVIDER:-gemini}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+
+      # Para usar Ollama (descomente o serviço ollama acima):
+      # LLM_PROVIDER: ollama
+      # OLLAMA_BASE_URL: http://ollama:11434
+      # OLLAMA_MODEL: gemma2:9b
     depends_on:
       database:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     networks:
       - jcpe_net
 
   # =======================================================================
-  # 5. FRONTEND (REACT + NGINX REVERSE PROXY)
+  # 7. FRONTEND (REACT + NGINX REVERSE PROXY)
   # Nenhuma porta pública é mais necessária. O Tunnel acessa pela rede interna.
   # =======================================================================
   frontend:
@@ -104,3 +157,9 @@ services:
 volumes:
   # Volume para persistir os dados do banco de dados
   mysql_data:
+
+  # Volume para persistir dados do Redis
+  redis_data:
+
+  # Volume para persistir modelos do Ollama (se habilitado)
+  # ollama_data:
