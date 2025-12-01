@@ -301,8 +301,7 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
                   <div
                     key={index}
                     className="group relative h-32 lg:h-40 rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all duration-300 ring-1 ring-black/5"
-                    onMouseEnter={() => setActiveCategory(category)}
-                    onClick={() => setActiveCategory(category)} // For mobile/touch
+                    onClick={() => setActiveCategory(category)}
                   >
                     {/* Background Image */}
                     <img
