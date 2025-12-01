@@ -14,7 +14,7 @@ services:
   # abrir portas no firewall. Conecta-se diretamente ao frontend.
   # =======================================================================
   cloudflared:
-    image: cloudflare/cloudflared:2024.7.1 # Versão fixada para estabilidade
+    image: cloudflare/cloudflared:latest
     container_name: jcpe-tunnel
     restart: unless-stopped
     command: tunnel --no-autoupdate run --token eyJhIjoiNzRlZGE5MDU3MzExZGMyNjhmNDY1YTRmZDFkNGFiNTIiLCJ0IjoiYmM5MzkxOTktYmQxOS00MDM1LWI3MmMtODQ1OWU5MjIwNWYzIiwicyI6Ik1EVm1OVFkyTVRRdFpHWmhZUzAwT1dNd0xUbGxPREl0WlRKaFpETTVOMkV4Wm1ZMiJ9
