@@ -7,7 +7,7 @@ import Button from '@/components/atoms/Button';
 import Highlights from './components/Highlights';
 import { MOCK_NEWS } from '@/features/news/mocks/news';
 import { News } from '@/types';
-import TagCarousel, { TagItem } from './components/TagCarousel';
+import TagCarousel from './components/TagCarousel';
 import PostGridSection from './components/PostGridSection';
 import NewPostsSection from './components/NewPostsSection';
 import LatestVideosSection, { VideoPost } from './components/LatestVideosSection';
@@ -36,27 +36,7 @@ import logoMangary from '@/assets/logo-mangary.png';
 import logoPetrolina from '@/assets/logo-petrolina.png';
 import logoRetro from '@/assets/logo-retro.png';
 
-const TAG_IMAGE_MAP: Record<string, string> = {
-  food: 'https://www.figma.com/api/mcp/asset/ab7f8a76-4b72-43cd-a265-82ce679d2e93',
-  animal: 'https://www.figma.com/api/mcp/asset/5fb6dac2-711f-493f-b6ab-b693b71a78c8',
-  car: 'https://www.figma.com/api/mcp/asset/c02f99a7-ca47-40c7-afec-49b8389e1d25',
-  sport: 'https://www.figma.com/api/mcp/asset/d837d745-4cfd-42e7-b9c5-d75a2c6ac2d5',
-  music: 'https://www.figma.com/api/mcp/asset/996adbbd-4e54-4cd3-a2f4-21ab926614d9',
-  technology: 'https://www.figma.com/api/mcp/asset/3bc382b5-595c-40e7-bffc-ae7fd1b10987',
-  abstract: 'https://www.figma.com/api/mcp/asset/84375a82-8e73-4f36-a404-039b32ee258f',
-  nature: 'https://www.figma.com/api/mcp/asset/79b3f546-b84d-4dad-b503-cbf8eb95fb62',
-};
 
-const TAGS: TagItem[] = [
-  { id: 'food', label: '#comida', imageUrl: TAG_IMAGE_MAP.food },
-  { id: 'animal', label: '#animal', imageUrl: TAG_IMAGE_MAP.animal },
-  { id: 'car', label: '#carro', imageUrl: TAG_IMAGE_MAP.car },
-  { id: 'sport', label: '#esporte', imageUrl: TAG_IMAGE_MAP.sport },
-  { id: 'music', label: '#musica', imageUrl: TAG_IMAGE_MAP.music },
-  { id: 'technology', label: '#tecnologia', imageUrl: TAG_IMAGE_MAP.technology },
-  { id: 'abstract', label: '#abstrato', imageUrl: TAG_IMAGE_MAP.abstract },
-  { id: 'nature', label: '#natureza', imageUrl: TAG_IMAGE_MAP.nature },
-];
 
 const WEATHER_HOURLY: HourPoint[] = [
   { label: '5 AM', value: 27 },
@@ -331,7 +311,7 @@ const Home: React.FC = () => {
   return (
     <div className="bg-[var(--bg-primary)]">
       <div className="mx-auto flex max-w-[1512px] px-12 flex-col gap-12 py-10">
-        <TagCarousel tags={TAGS} />
+        <TagCarousel />
 
         <Highlights
           singleContentItems={singleContentItems}
