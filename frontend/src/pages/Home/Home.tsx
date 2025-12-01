@@ -18,7 +18,6 @@ import WeatherSection, {
   CityWeather,
 } from './components/WeatherSection';
 import SportsScoreboard, {
-  CalendarDay,
   StandingRow,
   MatchHighlight,
 } from './components/SportsScoreboard';
@@ -28,6 +27,14 @@ import petrolinaImg from '@/assets/weather-cities/petrolina.png';
 import garanhunImg from '@/assets/weather-cities/garanhuns.png';
 import caruaruImg from '@/assets/weather-cities/caruaru.png';
 import olindaImg from '@/assets/weather-cities/olinda.png';
+
+// Logos dos times
+import logoSanta from '@/assets/logo-santa.png';
+import logoSport from '@/assets/logo-sport.png';
+import logoNautico from '@/assets/logo-nautico.png';
+import logoMangary from '@/assets/logo-mangary.png';
+import logoPetrolina from '@/assets/logo-petrolina.png';
+import logoRetro from '@/assets/logo-retro.png';
 
 const TAG_IMAGE_MAP: Record<string, string> = {
   food: 'https://www.figma.com/api/mcp/asset/ab7f8a76-4b72-43cd-a265-82ce679d2e93',
@@ -131,67 +138,37 @@ const formatDate = (dateString: string) =>
     year: 'numeric',
   });
 
-const buildCalendar = (year: number, month: number): CalendarDay[] => {
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const days: CalendarDay[] = [];
 
-  for (let i = 0; i < firstDay; i += 1) {
-    days.push({ date: null, isCurrentMonth: false });
-  }
-
-  for (let day = 1; day <= daysInMonth; day += 1) {
-    days.push({
-      date: day,
-      isCurrentMonth: true,
-      isToday: year === 2025 && month === 10 && day === 14,
-    });
-  }
-
-  while (days.length % 7 !== 0) {
-    days.push({ date: null, isCurrentMonth: false });
-  }
-
-  return days;
-};
-
-const WEEK_DAYS = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-
-const SCOREBOARD_CALENDAR = {
-  monthLabel: 'Nov 2025',
-  weekDays: WEEK_DAYS,
-  days: buildCalendar(2025, 10),
-};
 
 const SCOREBOARD_STANDINGS: StandingRow[] = [
   {
     team: 'Santa Cruz',
-    logo: 'https://upload.wikimedia.org/wikipedia/en/7/7c/Santa_Cruz_Futebol_Clube_crest.svg',
+    logo: logoSanta,
     stats: { pj: 38, wins: 29, draws: 6, loses: 3, goalsFor: 99, goalsAgainst: 26, points: 93 },
   },
   {
     team: 'Sport',
-    logo: 'https://upload.wikimedia.org/wikipedia/en/1/16/Sport_Club_do_Recife_logo.svg',
+    logo: logoSport,
     stats: { pj: 38, wins: 28, draws: 8, loses: 2, goalsFor: 94, goalsAgainst: 26, points: 92 },
   },
   {
     team: 'Náutico',
-    logo: 'https://upload.wikimedia.org/wikipedia/en/9/9a/Clube_N%C3%A1utico_Capibaribe_logo.svg',
+    logo: logoNautico,
     stats: { pj: 38, wins: 21, draws: 11, loses: 6, goalsFor: 76, goalsAgainst: 33, points: 74 },
   },
   {
-    team: 'Manguary',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/7/7a/Football_%28soccer%29_uniform.svg',
+    team: 'Maguary',
+    logo: logoMangary,
     stats: { pj: 38, wins: 22, draws: 3, loses: 13, goalsFor: 69, goalsAgainst: 40, points: 71 },
   },
   {
     team: 'Petrolina',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6c/Football_%28soccer%29_ball.svg',
+    logo: logoPetrolina,
     stats: { pj: 38, wins: 22, draws: 3, loses: 13, goalsFor: 61, goalsAgainst: 48, points: 69 },
   },
   {
     team: 'Retrô',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6c/Football_%28soccer%29_ball.svg',
+    logo: logoRetro,
     stats: { pj: 38, wins: 16, draws: 10, loses: 12, goalsFor: 57, goalsAgainst: 57, points: 58 },
   },
 ];
@@ -199,13 +176,14 @@ const SCOREBOARD_STANDINGS: StandingRow[] = [
 const MATCH_HIGHLIGHT: MatchHighlight = {
   leftTeam: {
     name: 'Sport',
-    logo: 'https://upload.wikimedia.org/wikipedia/en/1/16/Sport_Club_do_Recife_logo.svg',
+    logo: logoSport,
   },
   rightTeam: {
     name: 'Santa Cruz',
-    logo: 'https://upload.wikimedia.org/wikipedia/en/7/7c/Santa_Cruz_Futebol_Clube_crest.svg',
+    logo: logoSanta,
   },
-  schedule: 'Sábado, Nov. 14',
+  schedule: 'Domingo, 15 de Dezembro - 16h00',
+  category: 'Campeonato Pernambucano',
 };
 
 /**
@@ -361,11 +339,10 @@ const Home: React.FC = () => {
         />
 
         {popularPosts.length > 0 && (
-          <PostGridSection title="posts populares" posts={popularPosts} />
+          <PostGridSection title="Destaques" posts={popularPosts} />
         )}
 
         <SportsScoreboard
-          calendar={SCOREBOARD_CALENDAR}
           standings={SCOREBOARD_STANDINGS}
           highlight={MATCH_HIGHLIGHT}
         />
@@ -390,7 +367,7 @@ const Home: React.FC = () => {
           />
 
          {topPosts.length > 0 && (
-          <PostGridSection title="destaques" posts={topPosts} disableLeftArrow />
+          <PostGridSection title="Mais lidos" posts={topPosts} disableLeftArrow />
         )}
 
         {user && (isAdmin() || isJournalist()) && (
