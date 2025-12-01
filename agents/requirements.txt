@@ -15,17 +15,16 @@ crewai-tools==1.6.1
 # ============================================================================
 # LANGCHAIN ECOSYSTEM - Compatibilidade Garantida
 # ============================================================================
-# IMPORTANTE: langchain>=1.0.0 REQUER langgraph>=1.0.2
-# Versões testadas e verificadas para funcionar entre si
+# Versões compatíveis entre si e com crewai 1.6.1
 langchain>=1.0.0,<2.0.0
-langchain-core>=1.1.0,<2.0.0
-langchain-google-genai>=1.0.0,<3.0.0
 langgraph>=1.0.2,<2.0.0
 
 # ============================================================================
-# GOOGLE AI - Integração com Gemini/Google Generative AI
+# GOOGLE AI - Integração com Gemini via LangChain
 # ============================================================================
-google-generativeai>=0.8.0,<1.0.0
+# IMPORTANTE: langchain-google-genai 1.0.10 requer google-generativeai<0.8.0
+google-generativeai>=0.7.0,<0.8.0
+langchain-google-genai==1.0.10
 
 # ============================================================================
 # LANGSMITH - Observabilidade e Debugging
