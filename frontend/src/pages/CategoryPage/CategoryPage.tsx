@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { useNews } from '@/hooks/useNews';
 import { News } from '@/types';
+import { MOCK_NEWS } from '@/features/news/mocks/news';
 import Highlights from '@/pages/Home/components/Highlights';
 import NewPostsSection from '@/pages/Home/components/NewPostsSection';
 import { PostPreview } from '@/pages/Home/components/PostCardVertical';
@@ -39,8 +40,8 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
   const [pageTitle, setPageTitle] = useState<string>('');
   const [breadcrumbs, setBreadcrumbs] = useState<{ label: string; path: string }[]>([]);
 
-  // Fetch news - in a real app, this would filter by category/subcategory
-  const { news, loading, error } = useNews({ autoFetch: true });
+  // Fetch news with mock data as fallback
+  const { news, loading, error } = useNews({ autoFetch: true, initialData: MOCK_NEWS as unknown as News[] });
 
   useEffect(() => {
     // Set page title and breadcrumbs based on slugs

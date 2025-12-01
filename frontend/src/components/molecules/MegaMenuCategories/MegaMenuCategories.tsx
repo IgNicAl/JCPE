@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { useCategories } from '@/hooks/useCategories';
 import pernambucoImg from '@/assets/pernambuco.png';
 import politicaImg from '@/assets/politica.png';
 import economiaImg from '@/assets/economia.png';
@@ -11,6 +12,19 @@ import saudeImg from '@/assets/saude.png';
 import educacaoImg from '@/assets/educacao.png';
 import tecnologiaImg from '@/assets/tecnologia.png';
 
+// Mapeamento entre slugs fixos e nomes de categorias no backend
+const CATEGORY_MAPPING: { [key: string]: string } = {
+  'pernambuco': 'Pernambuco',
+  'politica': 'Política',
+  'economia': 'Economia',
+  'esportes': 'Esportes',
+  'cultura': 'Cultura',
+  'mundo': 'Mundo',
+  'saude': 'Saúde',
+  'educacao': 'Educação',
+  'tecnologia': 'Tecnologia'
+};
+
 interface SubCategory {
   label: string;
   path: string;
@@ -18,6 +32,7 @@ interface SubCategory {
 
 interface Category {
   title: string;
+  slug: string;  // Added slug for mapping
   subcategories: SubCategory[];
   image: string;
   path?: string;
@@ -36,120 +51,174 @@ const MegaMenuCategories: React.FC<MegaMenuCategoriesProps> = ({
   const [menuTop, setMenuTop] = useState<number>(0);
   const triggerRef = useRef<HTMLDivElement>(null);
 
-  const categories: Category[] = [
+  // Buscar categorias do backend
+  const { rootCategories, getSubcategories, loading: categoriesLoading } = useCategories();
+
+  // Construir subcategorias a partir do backend ou usar fallback hardcoded
+  const buildSubcategories = (categorySlug: string, fallbackSubs: SubCategory[]): SubCategory[] => {
+    // Encontrar a categoria raiz correspondente no backend
+    const backendCategory = rootCategories.find(cat =>
+      cat.name === CATEGORY_MAPPING[categorySlug] ||
+      cat.slug === categorySlug
+    );
+
+    if (!backendCategory) {
+      // Se não encontrar no backend, usar fallback hardcoded
+      return fallbackSubs;
+    }
+
+    // Buscar subcategorias do backend
+    const backendSubs = getSubcategories(backendCategory.id);
+
+    if (backendSubs.length === 0) {
+      // Se não houver subcategorias no backend, usar fallback
+      return fallbackSubs;
+    }
+
+    // Mapear subcategorias do backend para o formato esperado
+    return backendSubs.map(sub => ({
+      label: sub.name,
+      path: `/categoria/${categorySlug}/${sub.slug}`
+    }));
+  };
+
+  // Categorias fixas com estrutura de fallback
+  const FALLBACK_SUBCATEGORIES = {
+    'pernambuco': [
+      { label: 'Região Metropolitana', path: '/categoria/pernambuco/metropolitana' },
+      { label: 'Segurança Pública', path: '/categoria/pernambuco/seguranca' },
+      { label: 'Mobilidade', path: '/categoria/pernambuco/mobilidade' },
+      { label: 'Interior', path: '/categoria/pernambuco/interior' },
+      { label: 'Educação Estadual', path: '/categoria/pernambuco/educacao' },
+      { label: 'Saúde Pública', path: '/categoria/pernambuco/saude' },
+      { label: 'Turismo Local', path: '/categoria/pernambuco/turismo' },
+    ],
+    'politica': [
+      { label: 'Governo Federal', path: '/categoria/politica/federal' },
+      { label: 'Congresso e STF', path: '/categoria/politica/congresso-stf' },
+      { label: 'Eleições', path: '/categoria/politica/eleicoes' },
+      { label: 'Bastidores', path: '/categoria/politica/bastidores'},
+      { label: 'Partidos', path: '/categoria/politica/partidos'},
+      { label: 'Reforma Tributária', path: '/categoria/politica/reforma'},
+    ],
+    'economia': [
+      { label: 'Negócios', path: '/categoria/economia/negocios' },
+      { label: 'Finanças Pessoais', path: '/categoria/economia/financas' },
+      { label: 'Emprego e Concursos', path: '/categoria/economia/emprego' },
+      { label: 'Agro', path: '/categoria/economia/agro' },
+      { label: 'Mercado Imobiliário', path: '/categoria/economia/imoveis' },
+      { label: 'Criptomoedas', path: '/categoria/economia/cripto' },
+    ],
+    'esportes': [
+      { label: 'Futebol Pernambucano', path: '/categoria/esportes/futebol-pe' },
+      { label: 'Futebol Nacional', path: '/categoria/esportes/futebol-br' },
+      { label: 'Futebol Internacional', path: '/categoria/esportes/futebol-int' },
+      { label: 'Outros Esportes', path: '/categoria/esportes/outros' },
+      { label: 'Tabela do Brasileirão', path: '/categoria/esportes/tabela' },
+    ],
+    'cultura': [
+      { label: 'Música', path: '/categoria/cultura/musica' },
+      { label: 'Cinema', path: '/categoria/cultura/cinema' },
+      { label: 'Teatro', path: '/categoria/cultura/teatro' },
+      { label: 'Literatura', path: '/categoria/cultura/literatura' },
+      { label: 'Artes Plásticas', path: '/categoria/cultura/artes' },
+      { label: 'Agenda Cultural', path: '/categoria/cultura/agenda' },
+    ],
+    'mundo': [
+      { label: 'Américas', path: '/categoria/mundo/americas' },
+      { label: 'Europa', path: '/categoria/mundo/europa' },
+      { label: 'Ásia e Oceania', path: '/categoria/mundo/asia-oceania' },
+      { label: 'Oriente Médio', path: '/categoria/mundo/oriente-medio' },
+      { label: 'Guerra na Ucrânia', path: '/categoria/mundo/ucrania' },
+    ],
+    'saude': [
+      { label: 'Nutrição', path: '/categoria/saude/nutricao' },
+      { label: 'Fitness', path: '/categoria/saude/fitness' },
+      { label: 'Saúde Mental', path: '/categoria/saude/mental' },
+      { label: 'Medicina', path: '/categoria/saude/medicina' },
+      { label: 'Bem-Estar', path: '/categoria/saude/bem-estar' },
+    ],
+    'educacao': [
+      { label: 'Provas e Gabaritos', path: '/categoria/educacao/provas' },
+      { label: 'Dicas de Estudo', path: '/categoria/educacao/dicas' },
+      { label: 'Profissões', path: '/categoria/educacao/profissoes' },
+      { label: 'Universidades', path: '/categoria/educacao/universidades' },
+      { label: 'Enem', path: '/categoria/educacao/enem' },
+    ],
+    'tecnologia': [
+      { label: 'Inovação', path: '/categoria/tecnologia/inovacao' },
+      { label: 'Startups', path: '/categoria/tecnologia/startups' },
+      { label: 'Games', path: '/categoria/tecnologia/games' },
+      { label: 'Ciência', path: '/categoria/tecnologia/ciencia' },
+      { label: 'Gadgets', path: '/categoria/tecnologia/gadgets' },
+    ],
+  };
+
+  // Usar useMemo para evitar recalcular categorias em cada render
+  const categories: Category[] = useMemo(() => [
     {
       title: 'Pernambuco',
+      slug: 'pernambuco',
       image: pernambucoImg,
       path: '/categoria/pernambuco',
-      subcategories: [
-        { label: 'Região Metropolitana', path: '/categoria/pernambuco/metropolitana' },
-        { label: 'Segurança Pública', path: '/categoria/pernambuco/seguranca' },
-        { label: 'Mobilidade', path: '/categoria/pernambuco/mobilidade' },
-        { label: 'Interior', path: '/categoria/pernambuco/interior' },
-        { label: 'Educação Estadual', path: '/categoria/pernambuco/educacao' },
-        { label: 'Saúde Pública', path: '/categoria/pernambuco/saude' },
-        { label: 'Turismo Local', path: '/categoria/pernambuco/turismo' },
-      ],
+      subcategories: buildSubcategories('pernambuco', FALLBACK_SUBCATEGORIES.pernambuco),
     },
     {
       title: 'Política',
+      slug: 'politica',
       image: politicaImg,
       path: '/categoria/politica',
-      subcategories: [
-        { label: 'Governo Federal', path: '/categoria/politica/federal' },
-        { label: 'Congresso e STF', path: '/categoria/politica/congresso-stf' },
-        { label: 'Eleições', path: '/categoria/politica/eleicoes' },
-        { label: 'Bastidores', path: '/categoria/politica/bastidores'},
-        { label: 'Partidos', path: '/categoria/politica/partidos'},
-        { label: 'Reforma Tributária', path: '/categoria/politica/reforma'},
-      ],
+      subcategories: buildSubcategories('politica', FALLBACK_SUBCATEGORIES.politica),
     },
     {
       title: 'Economia',
+      slug: 'economia',
       image: economiaImg,
       path: '/categoria/economia',
-      subcategories: [
-        { label: 'Negócios', path: '/categoria/economia/negocios' },
-        { label: 'Finanças Pessoais', path: '/categoria/economia/financas' },
-        { label: 'Emprego e Concursos', path: '/categoria/economia/emprego' },
-        { label: 'Agro', path: '/categoria/economia/agro' },
-        { label: 'Mercado Imobiliário', path: '/categoria/economia/imoveis' },
-        { label: 'Criptomoedas', path: '/categoria/economia/cripto' },
-      ],
+      subcategories: buildSubcategories('economia', FALLBACK_SUBCATEGORIES.economia),
     },
     {
       title: 'Esportes',
+      slug: 'esportes',
       image: esportesImg,
       path: '/categoria/esportes',
-      subcategories: [
-        { label: 'Futebol Pernambucano', path: '/categoria/esportes/futebol-pe' },
-        { label: 'Futebol Nacional', path: '/categoria/esportes/futebol-br' },
-        { label: 'Futebol Internacional', path: '/categoria/esportes/futebol-int' },
-        { label: 'Outros Esportes', path: '/categoria/esportes/outros' },
-        { label: 'Tabela do Brasileirão', path: '/categoria/esportes/tabela' },
-      ],
+      subcategories: buildSubcategories('esportes', FALLBACK_SUBCATEGORIES.esportes),
     },
     {
       title: 'Cultura',
+      slug: 'cultura',
       image: culturaImg,
       path: '/categoria/cultura',
-      subcategories: [
-        { label: 'Música', path: '/categoria/cultura/musica' },
-        { label: 'Cinema', path: '/categoria/cultura/cinema' },
-        { label: 'Teatro', path: '/categoria/cultura/teatro' },
-        { label: 'Literatura', path: '/categoria/cultura/literatura' },
-        { label: 'Artes Plásticas', path: '/categoria/cultura/artes' },
-        { label: 'Agenda Cultural', path: '/categoria/cultura/agenda' },
-      ],
+      subcategories: buildSubcategories('cultura', FALLBACK_SUBCATEGORIES.cultura),
     },
     {
       title: 'Mundo',
+      slug: 'mundo',
       image: mundoImg,
       path: '/categoria/mundo',
-      subcategories: [
-        { label: 'Américas', path: '/categoria/mundo/americas' },
-        { label: 'Europa', path: '/categoria/mundo/europa' },
-        { label: 'Ásia e Oceania', path: '/categoria/mundo/asia-oceania' },
-        { label: 'Oriente Médio', path: '/categoria/mundo/oriente-medio' },
-        { label: 'Guerra na Ucrânia', path: '/categoria/mundo/ucrania' },
-      ],
+      subcategories: buildSubcategories('mundo', FALLBACK_SUBCATEGORIES.mundo),
     },
     {
       title: 'Saúde',
+      slug: 'saude',
       image: saudeImg,
       path: '/categoria/saude',
-      subcategories: [
-        { label: 'Nutrição', path: '/categoria/saude/nutricao' },
-        { label: 'Fitness', path: '/categoria/saude/fitness' },
-        { label: 'Saúde Mental', path: '/categoria/saude/mental' },
-        { label: 'Medicina', path: '/categoria/saude/medicina' },
-        { label: 'Bem-Estar', path: '/categoria/saude/bem-estar' },
-      ],
+      subcategories: buildSubcategories('saude', FALLBACK_SUBCATEGORIES.saude),
     },
     {
       title: 'Educação',
+      slug: 'educacao',
       image: educacaoImg,
       path: '/categoria/educacao',
-      subcategories: [
-        { label: 'Provas e Gabaritos', path: '/categoria/educacao/provas' },
-        { label: 'Dicas de Estudo', path: '/categoria/educacao/dicas' },
-        { label: 'Profissões', path: '/categoria/educacao/profissoes' },
-        { label: 'Universidades', path: '/categoria/educacao/universidades' },
-        { label: 'Enem', path: '/categoria/educacao/enem' },
-      ],
+      subcategories: buildSubcategories('educacao', FALLBACK_SUBCATEGORIES.educacao),
     },
     {
       title: 'Tecnologia',
+      slug: 'tecnologia',
       image: tecnologiaImg,
-      subcategories: [
-        { label: 'Inovação', path: '/categoria/tecnologia/inovacao' },
-        { label: 'Startups', path: '/categoria/tecnologia/startups' },
-        { label: 'Games', path: '/categoria/tecnologia/games' },
-        { label: 'Ciência', path: '/categoria/tecnologia/ciencia' },
-        { label: 'Gadgets', path: '/categoria/tecnologia/gadgets' },
-      ],
+      subcategories: buildSubcategories('tecnologia', FALLBACK_SUBCATEGORIES.tecnologia),
     },
-  ];
+  ], [rootCategories, getSubcategories]); // Recalcula quando as categorias do backend mudam
 
   const [activeCategory, setActiveCategory] = useState<Category>(categories[0]);
   const dropdownRef = useClickOutside<HTMLDivElement>(() => setIsOpen(false));
