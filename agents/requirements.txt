@@ -1,5 +1,5 @@
 # ============================================================================
-# DEPENDÊNCIAS FIXADAS - NÃO ALTERAR SEM TESTAR
+# DEPENDÊNCIAS OTIMIZADAS - VERSÃO 2.0
 # ============================================================================
 # Versões fixadas para garantir builds rápidos e determinísticos.
 # As versões abaixo têm wheels manylinux pré-compilados disponíveis,
@@ -16,6 +16,9 @@ langchain-google-genai==2.0.5
 google-generativeai==0.8.3
 langgraph-prebuilt==0.1.7
 
+# LangSmith - Observabilidade (NOVO)
+langsmith>=0.1.17
+
 # FastAPI - Web framework
 fastapi==0.115.5
 uvicorn[standard]==0.32.1
@@ -24,16 +27,24 @@ python-dotenv==1.0.1
 
 # Utilitários
 requests==2.32.3
+nest-asyncio==1.6.0  # Permite nested event loops
 
 # Testing
 pytest==8.3.4
 
-# Database
+# Database - ASYNC SUPPORT (ATUALIZADO)
 SQLAlchemy==2.0.36
 pymysql==1.1.1
+aiomysql==0.2.0  # NOVO: Async MySQL driver
+
+# Cache (NOVO)
+redis[asyncio]==5.2.0  # Redis com suporte async - versão atualizada
 
 # News API
 newsapi-python==0.2.7
+
+# Monitoring (NOVO)
+prometheus-client==0.22.0  # Métricas Prometheus - versão atualizada
 
 # ============================================================================
 # BIBLIOTECAS CIENTÍFICAS (numpy, pandas, etc. vêm como dependências transitivas)

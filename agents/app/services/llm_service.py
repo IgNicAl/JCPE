@@ -16,7 +16,7 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     raise ValueError("Variável de ambiente GEMINI_API_KEY não definida.")
 
-# Configura e instancia o LLM
+# Configura e instancia o LLM padrão
 llm = LLM(
     model="gemini/gemini-2.0-flash",
     api_key=GEMINI_API_KEY,
@@ -24,12 +24,27 @@ llm = LLM(
 
 
 def get_llm() -> LLM:
-    """Retorna a instância configurada do LLM.
+    """Retorna LLM configurado padrão.
 
     Returns:
-        LLM: A instância global do LLM.
+        Instância configurada do LLM
     """
-    return llm
+    return LLM(
+        model="gemini/gemini-2.0-flash",
+        api_key=GEMINI_API_KEY,
+    )
+
+
+# LLMs especializados (por enquanto, retornam o mesmo LLM)
+# TODO: Investigar parâmetros corretos para CrewAI LLM
+def get_factual_llm() -> LLM:
+    """LLM para tarefas factuais (busca, classificação)."""
+    return get_llm()
+
+
+def get_creative_llm() -> LLM:
+    """LLM para tarefas criativas (compilação, redação)."""
+    return get_llm()
 
 
 def summarize_text(text: str, query: str) -> str:
@@ -44,15 +59,23 @@ def summarize_text(text: str, query: str) -> str:
     """
     prompt_template = ChatPromptTemplate.from_messages(
         [
-            ("system", "Você é um assistente prestativo que resume artigos de notícias em Português do Brasil (PT-BR). Seu resumo deve ser conciso, claro e diretamente relacionado à consulta do usuário."),
-            ("human", "Por favor, resuma o seguinte texto com base nesta consulta: '{query}'\n\nTexto:\n---\n{text}"),
+            (
+                "system",
+                "Você é um assistente prestativo que resume artigos de notícias em Português do Brasil (PT-BR). Seu resumo deve ser conciso (máx 100 palavras), claro e diretamente relacionado à consulta do usuário.",
+            ),
+            (
+                "human",
+                "Por favor, resuma o seguinte texto com base nesta consulta: '{query}'\\n\\nTexto:\\n---\\n{text}\\n---\\n\\nResumo:",
+            ),
         ]
     )
 
-    chain = prompt_template | llm.client
+    factual_llm = get_factual_llm()
+    chain = prompt_template | factual_llm.client
 
     try:
-        response = chain.invoke({"text": text, "query": query})
+        # Limita texto para evitar overflow de contexto
+        response = chain.invoke({"text": text[:3000], "query": query})
         return response.content
     except Exception as e:
         print(f"Erro durante a sumarização: {e}")
