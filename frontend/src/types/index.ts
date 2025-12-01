@@ -48,6 +48,8 @@ export interface News {
   category?: Category;
   tags?: Tag[];
   readCount?: number;
+  priority?: number;  // 1 = Normal, 2 = Alta, 3 = Urgente
+  averageRating?: number;  // Avaliação média (0-5)
   [key: string]: unknown;
 }
 

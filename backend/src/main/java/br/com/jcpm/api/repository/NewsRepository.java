@@ -44,4 +44,37 @@ public interface NewsRepository extends JpaRepository<News, UUID> {
   List<News> findByStatusInAndReviewedAtAfter(List<NewsStatus> statuses, LocalDateTime date, Pageable pageable);
 
   List<News> findByStatusAndAuthorId(NewsStatus status, UUID authorId);
+
+  /**
+   * Busca posts mais lidos do mês (por readCount)
+   */
+  @org.springframework.data.jpa.repository.Query(
+    "SELECT n FROM News n " +
+    "WHERE n.publicationDate >= :monthStart " +
+    "AND n.status = 'PUBLISHED' " +
+    "ORDER BY n.readCount DESC"
+  )
+  List<News> findTopByReadCountThisMonth(
+    @org.springframework.data.repository.query.Param("monthStart") LocalDateTime monthStart,
+    Pageable pageable
+  );
+
+  /**
+   * Busca posts mais bem avaliados do mês (por averageRating)
+   * Usa query nativa devido à complexidade do cálculo de média
+   */
+  @org.springframework.data.jpa.repository.Query(
+    value = "SELECT n.* FROM noticias n " +
+    "LEFT JOIN news_ratings nr ON n.id = nr.news_id " +
+    "WHERE n.publication_date >= :monthStart " +
+    "AND n.status = 'PUBLISHED' " +
+    "GROUP BY n.id " +
+    "HAVING AVG(nr.rating) > 0 " +
+    "ORDER BY AVG(nr.rating) DESC",
+    nativeQuery = true
+  )
+  List<News> findTopByAverageRatingThisMonth(
+    @org.springframework.data.repository.query.Param("monthStart") LocalDateTime monthStart,
+    Pageable pageable
+  );
 }

@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { useNews } from '@/hooks/useNews';
 import { News } from '@/types';
-import PostGridSection from '@/pages/Home/components/PostGridSection';
+import Highlights from '@/pages/Home/components/Highlights';
 import NewPostsSection from '@/pages/Home/components/NewPostsSection';
 import { PostPreview } from '@/pages/Home/components/PostCardVertical';
 import { getVideoThumbnail } from '@/utils/videoUtils';
@@ -91,10 +91,40 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
     slug: item.slug || '',
   }));
 
-  // Split posts into sections
-  const featuredPosts = posts.slice(0, 4);
-  const recentPosts = posts.slice(4, 10);
-  const morePosts = posts.slice(10, 14);
+  // Filtrar notícias por prioridade
+  // Priority 2 = Alta (Destaques na página de categoria)
+  // Priority 1 = Normal (Posts recentes)
+  const highPriorityNews = newsWithAuthors.filter(n => n.priority === 2);
+  const normalNews = newsWithAuthors.filter(n => n.priority === 1 || !n.priority);
+
+  // Destaques: Alta Prioridade (priority=2)
+  const highPriorityPosts: PostPreview[] = highPriorityNews.map((item) => ({
+    id: item.id || '',
+    title: item.title,
+    summary: item.summary || '',
+    imageUrl: getVideoThumbnail(item.featuredImageUrl),
+    authorName: item.authorName,
+    authorAvatar: item.authorAvatar,
+    publicationDate: formatDate(item.publicationDate || new Date().toISOString()),
+    slug: item.slug || '',
+  }));
+
+  // Posts Normais: Prioridade Normal (priority=1)
+  const normalPosts: PostPreview[] = normalNews.map((item) => ({
+    id: item.id || '',
+    title: item.title,
+    summary: item.summary || '',
+    imageUrl: getVideoThumbnail(item.featuredImageUrl),
+    authorName: item.authorName,
+    authorAvatar: item.authorAvatar,
+    publicationDate: formatDate(item.publicationDate || new Date().toISOString()),
+    slug: item.slug || '',
+  }));
+
+  // Split posts into sections based on priority
+  const featuredPosts = highPriorityPosts.slice(0, 4);  // Destaques (priority=2)
+  const recentPosts = normalPosts.slice(0, 6);  // Recentes (priority=1)
+  const morePosts = highPriorityPosts.slice(4, 8);  // Mais destaques (priority=2)
 
   if (loading) {
     return (
@@ -161,7 +191,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
           <div className="category-page__content">
             {featuredPosts.length > 0 && (
               <div className="category-page__section">
-                <PostGridSection title="Destaques" posts={featuredPosts} />
+                <Highlights title="Destaques" posts={featuredPosts} />
               </div>
             )}
 
@@ -173,7 +203,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
 
             {morePosts.length > 0 && (
               <div className="category-page__section">
-                <PostGridSection title="Mais Notícias" posts={morePosts} />
+                <Highlights title="Mais Notícias" posts={morePosts} />
               </div>
             )}
           </div>

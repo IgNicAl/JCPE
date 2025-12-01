@@ -1,7 +1,7 @@
 import React from 'react';
 import SingleContent from '@/components/organisms/SingleContent';
 import HeroSlider from '@/components/organisms/HeroSlider';
-import styles from './Highlights.module.css';
+import styles from './Headlines.module.css';
 
 interface Slide {
   id: string;
@@ -19,13 +19,13 @@ interface SingleContentItem {
   slug: string;
 }
 
-interface HighlightsProps {
+interface HeadlinesProps {
   singleContentItems?: SingleContentItem[];
   sliderSlides?: Slide[];
   className?: string;
 }
 
-const Highlights: React.FC<HighlightsProps> = ({
+const Headlines: React.FC<HeadlinesProps> = ({
   singleContentItems = [],
   sliderSlides = [],
   className = '',
@@ -34,7 +34,7 @@ const Highlights: React.FC<HighlightsProps> = ({
   const secondContent = singleContentItems[1];
 
   return (
-    <div className={`${styles.highlights} ${className}`}>
+    <div className={`${styles.headlines} ${className}`}>
       {firstContent && (
         <SingleContent
           id={firstContent.id}
@@ -67,4 +67,4 @@ const Highlights: React.FC<HighlightsProps> = ({
   );
 };
 
-export default Highlights;
+export default Headlines;

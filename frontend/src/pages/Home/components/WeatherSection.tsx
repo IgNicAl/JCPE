@@ -51,7 +51,7 @@ const WeatherSection: React.FC<WeatherSectionProps> = ({
   return (
     <section className="space-y-6">
       <HomeSectionTitle title="clima" />
-      <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-[minmax(0,1fr)_432px]">
         <article className="rounded-2xl bg-white p-6 shadow-card">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-4">
@@ -94,25 +94,55 @@ const WeatherSection: React.FC<WeatherSectionProps> = ({
               </defs>
 
               {/* Área preenchida abaixo da linha */}
+              {/* Área preenchida abaixo da linha */}
               <path
-                d={`M 0,280 L ${hourly.map((point, index) => {
-                  const x = (index / (hourly.length - 1)) * 700;
-                  const y = 280 - ((point.value - 15) / 20) * 280;
-                  return `${x},${y}`;
-                }).join(' L ')} L 700,280 Z`}
+                d={`
+                  M 0,280
+                  ${hourly.map((point, i, arr) => {
+                    const x = (i / (arr.length - 1)) * 700;
+                    const y = 280 - ((point.value - 15) / 20) * 280;
+                    if (i === 0) return `L ${x},${y}`;
+
+                    const prev = arr[i - 1];
+                    const prevX = ((i - 1) / (arr.length - 1)) * 700;
+                    const prevY = 280 - ((prev.value - 15) / 20) * 280;
+
+                    const cp1x = prevX + (x - prevX) * 0.5;
+                    const cp1y = prevY;
+                    const cp2x = prevX + (x - prevX) * 0.5;
+                    const cp2y = y;
+
+                    return `C ${cp1x},${cp1y} ${cp2x},${cp2y} ${x},${y}`;
+                  }).join(' ')}
+                  L 700,280 Z
+                `}
                 fill="url(#areaGradient)"
               />
 
               {/* Linha do gráfico */}
-              <polyline
+              <path
+                d={`
+                  M 0,${280 - ((hourly[0].value - 15) / 20) * 280}
+                  ${hourly.map((point, i, arr) => {
+                    if (i === 0) return '';
+                    const x = (i / (arr.length - 1)) * 700;
+                    const y = 280 - ((point.value - 15) / 20) * 280;
+
+                    const prev = arr[i - 1];
+                    const prevX = ((i - 1) / (arr.length - 1)) * 700;
+                    const prevY = 280 - ((prev.value - 15) / 20) * 280;
+
+                    const cp1x = prevX + (x - prevX) * 0.5;
+                    const cp1y = prevY;
+                    const cp2x = prevX + (x - prevX) * 0.5;
+                    const cp2y = y;
+
+                    return `C ${cp1x},${cp1y} ${cp2x},${cp2y} ${x},${y}`;
+                  }).join(' ')}
+                `}
                 fill="none"
                 stroke="url(#lineGradient)"
                 strokeWidth="3"
-                points={hourly.map((point, index) => {
-                  const x = (index / (hourly.length - 1)) * 700;
-                  const y = 280 - ((point.value - 15) / 20) * 280;
-                  return `${x},${y}`;
-                }).join(' ')}
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
@@ -148,18 +178,18 @@ const WeatherSection: React.FC<WeatherSectionProps> = ({
                 );
               })}
             </svg>
-            <div className="mt-2 grid grid-cols-8 gap-1 text-xs text-dark-75">
+            <div className="mt-2 flex justify-between gap-1 text-xs text-dark-75">
               {hourly.map((point) => (
                 <span key={point.label} className="text-center">{point.label}</span>
               ))}
             </div>
           </div>
 
-          <div className="mt-6 flex gap-3 overflow-x-auto">
+          <div className="mt-6 grid grid-cols-4 gap-3 md:grid-cols-8">
             {weekly.map((day) => (
               <div
                 key={day.id}
-                className={`flex h-28 w-20 flex-shrink-0 flex-col items-center justify-between rounded-2xl px-2 py-3 text-center ${
+                className={`flex h-28 w-full flex-col items-center justify-between rounded-2xl px-2 py-3 text-center ${
                   day.isActive ? 'bg-gray' : 'bg-gray/50'
                 }`}
               >

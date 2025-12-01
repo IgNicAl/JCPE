@@ -126,6 +126,16 @@ export const newsService = {
   getNewsStats: (newsId: string) => api.get(`/api/noticias/${newsId}/stats`),
   getAuthorPostCount: (authorId: string) => api.get(`/api/noticias/author/${authorId}/count`),
   getTopNews: () => api.get('/api/noticias/top'),
+
+  // Visualizações
+  registerView: (newsId: string, sessionId?: string) => {
+    const params = sessionId ? `?sessionId=${encodeURIComponent(sessionId)}` : '';
+    return api.post(`/api/noticias/${newsId}/view${params}`);
+  },
+
+  // Posts mais lidos e mais avaliados do mês
+  getMostReadThisMonth: () => api.get('/api/noticias/most-read-month'),
+  getTopRatedThisMonth: () => api.get('/api/noticias/top-rated-month'),
 };
 
 /**
