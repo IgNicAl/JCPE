@@ -5,9 +5,9 @@
 # Atualizado em 01/12/2025 para as versões estáveis mais recentes.
 # ============================================================================
 
-# CrewAI - Framework de agentes AI
-crewai[google-genai]~=0.93.1
-crewai-tools~=0.20.0
+# CrewAI - Framework de agentes AI (versões específicas compatíveis)
+crewai[google-genai]==1.6.1
+crewai-tools==1.6.1
 
 # LangChain - Framework para LLMs
 langchain~=0.4.1

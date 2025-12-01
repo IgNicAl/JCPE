@@ -45,8 +45,8 @@ ENV SPRING_PROFILES_ACTIVE=prod \
     JAVA_OPTS=""
 WORKDIR /app
 
-# Instala pacotes necessários para o script de entrypoint
-RUN apk add --no-cache mysql-client bash
+# Instala pacotes necessários para o script de entrypoint e healthcheck
+RUN apk add --no-cache mysql-client bash wget
 
 # Copia o JAR compilado do estágio de build
 ARG JAR_FILE=target/*.jar

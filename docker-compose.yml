@@ -1,10 +1,6 @@
-
 # =======================================================================
-# ARQUIVO DE CONFIGURAÇÃO DOCKER COMPOSE - VERSÃO 3.8
+# ARQUIVO DE CONFIGURAÇÃO DOCKER COMPOSE
 # =======================================================================
-# Define a versão do Docker Compose para garantir compatibilidade.
-version: "3.8"
-
 # Define uma rede interna única para que os containers possam
 # se comunicar uns com os outros por nome (ex: 'database', 'backend').
 networks:
@@ -46,7 +42,8 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p$$MYSQL_ROOT_PASSWORD"]
+      test:
+        ["CMD-SHELL", "mysqladmin ping -h localhost -p$$MYSQL_ROOT_PASSWORD"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -68,6 +65,9 @@ services:
     environment:
       DB_HOST: database
       DB_PORT: 3306
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_NAME: ${MYSQL_DATABASE}
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
     depends_on:
       database:
@@ -175,4 +175,3 @@ volumes:
     driver: local
   # ollama_data:
   #   driver: local
-

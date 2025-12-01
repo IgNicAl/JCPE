@@ -49,6 +49,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+# Instala curl para healthcheck
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
+
 # Instala as dependências a partir dos wheels, sem precisar compilar
 COPY --from=build /wheels /wheels
 COPY requirements.txt ./

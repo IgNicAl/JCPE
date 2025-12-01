@@ -43,6 +43,9 @@ LABEL description="Production image for React Frontend with Nginx."
 
 WORKDIR /usr/share/nginx/html
 
+# Instala wget para healthcheck
+RUN apk add --no-cache wget
+
 # Aplica a configuração customizada do Nginx
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
