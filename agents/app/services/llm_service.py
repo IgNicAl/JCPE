@@ -10,28 +10,32 @@ import os
 from crewai.llm import LLM
 from langchain_core.prompts import ChatPromptTemplate
 
-# Carrega a API Key (fornecida pelo main.py)
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+# ============================================================================
+# CONFIGURAÇÃO DO OLLAMA (Modelo Local - Gratuito e Ilimitado)
+# ============================================================================
+# Ollama roda localmente na porta 11434 por padrão
+# Modelo: gemma2:9b (5.4GB) - Download via: ollama pull gemma2:9b
+# ============================================================================
 
-if not GEMINI_API_KEY:
-    raise ValueError("Variável de ambiente GEMINI_API_KEY não definida.")
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "ollama/gemma2:9b")
 
-# Configura e instancia o LLM padrão
+# Configura e instancia o LLM padrão (Ollama)
 llm = LLM(
-    model="gemini/gemini-2.0-flash",
-    api_key=GEMINI_API_KEY,
+    model=OLLAMA_MODEL,
+    base_url=OLLAMA_BASE_URL,
 )
 
 
 def get_llm() -> LLM:
-    """Retorna LLM configurado padrão.
+    """Retorna LLM configurado padrão (Ollama).
 
     Returns:
-        Instância configurada do LLM
+        Instância configurada do LLM usando Ollama local
     """
     return LLM(
-        model="gemini/gemini-2.0-flash",
-        api_key=GEMINI_API_KEY,
+        model=OLLAMA_MODEL,
+        base_url=OLLAMA_BASE_URL,
     )
 
 

@@ -75,13 +75,22 @@ fi
 echo ""
 
 # ============================================================================
-# 5. Verificar quota do Gemini
+# 5. Verificar Ollama (LLM Local)
 # ============================================================================
-echo "📊 Verificando quota da API Gemini..."
-echo -e "${YELLOW}⚠️  Lembre-se dos limites do tier gratuito:${NC}"
-echo "   - 15 requisições/minuto"
-echo "   - 200 requisições/dia"
-echo "   - Monitor: https://ai.dev/usage?tab=rate-limit"
+echo "🧠 Verificando Ollama..."
+if curl -s http://localhost:11434/api/tags &>/dev/null; then
+    echo -e "${GREEN}✅ Ollama está rodando${NC}"
+else
+    echo -e "${RED}❌ Ollama não detectado na porta 11434${NC}"
+    echo -e "${YELLOW}💡 Para corrigir:${NC}"
+    echo "   Execute: ./install_ollama.sh"
+    echo ""
+    read -p "Deseja continuar mesmo assim? (y/n) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
+fi
 echo ""
 
 # ============================================================================
