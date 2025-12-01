@@ -4,6 +4,7 @@ import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { useNews } from '@/hooks/useNews';
 import { News } from '@/types';
 import { MOCK_NEWS } from '@/features/news/mocks/news';
+import TagCarousel from '@/pages/Home/components/TagCarousel';
 import Headlines from '@/pages/Home/components/Headlines';
 import Highlights from '@/pages/Home/components/Highlights';
 import NewPostsSection from '@/pages/Home/components/NewPostsSection';
@@ -51,7 +52,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
     const subcategoryName = propSubcategoryTitle || (subcategorySlug ? subcategorySlug.charAt(0).toUpperCase() + subcategorySlug.slice(1) : '');
 
     if (subcategorySlug) {
-      setPageTitle(`${subcategoryName} - ${categoryName}`);
+      // setPageTitle(`${subcategoryName} - ${categoryName}`);
       setBreadcrumbs([
         { label: 'Início', path: '/' },
         { label: categoryName, path: `/categoria/${categorySlug}` },
@@ -295,6 +296,8 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
             </React.Fragment>
           ))}
         </nav>
+
+        <TagCarousel />
 
         {/* Page Title */}
         <h1 className="category-page__title">{pageTitle}</h1>
