@@ -1,72 +1,65 @@
-"""Define as ferramentas (Tools) que os agentes poderão usar via CrewAI.
+"""Agrega todas as funções-ferramenta em um único local.
 
-Usa o decorador @tool do CrewAI para expor funções Python como ferramentas
-disponíveis aos agentes.
+Este módulo importa as funções de ferramenta dos módulos de banco de dados,
+API de notícias e serviços de LLM, e as expõe como ferramentas simples
+(funções) que podem ser facilmente anexadas aos agentes do CrewAI.
 """
-
 from crewai.tools import tool
-from .database_tools import get_user_preferences, save_user_preference
-from .jcpe_news_tools import search_jcpe_news
-
-
-# ===== FERRAMENTAS DO BANCO DE DADOS =====
+from app.tools.database_tools import get_user_preferences, save_user_preference
+from app.tools.news_api_tools import search_news
+from app.services.llm_service import summarize_text
 
 
 @tool("Get User Preferences Tool")
 def get_user_preferences_tool(user_id: str) -> list:
-    """Busca as preferências de um usuário no banco de dados.
+    """Ferramenta para obter as preferências de notícias de um usuário.
 
     Args:
-        user_id: O ID UUID do usuário.
+        user_id: O ID do usuário (UUID como string).
 
     Returns:
-        Uma lista de dicionários com as preferências do usuário.
+        Uma lista de dicionários com as preferências existentes.
     """
     return get_user_preferences(user_id)
 
 
 @tool("Save User Preference Tool")
 def save_user_preference_tool(user_id: str, key: str, value: str) -> dict:
-    """Salva ou atualiza uma preferência do usuário no banco de dados.
+    """Ferramenta para salvar uma preferência de notícia para um usuário.
 
     Args:
-        user_id: O ID UUID do usuário.
-        key: A chave da preferência (ex: 'topico_favorito', 'fonte_preferida').
-        value: O valor da preferência (ex: 'esportes', 'TechCrunch').
+        user_id: O ID do usuário (UUID como string).
+        key: A chave da preferência a ser salva (ex: 'topicos').
+        value: O valor da preferência a ser salvo.
 
     Returns:
-        Um dicionário com o status da operação.
+        Um dicionário com o status da operação de salvamento.
     """
     return save_user_preference(user_id, key, value)
 
 
-# ===== FERRAMENTA DE BUSCA DE NOTÍCIAS JCPE =====
-
-
-@tool("JCPE News Search Tool")
-def jcpe_search_tool(query: str) -> dict:
-    """Busca notícias no banco de dados JCPE (não na internet).
+@tool("News Search Tool")
+def news_search_tool(query: str) -> dict:
+    """Ferramenta para buscar artigos de notícias recentes sobre um tópico.
 
     Args:
-        query: Termo de busca para encontrar notícias (título, categoria, palavras-chave).
+        query: O tópico de busca.
 
     Returns:
-        dict: {
-            'status': 'success' | 'error',
-            'articles': [
-                {
-                    'title': str,
-                    'description': str (resumo),
-                    'url': str (link para o site JCPE),
-                    'source': 'JCPE News',
-                    'category': str,
-                    'author': str
-                }
-            ]
-        }
-
-    Exemplo:
-        jcpe_search_tool("política") -> notícias de política do banco JCPE
-        jcpe_search_tool("futebol") -> notícias de futebol do banco JCPE
+        dict: Um dicionário com o status e os artigos encontrados.
     """
-    return search_jcpe_news(query, limit=5)
+    return search_news(query)
+
+
+@tool("Summarizer Tool")
+def summarizer_tool(text: str, query: str) -> str:
+    """Ferramenta para resumir um texto com foco em uma consulta.
+
+    Args:
+        text: O texto completo a ser resumido.
+        query: A consulta que define o foco do resumo.
+
+    Returns:
+        str: O texto resumido.
+    """
+    return summarize_text(text, query)

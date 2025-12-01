@@ -1,122 +1,43 @@
 # ============================================================================
-# DEPENDÊNCIAS DO PROJETO JCPE AGENTS - Versão 4.0 (Otimizada)
+# DEPENDÊNCIAS FIXADAS - NÃO ALTERAR SEM TESTAR
 # ============================================================================
-# Gerado em: 01/12/2025
-# Análise completa do código fonte para garantir compatibilidade total
+# Versões fixadas para garantir builds rápidos e determinísticos.
+# As versões abaixo têm wheels manylinux pré-compilados disponíveis,
+# evitando compilação demorada durante o build do Docker.
 # ============================================================================
 
-# ============================================================================
-# CREWAI - Framework Core de Agentes AI
-# ============================================================================
-# Versões fixas para garantir build determinístico e compatibilidade
-crewai==1.6.1
-crewai-tools==1.6.1
+# CrewAI - Framework de agentes AI
+crewai[google-genai]==0.86.0
+crewai-tools==0.17.0
+
+# LangChain - Framework para LLMs
+langchain==0.3.7
+langchain-google-genai==2.0.5
+google-generativeai==0.8.3
+langgraph-prebuilt==0.1.7
+
+# FastAPI - Web framework
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+pydantic==2.10.2
+python-dotenv==1.0.1
+
+# Utilitários
+requests==2.32.3
+
+# Testing
+pytest==8.3.4
+
+# Database
+SQLAlchemy==2.0.36
+pymysql==1.1.1
+
+# News API
+newsapi-python==0.2.7
 
 # ============================================================================
-# LANGCHAIN ECOSYSTEM - Compatibilidade Garantida
+# BIBLIOTECAS CIENTÍFICAS (numpy, pandas, etc. vêm como dependências transitivas)
 # ============================================================================
-# Versões compatíveis entre si e com crewai 1.6.1
-langchain>=1.0.0,<2.0.0
-langgraph>=1.0.2,<2.0.0
-
-# ============================================================================
-# GOOGLE AI - Integração com Gemini via LangChain
-# ============================================================================
-# IMPORTANTE: langchain-google-genai 1.0.10 requer google-generativeai<0.8.0
-google-generativeai>=0.7.0,<0.8.0
-langchain-google-genai==1.0.10
-
-# ============================================================================
-# LANGSMITH - Observabilidade e Debugging
-# ============================================================================
-langsmith>=0.2.0,<1.0.0
-
-# ============================================================================
-# FASTAPI - Web Framework e Server
-# ============================================================================
-fastapi>=0.115.0,<1.0.0
-uvicorn[standard]>=0.32.0,<1.0.0
-
-# ============================================================================
-# PYDANTIC - Validação de Dados e Settings
-# ============================================================================
-pydantic>=2.11.9,<3.0.0
-pydantic-settings>=2.10.1,<3.0.0
-
-# ============================================================================
-# ENVIRONMENT & CONFIG
-# ============================================================================
-python-dotenv>=1.1.1,<2.0.0
-
-# ============================================================================
-# HTTP & REQUESTS
-# ============================================================================
-requests>=2.32.3,<3.0.0
-
-# ============================================================================
-# ASYNC & CONCURRENCY
-# ============================================================================
-# Permite nested event loops (necessário para compatibilidade sync/async)
-nest-asyncio>=1.6.0,<2.0.0
-
-# ============================================================================
-# DATABASE - MySQL com suporte ASYNC
-# ============================================================================
-SQLAlchemy>=2.0.31,<3.0.0
-pymysql>=1.1.1,<2.0.0
-aiomysql>=0.2.0,<1.0.0
-
-# ============================================================================
-# CACHE - Redis com AsyncIO
-# ============================================================================
-redis[asyncio]>=5.1.1,<6.0.0
-
-# ============================================================================
-# EXTERNAL APIs
-# ============================================================================
-# NewsAPI para buscar notícias externas (fallback)
-newsapi-python>=0.2.7,<1.0.0
-
-# ============================================================================
-# MONITORING & OBSERVABILITY
-# ============================================================================
-prometheus-client>=0.20.0,<1.0.0
-
-# ============================================================================
-# TESTING
-# ============================================================================
-pytest>=8.3.2,<9.0.0
-
-# ============================================================================
-# DEPENDÊNCIAS TRANSITIVAS IMPORTANTES
-# ============================================================================
-# Estas são instaladas automaticamente pelas libs acima, mas listadas
-# aqui para documentação e possível pinning futuro se necessário:
-#
-# - appdirs (crewai)
-# - chromadb (crewai)
-# - click (crewai)
-# - instructor (crewai)
-# - json-repair (crewai)
-# - json5 (crewai)
-# - jsonref (crewai)
-# - openai (crewai)
-# - openpyxl (crewai)
-# - opentelemetry-* (crewai)
-# - pdfplumber (crewai)
-# - portalocker (crewai)
-# - pyjwt (crewai)
-# - regex (crewai)
-# - tokenizers (crewai)
-# - tomli (crewai)
-# - tomli-w (crewai)
-# - uv (crewai)
-# - beautifulsoup4 (crewai-tools)
-# - docker (crewai-tools)
-# - lancedb (crewai-tools)
-# - pymupdf (crewai-tools)
-# - python-docx (crewai-tools)
-# - pytube (crewai-tools)
-# - tiktoken (crewai-tools)
-# - youtube-transcript-api (crewai-tools)
-# ============================================================================
+# numpy~=2.0.2 - Instalado automaticamente pelo crewai-tools
+# pandas~=2.2.3 - Instalado automaticamente pelo crewai-tools
+# Versões compatíveis com wheels manylinux2014_x86_64

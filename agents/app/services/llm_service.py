@@ -10,45 +10,26 @@ import os
 from crewai.llm import LLM
 from langchain_core.prompts import ChatPromptTemplate
 
-# ============================================================================
-# CONFIGURAÇÃO DO OLLAMA (Modelo Local - Gratuito e Ilimitado)
-# ============================================================================
-# Ollama roda localmente na porta 11434 por padrão
-# Modelo: gemma2:9b (5.4GB) - Download via: ollama pull gemma2:9b
-# ============================================================================
+# Carrega a API Key (fornecida pelo main.py)
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "ollama/gemma2:9b")
+if not GEMINI_API_KEY:
+    raise ValueError("Variável de ambiente GEMINI_API_KEY não definida.")
 
-# Configura e instancia o LLM padrão (Ollama)
+# Configura e instancia o LLM
 llm = LLM(
-    model=OLLAMA_MODEL,
-    base_url=OLLAMA_BASE_URL,
+    model="gemini/gemini-2.0-flash",
+    api_key=GEMINI_API_KEY,
 )
 
 
 def get_llm() -> LLM:
-    """Retorna LLM configurado padrão (Ollama).
+    """Retorna a instância configurada do LLM.
 
     Returns:
-        Instância configurada do LLM usando Ollama local
+        LLM: A instância global do LLM.
     """
-    return LLM(
-        model=OLLAMA_MODEL,
-        base_url=OLLAMA_BASE_URL,
-    )
-
-
-# LLMs especializados (por enquanto, retornam o mesmo LLM)
-# TODO: Investigar parâmetros corretos para CrewAI LLM
-def get_factual_llm() -> LLM:
-    """LLM para tarefas factuais (busca, classificação)."""
-    return get_llm()
-
-
-def get_creative_llm() -> LLM:
-    """LLM para tarefas criativas (compilação, redação)."""
-    return get_llm()
+    return llm
 
 
 def summarize_text(text: str, query: str) -> str:
@@ -63,23 +44,15 @@ def summarize_text(text: str, query: str) -> str:
     """
     prompt_template = ChatPromptTemplate.from_messages(
         [
-            (
-                "system",
-                "Você é um assistente prestativo que resume artigos de notícias em Português do Brasil (PT-BR). Seu resumo deve ser conciso (máx 100 palavras), claro e diretamente relacionado à consulta do usuário.",
-            ),
-            (
-                "human",
-                "Por favor, resuma o seguinte texto com base nesta consulta: '{query}'\\n\\nTexto:\\n---\\n{text}\\n---\\n\\nResumo:",
-            ),
+            ("system", "Você é um assistente prestativo que resume artigos de notícias em Português do Brasil (PT-BR). Seu resumo deve ser conciso, claro e diretamente relacionado à consulta do usuário."),
+            ("human", "Por favor, resuma o seguinte texto com base nesta consulta: '{query}'\n\nTexto:\n---\n{text}"),
         ]
     )
 
-    factual_llm = get_factual_llm()
-    chain = prompt_template | factual_llm.client
+    chain = prompt_template | llm.client
 
     try:
-        # Limita texto para evitar overflow de contexto
-        response = chain.invoke({"text": text[:3000], "query": query})
+        response = chain.invoke({"text": text, "query": query})
         return response.content
     except Exception as e:
         print(f"Erro durante a sumarização: {e}")
