@@ -10,6 +10,7 @@ from .agents.news_agents import NewsAgents
 from .services.llm_service import get_factual_llm, get_creative_llm
 from .utils.errors import AgentException, ErrorCode
 from .utils.output_validator import validate_llm_output
+from .tools.database_tools import get_user_preferences
 import logging
 
 logger = logging.getLogger(__name__)
@@ -43,27 +44,31 @@ def run_crew(user_id: str, query: str) -> str:
 
     # 3. Instanciar todos os Agentes
     orchestrator_agent = agents_factory.news_orchestrator_agent()
-    preference_agent = agents_factory.preference_manager_agent()
+    # preference_agent removido para otimização
     general_agent = agents_factory.general_assistant_agent()
     politics_agent = agents_factory.politics_agent()
     sports_agent = agents_factory.sports_agent()
     technology_agent = agents_factory.technology_agent()
     economy_agent = agents_factory.economy_agent()
 
+    # 0. Buscar preferências (Optimization)
+    try:
+        user_prefs = get_user_preferences(user_id)
+        prefs_str = str(user_prefs) if user_prefs else "Sem preferências registradas."
+        logger.info(f"📚 Preferências carregadas: {prefs_str}")
+    except Exception as e:
+        logger.error(f"Erro ao buscar preferências: {e}")
+        prefs_str = "Erro ao buscar preferências."
+
     # 4. Definir as Tarefas
 
-    # Tarefa 1: Buscar perfil
-    preference_task = Task(
-        description=f"Buscar preferências do user_id: '{user_id}'. Retornar JSON ou 'Novo usuário'.",
-        expected_output="JSON com preferências ou texto 'Novo usuário'.",
-        agent=preference_agent,
-    )
+    # Tarefa 1: Buscar perfil (REMOVIDA - Feita via código acima)
 
     # Tarefa 2: Buscar notícias
     search_task = Task(
-        description=f"Buscar notícias sobre: '{query}'. Retornar lista de 3-5 artigos relevantes.",
+        description=f"Buscar notícias sobre: '{query}'.\nContexto do Usuário (Preferências): {prefs_str}\nRetornar lista de 3-5 artigos relevantes.",
         expected_output="Lista de artigos em formato limpo e objetivo.",
-        context=[preference_task],
+        # context removido pois preferences já estão na descrição
     )
 
     # Tarefa 3: Compilar resposta final
@@ -76,14 +81,14 @@ def run_crew(user_id: str, query: str) -> str:
         ),
         expected_output="Lista formatada de notícias, máximo 10 linhas.",
         agent=orchestrator_agent,
-        context=[preference_task, search_task],
+        context=[search_task],
     )
 
     # 5. Montar a Crew Hierárquica
 
     all_agents = [
         orchestrator_agent,
-        preference_agent,
+        # preference_agent removido
         general_agent,
         politics_agent,
         sports_agent,
@@ -91,7 +96,7 @@ def run_crew(user_id: str, query: str) -> str:
         economy_agent,
     ]
 
-    all_tasks = [preference_task, search_task, summary_task]
+    all_tasks = [search_task, summary_task]
 
     crew = Crew(
         agents=all_agents,

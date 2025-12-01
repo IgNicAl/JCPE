@@ -27,10 +27,6 @@ def search_jcpe_news(query: str, limit: int = 5) -> Dict:
         # Busca TODAS as notícias publicadas (paginação máxima)
         response = requests.get(
             f"{BACKEND_URL}/noticias",
-            params={
-                "page": 0,
-                "size": 100,  # Busca mais notícias para melhorar resultado
-            },
             timeout=10,
         )
 
