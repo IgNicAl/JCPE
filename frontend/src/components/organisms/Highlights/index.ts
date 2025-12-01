@@ -1,1 +1,1 @@
-export { default } from './Highlights';
+export { default } from './Headlines';

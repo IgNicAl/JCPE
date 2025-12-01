@@ -16,10 +16,18 @@ ENV SPRING_PROFILES_ACTIVE=prod \
     JAVA_OPTS=""
 WORKDIR /app
 
+# Instalar mysql-client para executar migrações
+RUN apk add --no-cache mysql-client bash
+
 ARG JAR_FILE=target/*.jar
 COPY --from=build /app/${JAR_FILE} app.jar
 
+# Copiar migrações e script de entrada
+COPY migrations /app/migrations
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+
 EXPOSE 8080
 
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
 

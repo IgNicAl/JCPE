@@ -156,6 +156,9 @@ public class News {
   @UpdateTimestamp
   private LocalDateTime updateDate;
 
+  @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+  private Long readCount = 0L;
+
   // Getters e Setters Explícitos (gerados por Lombok @Data, mas adicionados para
   // suporte IDE)
   public UUID getId() {
