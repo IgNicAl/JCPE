@@ -9,17 +9,14 @@
 crewai[google-genai]==1.6.1
 crewai-tools==1.6.1
 
-# LangChain - Framework para LLMs
-langchain~=0.4.1
-langchain-google-genai~=2.0.7
-google-generativeai~=0.9.0
-langgraph-prebuilt~=0.2.1
+# LangChain - Framework para LLMs (versões compatíveis com crewai 1.6.1)
+langchain>=1.0.0,<2.0.0
+langchain-google-genai>=2.0.0,<3.0.0
+google-generativeai>=0.8.0,<1.0.0
+langgraph>=0.3.0,<1.0.0
 
 # LangSmith - Observabilidade
-langsmith~=0.1.93
-
-# LangSmith - Observabilidade (NOVO)
-langsmith>=0.1.17
+langsmith>=0.2.0,<1.0.0
 
 # FastAPI - Web framework
 fastapi~=0.112.0
@@ -47,9 +44,6 @@ newsapi-python~=0.2.7
 
 # Monitoring
 prometheus-client~=0.20.0
-
-# Monitoring (NOVO)
-prometheus-client==0.22.0  # Métricas Prometheus - versão atualizada
 
 # ============================================================================
 # BIBLIOTECAS CIENTÍFICAS (instaladas como dependências transitivas)
