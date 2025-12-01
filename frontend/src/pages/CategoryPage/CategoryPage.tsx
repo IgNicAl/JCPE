@@ -4,8 +4,10 @@ import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { useNews } from '@/hooks/useNews';
 import { News } from '@/types';
 import { MOCK_NEWS } from '@/features/news/mocks/news';
+import Headlines from '@/pages/Home/components/Headlines';
 import Highlights from '@/pages/Home/components/Highlights';
 import NewPostsSection from '@/pages/Home/components/NewPostsSection';
+import LatestVideosSection, { VideoPost } from '@/pages/Home/components/LatestVideosSection';
 import { PostPreview } from '@/pages/Home/components/PostCardVertical';
 import { getVideoThumbnail } from '@/utils/videoUtils';
 import './CategoryPage.scss';
@@ -18,9 +20,9 @@ interface CategoryPageProps {
 }
 
 const formatDate = (dateString: string) =>
-  new Date(dateString).toLocaleDateString('pt-BR', {
-    day: '2-digit',
+  new Date(dateString).toLocaleDateString('en-US', {
     month: 'long',
+    day: 'numeric',
     year: 'numeric',
   });
 
@@ -67,7 +69,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
     document.title = `${pageTitle || categoryName} | JCPE`;
   }, [categorySlug, subcategorySlug, propCategoryTitle, propSubcategoryTitle, pageTitle]);
 
-  // Transform news to PostPreview format
+  // Transform news to include author info
   const newsWithAuthors = news.map((item) => {
     const authorName = typeof item.author === 'string'
       ? item.author
@@ -81,7 +83,124 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
     };
   });
 
-  const posts: PostPreview[] = newsWithAuthors.map((item) => ({
+  // Filter news by category/subcategory
+  const filteredNews = newsWithAuthors.filter((item) => {
+    if (!item.category) return false;
+
+    if (subcategorySlug) {
+      // Filter by subcategory
+      return item.category.slug === subcategorySlug;
+    } else {
+      // Filter by category (including subcategories of this category)
+      return item.category.slug === categorySlug ||
+             item.category.parentCategory?.slug === categorySlug;
+    }
+  });
+
+  // Filter by priority
+  const urgentNews = filteredNews.filter(n => n.priority === 3);
+  const highPriorityNews = filteredNews.filter(n => n.priority === 2);
+  const normalNews = filteredNews.filter(n => n.priority === 1 || !n.priority);
+
+  // Headlines: Urgent News (priority=3)
+  const singleContentItems = urgentNews.slice(0, 2).map(news => ({
+    id: news.id || '',
+    title: news.title,
+    summary: news.summary || '',
+    imageUrl: getVideoThumbnail(news.featuredImageUrl),
+    slug: news.slug || '',
+  }));
+
+  const sliderSlides = urgentNews.slice(2, 5).map(news => ({
+    id: news.id || '',
+    title: news.title,
+    summary: news.summary || '',
+    imageUrl: getVideoThumbnail(news.featuredImageUrl),
+    slug: news.slug || '',
+  }));
+
+  // Helper: Get first day of current month
+  const getCurrentMonthStart = () => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  };
+
+  // Helper: Get first day of last month
+  const getLastMonthStart = () => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  };
+
+  // Helper: Filter posts by period
+  const filterPostsByPeriod = (newsList: typeof filteredNews, startDate: Date, endDate?: Date) => {
+    return newsList.filter(item => {
+      if (!item.publicationDate) return false;
+      const pubDate = new Date(item.publicationDate);
+      if (endDate) {
+        return pubDate >= startDate && pubDate < endDate;
+      }
+      return pubDate >= startDate;
+    });
+  };
+
+  // Filter posts by month
+  const currentMonthStart = getCurrentMonthStart();
+  const lastMonthStart = getLastMonthStart();
+  const currentMonthNews = filterPostsByPeriod(filteredNews, currentMonthStart);
+  const lastMonthNews = filterPostsByPeriod(filteredNews, lastMonthStart, currentMonthStart);
+
+  // Trendy Posts (Em Alta): Top rated posts of the month
+  let topRatedThisMonth = [...currentMonthNews]
+    .filter(item => item.averageRating && item.averageRating > 0)
+    .sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0))
+    .slice(0, 4);
+
+  // Fallback level 1: use last month if not enough data
+  if (topRatedThisMonth.length < 4) {
+    const topRatedLastMonth = [...lastMonthNews]
+      .filter(item => item.averageRating && item.averageRating > 0)
+      .sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0))
+      .slice(0, 4 - topRatedThisMonth.length);
+
+    topRatedThisMonth = [...topRatedThisMonth, ...topRatedLastMonth];
+  }
+
+  // Fallback level 2: use high priority news if still not enough
+  if (topRatedThisMonth.length < 4) {
+    const fallbackPosts = highPriorityNews
+      .filter(item => !topRatedThisMonth.find(p => p.id === item.id))
+      .slice(0, 4 - topRatedThisMonth.length);
+
+    topRatedThisMonth = [...topRatedThisMonth, ...fallbackPosts];
+  }
+
+  // Top Posts (Mais Lidos): Most viewed posts of the month
+  let mostReadThisMonth = [...currentMonthNews]
+    .filter(item => item.readCount && item.readCount > 0)
+    .sort((a, b) => (b.readCount || 0) - (a.readCount || 0))
+    .slice(0, 4);
+
+  // Fallback level 1: use last month if not enough data
+  if (mostReadThisMonth.length < 4) {
+    const mostReadLastMonth = [...lastMonthNews]
+      .filter(item => item.readCount && item.readCount > 0)
+      .sort((a, b) => (b.readCount || 0) - (a.readCount || 0))
+      .slice(0, 4 - mostReadThisMonth.length);
+
+    mostReadThisMonth = [...mostReadThisMonth, ...mostReadLastMonth];
+  }
+
+  // Fallback level 2: use recent normal posts if still not enough
+  if (mostReadThisMonth.length < 4) {
+    const fallbackPosts = normalNews
+      .filter(item => !mostReadThisMonth.find(p => p.id === item.id))
+      .slice(0, 4 - mostReadThisMonth.length);
+
+    mostReadThisMonth = [...mostReadThisMonth, ...fallbackPosts];
+  }
+
+  // Map to PostPreview
+  const trendyPosts: PostPreview[] = topRatedThisMonth.map((item) => ({
     id: item.id || '',
     title: item.title,
     summary: item.summary || '',
@@ -92,14 +211,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
     slug: item.slug || '',
   }));
 
-  // Filtrar notícias por prioridade
-  // Priority 2 = Alta (Destaques na página de categoria)
-  // Priority 1 = Normal (Posts recentes)
-  const highPriorityNews = newsWithAuthors.filter(n => n.priority === 2);
-  const normalNews = newsWithAuthors.filter(n => n.priority === 1 || !n.priority);
-
-  // Destaques: Alta Prioridade (priority=2)
-  const highPriorityPosts: PostPreview[] = highPriorityNews.map((item) => ({
+  const topPosts: PostPreview[] = mostReadThisMonth.map((item) => ({
     id: item.id || '',
     title: item.title,
     summary: item.summary || '',
@@ -110,8 +222,8 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
     slug: item.slug || '',
   }));
 
-  // Posts Normais: Prioridade Normal (priority=1)
-  const normalPosts: PostPreview[] = normalNews.map((item) => ({
+  // Highlights Posts: High Priority (priority=2)
+  const highlightsPosts: PostPreview[] = highPriorityNews.slice(0, 4).map((item) => ({
     id: item.id || '',
     title: item.title,
     summary: item.summary || '',
@@ -122,40 +234,50 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
     slug: item.slug || '',
   }));
 
-  // Split posts into sections based on priority
-  const featuredPosts = highPriorityPosts.slice(0, 4);  // Destaques (priority=2)
-  const recentPosts = normalPosts.slice(0, 6);  // Recentes (priority=1)
-  const morePosts = highPriorityPosts.slice(4, 8);  // Mais destaques (priority=2)
+  // New Posts: Normal Priority (priority=1)
+  const newPosts: PostPreview[] = normalNews.slice(0, 6).map((item) => ({
+    id: item.id || '',
+    title: item.title,
+    summary: item.summary || '',
+    imageUrl: getVideoThumbnail(item.featuredImageUrl),
+    authorName: item.authorName,
+    authorAvatar: item.authorAvatar,
+    publicationDate: formatDate(item.publicationDate || new Date().toISOString()),
+    slug: item.slug || '',
+  }));
+
+  // Filter video posts
+  const videoNews = filteredNews.filter(n => n.mediaType === 'video');
+  const videoPosts: VideoPost[] = videoNews.map(n => ({
+    id: n.id || '',
+    title: n.title,
+    description: n.summary || '',
+    imageUrl: getVideoThumbnail(n.featuredImageUrl),
+    slug: n.slug || ''
+  }));
+
+  const videoHighlight = videoPosts.length > 0 ? videoPosts[0] : null;
+  const latestVideos = videoPosts.length > 1 ? videoPosts.slice(1, 5) : [];
 
   if (loading) {
     return (
-      <div className="category-page">
-        <div className="category-page__container">
-          <div className="category-page__loading">
-            <i className="fas fa-spinner fa-spin" />
-            <span>Carregando notícias...</span>
-          </div>
-        </div>
+      <div className="flex min-h-[60vh] items-center justify-center text-dark">
+        Carregando notícias...
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="category-page">
-        <div className="category-page__container">
-          <div className="category-page__error">
-            <i className="fas fa-exclamation-triangle" />
-            <span>Erro ao carregar as notícias. Tente novamente mais tarde.</span>
-          </div>
-        </div>
+      <div className="flex min-h-[60vh] items-center justify-center text-red-500">
+        Não foi possível carregar as notícias agora.
       </div>
     );
   }
 
   return (
-    <div className="category-page">
-      <div className="category-page__container">
+    <div className="bg-[var(--bg-primary)]">
+      <div className="mx-auto flex max-w-[1512px] px-12 flex-col gap-12 py-10">
         {/* Breadcrumbs */}
         <nav className="category-page__breadcrumbs" aria-label="breadcrumb">
           {breadcrumbs.map((crumb, index) => (
@@ -178,7 +300,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
         <h1 className="category-page__title">{pageTitle}</h1>
 
         {/* Content Sections */}
-        {posts.length === 0 ? (
+        {filteredNews.length === 0 ? (
           <div className="category-page__empty">
             <i className="fas fa-newspaper" />
             <h2>Nenhuma notícia encontrada</h2>
@@ -189,25 +311,40 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
             </Link>
           </div>
         ) : (
-          <div className="category-page__content">
-            {featuredPosts.length > 0 && (
-              <div className="category-page__section">
-                <Highlights title="Destaques" posts={featuredPosts} />
-              </div>
+          <>
+            {/* Headlines - Priority 3 */}
+            {(singleContentItems.length > 0 || sliderSlides.length > 0) && (
+              <Headlines
+                singleContentItems={singleContentItems}
+                sliderSlides={sliderSlides}
+              />
             )}
 
-            {recentPosts.length > 0 && (
-              <div className="category-page__section">
-                <NewPostsSection posts={recentPosts} onShowAll={() => {}} />
-              </div>
+            {/* Highlights - Priority 2 */}
+            {highlightsPosts.length > 0 && (
+              <Highlights title="Destaques" posts={highlightsPosts} />
             )}
 
-            {morePosts.length > 0 && (
-              <div className="category-page__section">
-                <Highlights title="Mais Notícias" posts={morePosts} />
-              </div>
+            {/* New Posts - Priority 1 */}
+            {newPosts.length > 0 && (
+              <NewPostsSection posts={newPosts} onShowAll={() => {}} />
             )}
-          </div>
+
+            {/* Video Highlight */}
+            {videoHighlight && (
+              <LatestVideosSection highlight={videoHighlight} posts={latestVideos} />
+            )}
+
+            {/* Trendy Posts - Em Alta */}
+            {trendyPosts.length > 0 && (
+              <Highlights title="em alta" posts={trendyPosts} />
+            )}
+
+            {/* Top Posts - Mais Lidos */}
+            {topPosts.length > 0 && (
+              <Highlights title="Mais lidos" posts={topPosts} disableLeftArrow />
+            )}
+          </>
         )}
       </div>
     </div>
