@@ -18,6 +18,9 @@ langgraph-prebuilt~=0.2.1
 # LangSmith - Observabilidade
 langsmith~=0.1.93
 
+# LangSmith - Observabilidade (NOVO)
+langsmith>=0.1.17
+
 # FastAPI - Web framework
 fastapi~=0.112.0
 uvicorn[standard]~=0.30.1
@@ -44,6 +47,9 @@ newsapi-python~=0.2.7
 
 # Monitoring
 prometheus-client~=0.20.0
+
+# Monitoring (NOVO)
+prometheus-client==0.22.0  # Métricas Prometheus - versão atualizada
 
 # ============================================================================
 # BIBLIOTECAS CIENTÍFICAS (instaladas como dependências transitivas)
