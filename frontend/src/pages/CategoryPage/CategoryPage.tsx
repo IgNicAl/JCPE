@@ -52,7 +52,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
     const subcategoryName = propSubcategoryTitle || (subcategorySlug ? subcategorySlug.charAt(0).toUpperCase() + subcategorySlug.slice(1) : '');
 
     if (subcategorySlug) {
-      // setPageTitle(`${subcategoryName} - ${categoryName}`);
+      setPageTitle(subcategoryName);
       setBreadcrumbs([
         { label: 'Início', path: '/' },
         { label: categoryName, path: `/categoria/${categorySlug}` },
@@ -278,7 +278,9 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
 
   return (
     <div className="bg-[var(--bg-primary)]">
-      <div className="mx-auto flex max-w-[1512px] px-12 flex-col gap-12 py-10">
+      <div className="mx-auto flex max-w-[1512px] px-12 flex-col gap-6 py-10">
+        <TagCarousel />
+
         {/* Breadcrumbs */}
         <nav className="category-page__breadcrumbs" aria-label="breadcrumb">
           {breadcrumbs.map((crumb, index) => (
@@ -297,10 +299,6 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
           ))}
         </nav>
 
-        <TagCarousel />
-
-        {/* Page Title */}
-        <h1 className="category-page__title">{pageTitle}</h1>
 
         {/* Content Sections */}
         {filteredNews.length === 0 ? (
