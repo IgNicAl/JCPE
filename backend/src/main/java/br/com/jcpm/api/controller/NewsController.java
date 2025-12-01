@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,6 +28,7 @@ import br.com.jcpm.api.domain.entity.NewsComment;
 import br.com.jcpm.api.domain.entity.NewsLike;
 import br.com.jcpm.api.domain.entity.NewsRating;
 import br.com.jcpm.api.domain.entity.NewsShare;
+import br.com.jcpm.api.domain.entity.NewsView;
 import br.com.jcpm.api.domain.entity.User;
 import br.com.jcpm.api.domain.enums.NewsStatus;
 import br.com.jcpm.api.dto.NewsCommentRequest;
@@ -35,12 +37,14 @@ import br.com.jcpm.api.dto.NewsLikeResponse;
 import br.com.jcpm.api.dto.NewsRatingRequest;
 import br.com.jcpm.api.dto.NewsRequest;
 import br.com.jcpm.api.dto.NewsStatsResponse;
+import br.com.jcpm.api.dto.NewsWithMetricsDTO;
 import br.com.jcpm.api.repository.CategoryRepository;
 import br.com.jcpm.api.repository.NewsCommentRepository;
 import br.com.jcpm.api.repository.NewsLikeRepository;
 import br.com.jcpm.api.repository.NewsRatingRepository;
 import br.com.jcpm.api.repository.NewsRepository;
 import br.com.jcpm.api.repository.NewsShareRepository;
+import br.com.jcpm.api.repository.NewsViewRepository;
 import br.com.jcpm.api.repository.TagRepository;
 import jakarta.validation.Valid;
 
@@ -55,6 +59,7 @@ public class NewsController {
   private final NewsRatingRepository newsRatingRepository;
   private final NewsCommentRepository newsCommentRepository;
   private final NewsShareRepository newsShareRepository;
+  private final NewsViewRepository newsViewRepository;
   private final CategoryRepository categoryRepository;
   private final TagRepository tagRepository;
 
@@ -64,6 +69,7 @@ public class NewsController {
       NewsRatingRepository newsRatingRepository,
       NewsCommentRepository newsCommentRepository,
       NewsShareRepository newsShareRepository,
+      NewsViewRepository newsViewRepository,
       CategoryRepository categoryRepository,
       TagRepository tagRepository) {
     this.newsRepository = newsRepository;
@@ -71,6 +77,7 @@ public class NewsController {
     this.newsRatingRepository = newsRatingRepository;
     this.newsCommentRepository = newsCommentRepository;
     this.newsShareRepository = newsShareRepository;
+    this.newsViewRepository = newsViewRepository;
     this.categoryRepository = categoryRepository;
     this.tagRepository = tagRepository;
   }
@@ -91,31 +98,40 @@ public class NewsController {
   }
 
   @GetMapping
-  public ResponseEntity<List<News>> getAllPublicNews(
+  public ResponseEntity<List<NewsWithMetricsDTO>> getAllPublicNews(
       @RequestParam(required = false) String page,
       @RequestParam(required = false) Boolean featuredHome,
       @RequestParam(required = false) Boolean featuredPage) {
 
+    List<News> newsList = null;
+
     // Se solicitar notícias em destaque na HOME
     if (featuredHome != null && featuredHome) {
-      return ResponseEntity.ok(
-          newsRepository.findAllByIsFeaturedHomeAndStatusOrderByPriorityDescPublicationDateDesc(true, NewsStatus.PUBLISHED));
+      newsList = newsRepository.findAllByIsFeaturedHomeAndStatusOrderByPriorityDescPublicationDateDesc(true, NewsStatus.PUBLISHED);
     }
-
     // Se solicitar notícias em destaque de uma página específica
-    if (featuredPage != null && featuredPage && page != null && !page.isBlank()) {
-      return ResponseEntity.ok(
-          newsRepository.findAllByPageAndIsFeaturedPageAndStatusOrderByPriorityDescPublicationDateDesc(page, true, NewsStatus.PUBLISHED));
+    else if (featuredPage != null && featuredPage && page != null && !page.isBlank()) {
+      newsList = newsRepository.findAllByPageAndIsFeaturedPageAndStatusOrderByPriorityDescPublicationDateDesc(page, true, NewsStatus.PUBLISHED);
     }
-
     // Busca normal por página
-    if (page != null && !page.isBlank()) {
-      return ResponseEntity.ok(
-          newsRepository.findAllByPageAndStatusOrderByPriorityDescPublicationDateDesc(page, NewsStatus.PUBLISHED));
+    else if (page != null && !page.isBlank()) {
+      newsList = newsRepository.findAllByPageAndStatusOrderByPriorityDescPublicationDateDesc(page, NewsStatus.PUBLISHED);
+    }
+    // Todas as notícias publicadas
+    else {
+      newsList = newsRepository.findAllByStatusOrderByPublicationDateDesc(NewsStatus.PUBLISHED);
     }
 
-    // Todas as notícias publicadas
-    return ResponseEntity.ok(newsRepository.findAllByStatusOrderByPublicationDateDesc(NewsStatus.PUBLISHED));
+    // Converter para DTO com métricas calculadas
+    List<NewsWithMetricsDTO> newsWithMetrics = newsList.stream()
+        .map(news -> {
+          Double avgRating = newsRatingRepository.getAverageRatingByNewsId(news.getId());
+          Long totalRatings = newsRatingRepository.countByNewsId(news.getId());
+          return new NewsWithMetricsDTO(news, avgRating, totalRatings);
+        })
+        .collect(java.util.stream.Collectors.toList());
+
+    return ResponseEntity.ok(newsWithMetrics);
   }
 
   // ROTA CORRIGIDA para evitar ambiguidade
@@ -590,6 +606,80 @@ public class NewsController {
   @GetMapping("/top")
   public ResponseEntity<List<News>> getTopNews() {
     return ResponseEntity.ok(newsRepository.findTop3ByStatusOrderByPublicationDateDesc(NewsStatus.PUBLISHED));
+  }
+
+  // ========== ENDPOINTS DE VISUALIZAÇÕES ==========
+
+  /**
+   * Registrar visualização de uma notícia
+   * Conta apenas visualizações únicas por usuário ou sessão
+   */
+  @PostMapping("/{newsId}/view")
+  public ResponseEntity<?> registerView(
+      @PathVariable UUID newsId,
+      @RequestParam(required = false) String sessionId) {
+
+    // Verificar se a notícia existe
+    News news = newsRepository.findById(newsId)
+        .orElse(null);
+
+    if (news == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    // Verificar se está autenticado
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User currentUser = null;
+
+    if (authentication != null && authentication.getPrincipal() instanceof User) {
+      currentUser = (User) authentication.getPrincipal();
+    }
+
+    // Verificar se já visualizou
+    boolean alreadyViewed = false;
+
+    if (currentUser != null) {
+      // Usuário autenticado - verificar por user_id
+      alreadyViewed = newsViewRepository.existsByNewsIdAndUserId(newsId, currentUser.getId());
+    } else if (sessionId != null && !sessionId.isBlank()) {
+      // Visitante - verificar por session_id
+      alreadyViewed = newsViewRepository.existsByNewsIdAndSessionId(newsId, sessionId);
+    }
+
+    if (!alreadyViewed) {
+      // Registrar visualização
+      NewsView view = new NewsView();
+      view.setNews(news);
+      view.setUser(currentUser);
+      view.setSessionId(sessionId);
+      newsViewRepository.save(view);
+
+      // Incrementar contador
+      news.setReadCount((news.getReadCount() != null ? news.getReadCount() : 0L) + 1);
+      newsRepository.save(news);
+    }
+
+    return ResponseEntity.ok(Collections.singletonMap("message", "Visualização registrada."));
+  }
+
+  /**
+   * Buscar posts mais lidos do mês
+   */
+  @GetMapping("/most-read-month")
+  public ResponseEntity<List<News>> getMostReadThisMonth() {
+    LocalDateTime monthStart = LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+    List<News> topRead = newsRepository.findTopByReadCountThisMonth(monthStart, PageRequest.of(0, 4));
+    return ResponseEntity.ok(topRead);
+  }
+
+  /**
+   * Buscar posts mais bem avaliados do mês
+   */
+  @GetMapping("/top-rated-month")
+  public ResponseEntity<List<News>> getTopRatedThisMonth() {
+    LocalDateTime monthStart = LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+    List<News> topRated = newsRepository.findTopByAverageRatingThisMonth(monthStart, PageRequest.of(0, 4));
+    return ResponseEntity.ok(topRated);
   }
 }
 

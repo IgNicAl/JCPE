@@ -1,4 +1,6 @@
-
+# =======================================================================
+# ARQUIVO DE CONFIGURAÇÃO DOCKER COMPOSE
+# =======================================================================
 # Define uma rede interna única para que os containers possam
 # se comunicar uns com os outros por nome (ex: 'database', 'backend').
 networks:
@@ -8,23 +10,26 @@ networks:
 services:
   # =======================================================================
   # 1. CLOUDFLARE TUNNEL (cloudflared)
-  # Função: Expõe sua aplicação à internet de forma segura.
+  # Função: Expõe sua aplicação à internet de forma segura, sem precisar
+  # abrir portas no firewall. Conecta-se diretamente ao frontend.
   # =======================================================================
   cloudflared:
-    image: cloudflare/cloudflared:latest
+    image: cloudflare/cloudflared:2024.7.1 # Versão fixada para estabilidade
     container_name: jcpe-tunnel
     restart: unless-stopped
-    # Este é o seu NOVO token, que você acabou de gerar:
     command: tunnel --no-autoupdate run --token eyJhIjoiNzRlZGE5MDU3MzExZGMyNjhmNDY1YTRmZDFkNGFiNTIiLCJ0IjoiYmM5MzkxOTktYmQxOS00MDM1LWI3MmMtODQ1OWU5MjIwNWYzIiwicyI6Ik1EVm1OVFkyTVRRdFpHWmhZUzAwT1dNd0xUbGxPREl0WlRKaFpETTVOMkV4Wm1ZMiJ9
-    # Conecta o tunnel à rede interna para que ele possa encontrar o 'jcpe-frontend'.
     networks:
       - jcpe_net
+    depends_on:
+      - frontend
 
   # =======================================================================
   # 2. BANCO DE DADOS (MYSQL)
+  # Função: Armazena todos os dados persistentes da aplicação.
   # =======================================================================
   database:
-    image: mysql:8.4
+    image: mysql:8.4.0 # Versão fixada para estabilidade
+    container_name: jcpe-database
     restart: unless-stopped
     env_file: ./.env
     environment:
@@ -37,25 +42,32 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p$$MYSQL_ROOT_PASSWORD" ]
+      test:
+        ["CMD-SHELL", "mysqladmin ping -h localhost -p$$MYSQL_ROOT_PASSWORD"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
     networks:
       - jcpe_net
 
   # =======================================================================
   # 3. BACKEND (JAVA SPRING BOOT)
+  # Função: API principal da aplicação, lida com a lógica de negócio.
   # =======================================================================
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    container_name: jcpe-backend
     restart: unless-stopped
     env_file: ./.env
     environment:
       DB_HOST: database
       DB_PORT: 3306
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_NAME: ${MYSQL_DATABASE}
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
     depends_on:
       database:
@@ -64,26 +76,80 @@ services:
       - jcpe_net
 
   # =======================================================================
-  # 4. AGENTES DE IA (PYTHON FASTAPI)
+  # 4. REDIS (CACHE)
+  # Função: Cache em memória para acelerar respostas e reduzir a carga
+  # no banco de dados.
+  # =======================================================================
+  redis:
+    image: redis:7.2-alpine # Versão fixada para estabilidade
+    container_name: jcpe-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    networks:
+      - jcpe_net
+
+  # =======================================================================
+  # 5. OLLAMA (OPCIONAL - LLM Local)
+  # Função: Permite rodar modelos de linguagem (LLMs) localmente.
+  # Mantenha comentado se for usar um provedor externo como Gemini.
+  # =======================================================================
+  # ollama:
+  #   image: ollama/ollama:0.2.5 # Versão fixada para estabilidade
+  #   container_name: jcpe-ollama
+  #   restart: unless-stopped
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_data:/root/.ollama
+  #   networks:
+  #     - jcpe_net
+
+  # =======================================================================
+  # 6. AGENTES DE IA (PYTHON FASTAPI)
+  # Função: Serviço de IA que executa agentes para tarefas complexas.
   # =======================================================================
   agents:
     build:
       context: ./agents
       dockerfile: Dockerfile
+    container_name: jcpe-agents
     restart: unless-stopped
     env_file: ./.env
     environment:
+      # Database
       DB_HOST: database
       DB_PORT: 3306
+      # Redis Cache
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      # LLM Configuration
+      LLM_PROVIDER: ${LLM_PROVIDER:-gemini}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      # OLLAMA_BASE_URL: http://ollama:11434
+      # OLLAMA_MODEL: gemma2:9b
     depends_on:
       database:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     networks:
       - jcpe_net
 
   # =======================================================================
-  # 5. FRONTEND (REACT + NGINX REVERSE PROXY)
-  # Nenhuma porta pública é mais necessária. O Tunnel acessa pela rede interna.
+  # 7. FRONTEND (REACT + NGINX)
+  # Função: Interface do usuário da aplicação. É servido pelo Nginx.
+  # O acesso externo é gerenciado pelo Cloudflare Tunnel.
   # =======================================================================
   frontend:
     build:
@@ -93,14 +159,19 @@ services:
     restart: unless-stopped
     env_file: ./.env
     depends_on:
-      backend:
-        condition: service_started
-      agents:
-        condition: service_started
+      - backend
+      - agents
     networks:
       - jcpe_net
-    # Nenhuma porta (ports:) é necessária aqui
 
+# =======================================================================
+# VOLUMES
+# Define volumes para persistir dados entre reinicializações dos containers.
+# =======================================================================
 volumes:
-  # Volume para persistir os dados do banco de dados
   mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+  # ollama_data:
+  #   driver: local

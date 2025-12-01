@@ -92,6 +92,21 @@ interface NewsWithDetails extends News {
 
       // Then, if we have newsId, load comments and stats
       if (newsData.id) {
+        // Registrar visualização
+        try {
+          // Gerar ou recuperar sessionId para visitantes não autenticados
+          let sessionId = localStorage.getItem('visitorSessionId');
+          if (!sessionId) {
+            sessionId = `visitor-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+            localStorage.setItem('visitorSessionId', sessionId);
+          }
+
+          await newsService.registerView(newsData.id, isAuthenticated() ? undefined : sessionId);
+        } catch (err) {
+          // Não bloquear o carregamento se falhar ao registrar visualização
+          console.error('Erro ao registrar visualização:', err);
+        }
+
         try {
           const commentsResponse = await newsService.getNewsComments(newsData.id);
           setComments(commentsResponse.data || []);

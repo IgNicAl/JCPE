@@ -671,47 +671,84 @@ const CreateNews: React.FC = () => {
               </div>
             </div>
 
-            {/* Configurações */}
-            <div className={styles.card}>
-              <div className={styles.cardTitle}>Configurações</div>
-              <div className={styles.formGroup}>
-                <label className={styles.label}>Prioridade</label>
-                <select
-                  name="priority"
-                  value={formData.priority}
-                  onChange={handleChange}
-                  className={styles.select}
-                >
-                  <option value={1}>Normal</option>
-                  <option value={2}>Alta</option>
-                  <option value={3}>Urgente</option>
-                </select>
-              </div>
+            {/* Configurações - Apenas para Revisores e Admins */}
+            {(isReviewer() || isAdmin()) && (
+              <div className={styles.card}>
+                <div className={styles.cardTitle}>
+                  <i className="fas fa-cog" style={{ marginRight: '0.5rem' }} />
+                  Configurações de Publicação
+                </div>
 
-              <div className={styles.formGroup} style={{ marginTop: '1rem' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                  <input
-                    type="checkbox"
-                    name="isFeaturedHome"
-                    checked={formData.isFeaturedHome}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span className={styles.label} style={{ marginBottom: 0 }}>Destaque na Home</span>
-                </label>
-              </div>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>
+                    <i className="fas fa-flag" style={{ marginRight: '0.5rem' }} />
+                    Prioridade
+                  </label>
+                  <select
+                    name="priority"
+                    value={formData.priority}
+                    onChange={handleChange}
+                    className={styles.select}
+                    aria-label="Selecione a prioridade da notícia"
+                  >
+                    <option value={1}>Normal - Exibida apenas nas listas padrão</option>
+                    <option value={2}>Alta - Promovida para Destaques (Highlights)</option>
+                    <option value={3}>Urgente - Promovida para Manchetes (Headlines)</option>
+                  </select>
+                  <small style={{ display: 'block', marginTop: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+                    <i className="fas fa-info-circle" /> A prioridade determina onde a notícia será exibida na página inicial
+                  </small>
+                </div>
 
-              <div className={styles.formGroup}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                  <input
-                    type="checkbox"
-                    name="isFeaturedPage"
-                    checked={formData.isFeaturedPage}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span className={styles.label} style={{ marginBottom: 0 }}>Destaque na Página</span>
-                </label>
+                {/* Destaques - Visíveis apenas para prioridade Alta (2) ou Urgente (3) */}
+                {formData.priority >= 2 && (
+                  <>
+                    <div className={styles.formGroup} style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color, #e5e7eb)' }}>
+                      <div style={{ marginBottom: '0.75rem' }}>
+                        <strong style={{ fontSize: '0.95rem', color: 'var(--text-primary)' }}>
+                          <i className="fas fa-star" style={{ marginRight: '0.5rem', color: '#f59e0b' }} />
+                          Opções de Destaque
+                        </strong>
+                      </div>
+
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', marginBottom: '0.75rem' }}>
+                        <input
+                          type="checkbox"
+                          name="isFeaturedHome"
+                          checked={formData.isFeaturedHome}
+                          onChange={handleCheckboxChange}
+                          aria-label="Destacar na página inicial"
+                        />
+                        <span className={styles.label} style={{ marginBottom: 0 }}>
+                          <i className="fas fa-home" style={{ marginRight: '0.5rem' }} />
+                          Home
+                        </span>
+                      </label>
+                      <small style={{ display: 'block', marginLeft: '1.75rem', marginTop: '-0.5rem', marginBottom: '1rem', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                        Exibir esta notícia na página inicial do site
+                      </small>
+
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                        <input
+                          type="checkbox"
+                          name="isFeaturedPage"
+                          checked={formData.isFeaturedPage}
+                          onChange={handleCheckboxChange}
+                          aria-label="Destacar na página da categoria"
+                        />
+                        <span className={styles.label} style={{ marginBottom: 0 }}>
+                          <i className="fas fa-newspaper" style={{ marginRight: '0.5rem' }} />
+                          Página
+                        </span>
+                      </label>
+                      <small style={{ display: 'block', marginLeft: '1.75rem', marginTop: '0.25rem', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                        Exibir esta notícia em destaque na página da categoria/subcategoria
+                      </small>
+                    </div>
+                  </>
+                )}
               </div>
-            </div>
+            )}
           </div>
         </div>
       </form>

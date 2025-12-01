@@ -21,6 +21,7 @@
     "axios": "^1.12.2",
     "date-fns": "^4.1.0",
     "editorjs-react-renderer": "^3.5.1",
+    "lucide-react": "^0.555.0",
     "phosphor-react": "^1.4.1",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",

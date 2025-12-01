@@ -96,6 +96,8 @@ public class WebSecurityConfig {
                     .permitAll()
                     .requestMatchers("/api/noticias/**")
                     .permitAll()
+                    .requestMatchers("/api/tags/**")
+                    .permitAll()
                     .requestMatchers("/api/users/perfil/**")
                     .permitAll()
                     .requestMatchers("/uploads/**")

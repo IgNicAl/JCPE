@@ -38,46 +38,6 @@ import EditProfile from './pages/Profile/EditProfile';
 import AdminPanel from './pages/AdminPanel/AdminPanel';
 import Busca from './pages/Busca/Busca';
 
-// Importar subcategorias de Pernambuco
-import Metropolitana from './pages/Pernambuco/Metropolitana/Metropolitana';
-import Seguranca from './pages/Pernambuco/Seguranca/Seguranca';
-import Mobilidade from './pages/Pernambuco/Mobilidade/Mobilidade';
-import Interior from './pages/Pernambuco/Interior/Interior';
-import EducacaoEstadual from './pages/Pernambuco/EducacaoEstadual/EducacaoEstadual';
-import SaudePublica from './pages/Pernambuco/SaudePublica/SaudePublica';
-import TurismoLocal from './pages/Pernambuco/TurismoLocal/TurismoLocal';
-
-// Importar subcategorias de Esportes
-import FutebolPE from './pages/Esportes/FutebolPE/FutebolPE';
-import FutebolBR from './pages/Esportes/FutebolBR/FutebolBR';
-import FutebolInt from './pages/Esportes/FutebolInt/FutebolInt';
-import OutrosEsportes from './pages/Esportes/OutrosEsportes/OutrosEsportes';
-import TabelaBrasileirao from './pages/Esportes/TabelaBrasileirao/TabelaBrasileirao';
-
-// Importar subcategorias de Cultura
-import Musica from './pages/Cultura/Musica/Musica';
-import Cinema from './pages/Cultura/Cinema/Cinema';
-import Teatro from './pages/Cultura/Teatro/Teatro';
-import Literatura from './pages/Cultura/Literatura/Literatura';
-import ArtesPlasticas from './pages/Cultura/ArtesPlasticas/ArtesPlasticas';
-import AgendaCultural from './pages/Cultura/AgendaCultural/AgendaCultural';
-
-// Importar subcategorias de Economia
-import Negocios from './pages/Economia/Negocios/Negocios';
-import Financas from './pages/Economia/Financas/Financas';
-import Emprego from './pages/Economia/Emprego/Emprego';
-import Agro from './pages/Economia/Agro/Agro';
-import Imoveis from './pages/Economia/Imoveis/Imoveis';
-import Cripto from './pages/Economia/Cripto/Cripto';
-
-// Importar subcategorias de Política
-import Federal from './pages/Politica/Federal/Federal';
-import CongressoSTF from './pages/Politica/CongressoSTF/CongressoSTF';
-import Eleicoes from './pages/Politica/Eleicoes/Eleicoes';
-import Bastidores from './pages/Politica/Bastidores/Bastidores';
-import Partidos from './pages/Politica/Partidos/Partidos';
-import Reforma from './pages/Politica/Reforma/Reforma';
-
 // Category Pages
 import Pernambuco from './pages/Pernambuco/Pernambuco';
 import Politica from './pages/Politica/Politica';
@@ -133,46 +93,6 @@ export function App() {
               <Route path="/sobre" element={<Sobre />} />
               <Route path="/contato" element={<Contato />} />
               <Route path="/busca" element={<Busca />} />
-
-              {/* Subcategorias de Pernambuco */}
-              <Route path="/pernambuco/metropolitana" element={<Metropolitana />} />
-              <Route path="/pernambuco/seguranca" element={<Seguranca />} />
-              <Route path="/pernambuco/mobilidade" element={<Mobilidade />} />
-              <Route path="/pernambuco/interior" element={<Interior />} />
-              <Route path="/pernambuco/educacao-estadual" element={<EducacaoEstadual />} />
-              <Route path="/pernambuco/saude-publica" element={<SaudePublica />} />
-              <Route path="/pernambuco/turismo-local" element={<TurismoLocal />} />
-
-              {/* Subcategorias de Esportes */}
-              <Route path="/esportes/futebol-pe" element={<FutebolPE />} />
-              <Route path="/esportes/futebol-br" element={<FutebolBR />} />
-              <Route path="/esportes/futebol-int" element={<FutebolInt />} />
-              <Route path="/esportes/outros-esportes" element={<OutrosEsportes />} />
-              <Route path="/esportes/tabela-brasileirao" element={<TabelaBrasileirao />} />
-
-              {/* Subcategorias de Cultura */}
-              <Route path="/cultura/musica" element={<Musica />} />
-              <Route path="/cultura/cinema" element={<Cinema />} />
-              <Route path="/cultura/teatro" element={<Teatro />} />
-              <Route path="/cultura/literatura" element={<Literatura />} />
-              <Route path="/cultura/artes-plasticas" element={<ArtesPlasticas />} />
-              <Route path="/cultura/agenda-cultural" element={<AgendaCultural />} />
-
-              {/* Subcategorias de Economia */}
-              <Route path="/economia/negocios" element={<Negocios />} />
-              <Route path="/economia/financas" element={<Financas />} />
-              <Route path="/economia/emprego" element={<Emprego />} />
-              <Route path="/economia/agro" element={<Agro />} />
-              <Route path="/economia/imoveis" element={<Imoveis />} />
-              <Route path="/economia/cripto" element={<Cripto />} />
-
-              {/* Subcategorias de Política */}
-              <Route path="/politica/federal" element={<Federal />} />
-              <Route path="/politica/congresso-stf" element={<CongressoSTF />} />
-              <Route path="/politica/eleicoes" element={<Eleicoes />} />
-              <Route path="/politica/bastidores" element={<Bastidores />} />
-              <Route path="/politica/partidos" element={<Partidos />} />
-              <Route path="/politica/reforma" element={<Reforma />} />
 
               <Route
                 path="/chat"
@@ -347,31 +267,31 @@ export function App() {
 
               {/* Category Routes */}
               <Route path="/categoria/pernambuco" element={<Pernambuco />} />
-              <Route path="/categoria/pernambuco/:subcategorySlug" element={<CategoryPage />} />
+              <Route path="/categoria/pernambuco/:subcategorySlug" element={<CategoryPage categorySlug="pernambuco" categoryTitle="Pernambuco" />} />
 
               <Route path="/categoria/politica" element={<Politica />} />
-              <Route path="/categoria/politica/:subcategorySlug" element={<CategoryPage />} />
+              <Route path="/categoria/politica/:subcategorySlug" element={<CategoryPage categorySlug="politica" categoryTitle="Política" />} />
 
               <Route path="/categoria/economia" element={<Economia />} />
-              <Route path="/categoria/economia/:subcategorySlug" element={<CategoryPage />} />
+              <Route path="/categoria/economia/:subcategorySlug" element={<CategoryPage categorySlug="economia" categoryTitle="Economia" />} />
 
               <Route path="/categoria/esportes" element={<Esportes />} />
-              <Route path="/categoria/esportes/:subcategorySlug" element={<CategoryPage />} />
+              <Route path="/categoria/esportes/:subcategorySlug" element={<CategoryPage categorySlug="esportes" categoryTitle="Esportes" />} />
 
               <Route path="/categoria/cultura" element={<Cultura />} />
-              <Route path="/categoria/cultura/:subcategorySlug" element={<CategoryPage />} />
+              <Route path="/categoria/cultura/:subcategorySlug" element={<CategoryPage categorySlug="cultura" categoryTitle="Cultura" />} />
 
               <Route path="/categoria/mundo" element={<Mundo />} />
-              <Route path="/categoria/mundo/:subcategorySlug" element={<CategoryPage />} />
+              <Route path="/categoria/mundo/:subcategorySlug" element={<CategoryPage categorySlug="mundo" categoryTitle="Mundo" />} />
 
               <Route path="/categoria/saude" element={<Saude />} />
-              <Route path="/categoria/saude/:subcategorySlug" element={<CategoryPage />} />
+              <Route path="/categoria/saude/:subcategorySlug" element={<CategoryPage categorySlug="saude" categoryTitle="Saúde" />} />
 
               <Route path="/categoria/educacao" element={<Educacao />} />
-              <Route path="/categoria/educacao/:subcategorySlug" element={<CategoryPage />} />
+              <Route path="/categoria/educacao/:subcategorySlug" element={<CategoryPage categorySlug="educacao" categoryTitle="Educação" />} />
 
               <Route path="/categoria/tecnologia" element={<Tecnologia />} />
-              <Route path="/categoria/tecnologia/:subcategorySlug" element={<CategoryPage />} />
+              <Route path="/categoria/tecnologia/:subcategorySlug" element={<CategoryPage categorySlug="tecnologia" categoryTitle="Tecnologia" />} />
 
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

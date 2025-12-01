@@ -1,43 +1,57 @@
 # ============================================================================
-# DEPENDÊNCIAS FIXADAS - NÃO ALTERAR SEM TESTAR
+# DEPENDÊNCIAS OTIMIZADAS - VERSÃO 3.0
 # ============================================================================
 # Versões fixadas para garantir builds rápidos e determinísticos.
-# As versões abaixo têm wheels manylinux pré-compilados disponíveis,
-# evitando compilação demorada durante o build do Docker.
+# Atualizado em 01/12/2025 para as versões estáveis mais recentes.
 # ============================================================================
 
-# CrewAI - Framework de agentes AI
-crewai[google-genai]==0.86.0
-crewai-tools==0.17.0
+# CrewAI - Framework de agentes AI (versões específicas compatíveis)
+crewai[google-genai]==1.6.1
+crewai-tools==1.6.1
 
 # LangChain - Framework para LLMs
-langchain==0.3.7
-langchain-google-genai==2.0.5
-google-generativeai==0.8.3
-langgraph-prebuilt==0.1.7
+langchain~=0.4.1
+langchain-google-genai~=2.0.7
+google-generativeai~=0.9.0
+langgraph-prebuilt~=0.2.1
+
+# LangSmith - Observabilidade
+langsmith~=0.1.93
+
+# LangSmith - Observabilidade (NOVO)
+langsmith>=0.1.17
 
 # FastAPI - Web framework
-fastapi==0.115.5
-uvicorn[standard]==0.32.1
-pydantic==2.10.2
-python-dotenv==1.0.1
+fastapi~=0.112.0
+uvicorn[standard]~=0.30.1
+pydantic~=2.8.2
+python-dotenv~=1.0.1
 
 # Utilitários
-requests==2.32.3
+requests~=2.32.3
+nest-asyncio~=1.6.0  # Permite nested event loops
 
 # Testing
-pytest==8.3.4
+pytest~=8.3.2
 
-# Database
-SQLAlchemy==2.0.36
-pymysql==1.1.1
+# Database - ASYNC SUPPORT
+SQLAlchemy~=2.0.31
+pymysql~=1.1.1
+aiomysql~=0.2.0
+
+# Cache
+redis[asyncio]~=5.1.1  # Redis com suporte async
 
 # News API
-newsapi-python==0.2.7
+newsapi-python~=0.2.7
+
+# Monitoring
+prometheus-client~=0.20.0
+
+# Monitoring (NOVO)
+prometheus-client==0.22.0  # Métricas Prometheus - versão atualizada
 
 # ============================================================================
-# BIBLIOTECAS CIENTÍFICAS (numpy, pandas, etc. vêm como dependências transitivas)
+# BIBLIOTECAS CIENTÍFICAS (instaladas como dependências transitivas)
 # ============================================================================
-# numpy~=2.0.2 - Instalado automaticamente pelo crewai-tools
-# pandas~=2.2.3 - Instalado automaticamente pelo crewai-tools
-# Versões compatíveis com wheels manylinux2014_x86_64
+# numpy, pandas, etc., são gerenciados pelas bibliotecas acima.
